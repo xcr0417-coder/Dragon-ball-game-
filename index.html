@@ -1,1 +1,3009 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>七龍珠格鬥小遊戲</title>
 
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "PingFang TC", sans-serif;
+  background: #10131d;
+  color: white;
+}
+
+button,
+select {
+  font: inherit;
+}
+
+#app {
+  max-width: 1100px;
+  margin: auto;
+  min-height: 100vh;
+  padding: 16px;
+}
+
+.panel {
+  background: #1b2030;
+  border: 1px solid #ffffff22;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 14px;
+}
+
+h1 {
+  margin: 0 0 12px;
+  color: #ffd84d;
+}
+
+h2 {
+  font-size: 18px;
+  margin: 0 0 10px;
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pick {
+  border: 1px solid #ffffff33;
+  background: #2a3147;
+  color: white;
+  border-radius: 12px;
+  padding: 10px 12px;
+  cursor: pointer;
+}
+
+.pick.active {
+  outline: 3px solid #ffd84d;
+  background: #5a471a;
+}
+
+.char-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 8px;
+}
+
+.char {
+  min-height: 94px;
+  text-align: left;
+}
+
+.char b {
+  display: block;
+  font-size: 15px;
+}
+
+.tiny {
+  opacity: 0.72;
+  font-size: 12px;
+}
+
+#startBtn {
+  background: #ffb52e;
+  color: #2b1600;
+  border: 0;
+  border-radius: 14px;
+  font-weight: 800;
+  font-size: 18px;
+  padding: 13px 20px;
+}
+
+#game {
+  display: none;
+}
+
+#hud {
+  display: grid;
+  grid-template-columns: 1fr 110px 1fr;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.hud.right {
+  text-align: right;
+}
+
+.bar {
+  height: 15px;
+  background: #333b51;
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 5px 0;
+}
+
+.hpFill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff3d5d, #ffb24a);
+}
+
+.kiFill {
+  height: 100%;
+  background: linear-gradient(90deg, #3187ff, #62e9ff);
+}
+
+#round {
+  text-align: center;
+  font-weight: 900;
+  color: #ffe36a;
+}
+
+#canvasWrap {
+  position: relative;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #202a58;
+  border-radius: 16px;
+  border: 1px solid #ffffff22;
+  touch-action: none;
+}
+
+#message {
+  position: absolute;
+  left: 50%;
+  top: 16%;
+  transform: translateX(-50%);
+  font-size: 28px;
+  font-weight: 900;
+  text-shadow: 0 3px 8px #000;
+  pointer-events: none;
+}
+
+#controls {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.move,
+.acts {
+  display: grid;
+  gap: 7px;
+}
+
+.move {
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 56px);
+}
+
+.acts {
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 56px);
+}
+
+.ctrl {
+  border: 1px solid #ffffff2c;
+  background: #2a3147;
+  color: white;
+  border-radius: 13px;
+  font-weight: 800;
+}
+
+.ctrl:active {
+  transform: scale(0.97);
+  background: #414b68;
+}
+
+#left {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+#right {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+#jump {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+#charge {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+#backBtn {
+  margin-top: 12px;
+  background: #333b51;
+}
+
+@media (max-width: 720px) {
+  #app {
+    padding: 8px;
+  }
+
+  #hud {
+    grid-template-columns: 1fr 72px 1fr;
+    font-size: 12px;
+  }
+
+  #controls {
+    grid-template-columns: 120px 1fr;
+  }
+
+  .move,
+  .acts {
+    grid-template-rows: repeat(2, 48px);
+  }
+
+  .ctrl {
+    font-size: 12px;
+    padding: 3px;
+  }
+
+  #message {
+    font-size: 22px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="app">
+
+<section id="menu">
+
+<div class="panel">
+  <h1>🐉 七龍珠格鬥小遊戲</h1>
+  <div class="tiny">
+    純 HTML / CSS / JavaScript，可直接放到 GitHub Pages 執行。
+  </div>
+</div>
+
+<div class="panel">
+  <h2>1. 戰鬥模式</h2>
+
+  <div class="row" id="modeButtons">
+    <button class="pick active" data-size="1">1 對 1</button>
+    <button class="pick" data-size="3">3 對 3</button>
+    <button class="pick" data-size="5">5 對 5</button>
+  </div>
+</div>
+
+<div class="panel">
+  <h2>2. 電腦難度</h2>
+
+  <select id="difficulty">
+    <option value="easy">easy</option>
+    <option value="normal" selected>normal</option>
+    <option value="hard">hard</option>
+    <option value="difficult">difficult</option>
+    <option value="boss">boss</option>
+  </select>
+</div>
+
+<div class="panel">
+  <h2>3. 場地</h2>
+
+  <div class="row" id="arenaButtons">
+    <button class="pick active" data-arena="earth">
+      地球荒野
+    </button>
+
+    <button class="pick" data-arena="time">
+      精神時光屋
+    </button>
+
+    <button class="pick" data-arena="space">
+      界王神界
+    </button>
+
+    <button class="pick" data-arena="beerus">
+      比魯斯星球
+    </button>
+  </div>
+</div>
+
+<div class="panel">
+  <h2>4. 選角色</h2>
+
+  <div id="roster" class="char-grid"></div>
+</div>
+
+<div class="panel">
+  <button id="startBtn">
+    開始戰鬥
+  </button>
+
+  <div class="tiny" style="margin-top:10px">
+    鍵盤操作：
+    A / D 移動、
+    W 跳、
+    J 拳、
+    K 氣彈、
+    L 特別技、
+    U 終極技、
+    I 集氣、
+    T 變身、
+    R 換人。
+  </div>
+</div>
+
+</section>
+
+
+<section id="game">
+
+<div id="hud">
+
+  <div class="hud">
+
+    <div id="pName"></div>
+
+    <div class="bar">
+      <div id="pHp" class="hpFill"></div>
+    </div>
+
+    <div class="bar">
+      <div id="pKi" class="kiFill"></div>
+    </div>
+
+    <div id="pTeam" class="tiny"></div>
+
+  </div>
+
+
+  <div id="round">
+    FIGHT
+  </div>
+
+
+  <div class="hud right">
+
+    <div id="eName"></div>
+
+    <div class="bar">
+      <div id="eHp" class="hpFill"></div>
+    </div>
+
+    <div class="bar">
+      <div id="eKi" class="kiFill"></div>
+    </div>
+
+    <div id="eTeam" class="tiny"></div>
+
+  </div>
+
+</div>
+
+
+<div id="canvasWrap">
+
+  <canvas
+    id="fight"
+    width="1000"
+    height="520">
+  </canvas>
+
+  <div id="message"></div>
+
+</div>
+
+
+<div id="controls">
+
+  <div class="move">
+
+    <button class="ctrl" id="jump">
+      跳
+    </button>
+
+    <button class="ctrl" id="left">
+      ◀
+    </button>
+
+    <button class="ctrl" id="charge">
+      集氣
+    </button>
+
+    <button class="ctrl" id="right">
+      ▶
+    </button>
+
+  </div>
+
+
+  <div class="acts">
+
+    <button class="ctrl" id="punch">
+      拳 / 體術
+    </button>
+
+    <button class="ctrl" id="kiShot">
+      氣彈
+    </button>
+
+    <button class="ctrl" id="special">
+      特別技
+    </button>
+
+    <button class="ctrl" id="ultimate">
+      終極技
+    </button>
+
+    <button class="ctrl" id="transform">
+      變身
+    </button>
+
+    <button class="ctrl" id="swap">
+      換人
+    </button>
+
+  </div>
+
+</div>
+
+<button class="pick" id="backBtn">
+  返回選單
+</button>
+
+</section>
+
+</div>
+
+
+<script>
+"use strict";
+
+const $ = s => document.querySelector(s);
+
+
+const roster = [
+
+{
+  name: "孫悟空",
+  cost: 2000,
+  hp: 100,
+  atk: 12,
+  kiAtk: 15,
+  special: "龜派氣功",
+  ult: "元氣彈"
+},
+
+{
+  name: "貝吉達",
+  cost: 2100,
+  hp: 100,
+  atk: 13,
+  kiAtk: 14,
+  special: "加力砲",
+  ult: "終極閃光"
+},
+
+{
+  name: "孫悟飯",
+  cost: 2500,
+  hp: 105,
+  atk: 12,
+  kiAtk: 15,
+  special: "魔閃光",
+  ult: "親子龜派氣功"
+},
+
+{
+  name: "比克",
+  cost: 2100,
+  hp: 110,
+  atk: 12,
+  kiAtk: 14,
+  special: "魔貫光殺砲",
+  ult: "巨大化爆擊"
+},
+
+{
+  name: "克林",
+  cost: 2000,
+  hp: 92,
+  atk: 10,
+  kiAtk: 15,
+  special: "氣圓斬",
+  ult: "太陽拳連擊"
+},
+
+{
+  name: "天津飯",
+  cost: 2000,
+  hp: 98,
+  atk: 12,
+  kiAtk: 14,
+  special: "太陽拳",
+  ult: "新氣功砲"
+},
+
+{
+  name: "人造人17號",
+  cost: 2500,
+  hp: 108,
+  atk: 13,
+  kiAtk: 14,
+  special: "防護罩",
+  ult: "全力能量球"
+},
+
+{
+  name: "人造人18號",
+  cost: 2500,
+  hp: 105,
+  atk: 13,
+  kiAtk: 14,
+  special: "無限能源連擊",
+  ult: "雙重能量波"
+},
+
+{
+  name: "弗利沙",
+  cost: 3000,
+  hp: 105,
+  atk: 14,
+  kiAtk: 16,
+  special: "死亡光束",
+  ult: "死亡球"
+},
+
+{
+  name: "魔人普烏",
+  cost: 3500,
+  hp: 125,
+  atk: 13,
+  kiAtk: 15,
+  special: "伸長手臂",
+  ult: "毀滅爆破"
+},
+
+{
+  name: "賽魯",
+  cost: 5000,
+  hp: 122,
+  atk: 15,
+  kiAtk: 16,
+  special: "太陽拳",
+  ult: "完美龜派氣功"
+},
+
+{
+  name: "布羅利",
+  cost: 5000,
+  hp: 140,
+  atk: 17,
+  kiAtk: 15,
+  special: "狂暴衝擊",
+  ult: "巨型能量彈"
+},
+
+{
+  name: "吉連",
+  cost: 12500,
+  hp: 150,
+  atk: 18,
+  kiAtk: 18,
+  special: "震空拳",
+  ult: "全力爆炎"
+},
+
+{
+  name: "悟空・自在極意",
+  cost: 15000,
+  hp: 145,
+  atk: 19,
+  kiAtk: 20,
+  special: "自在閃擊",
+  ult: "銀色龜派氣功"
+},
+
+{
+  name: "貝吉達・自我極意",
+  cost: 15000,
+  hp: 150,
+  atk: 20,
+  kiAtk: 18,
+  special: "破壞衝拳",
+  ult: "毀滅終結"
+},
+
+{
+  name: "比魯斯",
+  cost: 25000,
+  hp: 165,
+  atk: 21,
+  kiAtk: 23,
+  special: "破壞",
+  ult: "破壞神之怒"
+},
+
+{
+  name: "維斯",
+  cost: 25000,
+  hp: 160,
+  atk: 20,
+  kiAtk: 24,
+  special: "天使迴避",
+  ult: "天使衝擊"
+},
+
+{
+  name: "象帕",
+  cost: 25000,
+  hp: 170,
+  atk: 22,
+  kiAtk: 21,
+  special: "破壞重擊",
+  ult: "宇宙爆破"
+},
+
+{
+  name: "大神官",
+  cost: 40000,
+  hp: 185,
+  atk: 24,
+  kiAtk: 26,
+  special: "神速",
+  ult: "天界審判"
+},
+
+{
+  name: "全王",
+  cost: 50000,
+  hp: 200,
+  atk: 25,
+  kiAtk: 30,
+  special: "抹除",
+  ult: "全宇宙清除"
+}
+
+];
+
+
+const palettes = [
+
+["#f07a28", "#1f4ab8"],
+["#2b4ba4", "#f4f4f4"],
+["#6b44aa", "#28216d"],
+["#52924a", "#703d8f"],
+["#d76439", "#3558a5"],
+["#5d84b8", "#313a61"],
+["#2f678b", "#8ea3b7"],
+["#b5c7df", "#383d65"],
+["#f0f0f0", "#a561c0"],
+["#ef8db7", "#f6e7df"],
+["#5d9c64", "#612e7f"],
+["#4e8b3d", "#642c78"],
+["#b73737", "#242424"],
+["#d7dce7", "#ff7b28"],
+["#6e4fc2", "#222222"],
+["#8366aa", "#253a72"],
+["#84d3e6", "#775272"],
+["#8562a3", "#202b64"],
+["#e2efff", "#6c88c9"],
+["#72a8ff", "#e74b86"]
+
+];
+
+
+const state = {
+
+  teamSize: 1,
+
+  arena: "earth",
+
+  selected: 0,
+
+  difficulty: "normal",
+
+  running: false,
+
+  playerTeam: [],
+
+  enemyTeam: [],
+
+  pi: 0,
+
+  ei: 0,
+
+  px: 180,
+
+  ex: 820,
+
+  py: 0,
+
+  ey: 0,
+
+  pvy: 0,
+
+  evy: 0,
+
+  projectiles: [],
+
+  effects: [],
+
+  lastTime: 0,
+
+  aiClock: 0,
+
+  messageTimer: 0
+
+};
+
+
+const diff = {
+
+easy: {
+  interval: 950,
+  dmg: 0.8,
+  aggr: 0.55
+},
+
+normal: {
+  interval: 720,
+  dmg: 1,
+  aggr: 0.68
+},
+
+hard: {
+  interval: 540,
+  dmg: 1.12,
+  aggr: 0.76
+},
+
+difficult: {
+  interval: 420,
+  dmg: 1.22,
+  aggr: 0.84
+},
+
+boss: {
+  interval: 320,
+  dmg: 1.35,
+  aggr: 0.92
+}
+
+};
+
+
+function cloneChar(c) {
+
+  return {
+    ...c,
+    maxHp: c.hp,
+    hp: c.hp,
+    ki: 55,
+    transformed: false,
+    dead: false
+  };
+
+}
+
+
+function currentP() {
+
+  return state.playerTeam[state.pi];
+
+}
+
+
+function currentE() {
+
+  return state.enemyTeam[state.ei];
+
+}
+
+
+function buildRoster() {
+
+  const box = $("#roster");
+
+  box.innerHTML = "";
+
+
+  roster.forEach((c, i) => {
+
+    const b = document.createElement("button");
+
+    b.className =
+      "pick char" +
+      (i === state.selected ? " active" : "");
+
+
+    b.innerHTML = `
+
+      <b>${c.name}</b>
+
+      <span class="tiny">
+
+      ${c.cost.toLocaleString()}
+      ｜${c.special}
+
+      <br>
+
+      ${c.ult}
+
+      </span>
+
+    `;
+
+
+    b.addEventListener("click", () => {
+
+      state.selected = i;
+
+      document
+        .querySelectorAll(".char")
+        .forEach(x => x.classList.remove("active"));
+
+      b.classList.add("active");
+
+    });
+
+
+    box.appendChild(b);
+
+  });
+
+}
+
+
+buildRoster();
+
+
+function bindPickButtons(parentSelector, callback) {
+
+  document
+    .querySelectorAll(parentSelector + " .pick")
+    .forEach(btn => {
+
+      btn.addEventListener("click", () => {
+
+        document
+          .querySelectorAll(parentSelector + " .pick")
+          .forEach(x => x.classList.remove("active"));
+
+        btn.classList.add("active");
+
+        callback(btn);
+
+      });
+
+    });
+
+}
+
+
+bindPickButtons(
+  "#modeButtons",
+  b => state.teamSize = Number(b.dataset.size)
+);
+
+
+bindPickButtons(
+  "#arenaButtons",
+  b => state.arena = b.dataset.arena
+);
+
+
+function makePlayerTeam() {
+
+  const team = [
+    cloneChar(roster[state.selected])
+  ];
+
+
+  const ids = roster
+    .map((_, i) => i)
+    .filter(i => i !== state.selected);
+
+
+  while (team.length < state.teamSize) {
+
+    const pos =
+      Math.floor(
+        Math.random() * ids.length
+      );
+
+
+    team.push(
+      cloneChar(
+        roster[
+          ids.splice(pos, 1)[0]
+        ]
+      )
+    );
+
+  }
+
+
+  return team;
+
+}
+
+
+function makeEnemyTeam() {
+
+  const ids = roster
+    .map((_, i) => i)
+    .filter(i => i !== state.selected);
+
+
+  const team = [];
+
+
+  while (team.length < state.teamSize) {
+
+    const pos =
+      Math.floor(
+        Math.random() * ids.length
+      );
+
+
+    team.push(
+      cloneChar(
+        roster[
+          ids.splice(pos, 1)[0]
+        ]
+      )
+    );
+
+  }
+
+
+  return team;
+
+}
+
+
+function startGame() {
+
+  state.difficulty =
+    $("#difficulty").value;
+
+
+  state.playerTeam =
+    makePlayerTeam();
+
+
+  state.enemyTeam =
+    makeEnemyTeam();
+
+
+  state.pi = 0;
+
+  state.ei = 0;
+
+  state.px = 180;
+
+  state.ex = 820;
+
+  state.py = 0;
+
+  state.ey = 0;
+
+  state.pvy = 0;
+
+  state.evy = 0;
+
+  state.projectiles = [];
+
+  state.effects = [];
+
+  state.running = true;
+
+  state.aiClock = 0;
+
+
+  $("#menu").style.display = "none";
+
+  $("#game").style.display = "block";
+
+
+  showMessage(
+    "FIGHT!",
+    700
+  );
+
+
+  updateHud();
+
+}
+
+
+$("#startBtn")
+.addEventListener(
+  "click",
+  startGame
+);
+
+
+$("#backBtn")
+.addEventListener(
+  "click",
+  () => {
+
+    state.running = false;
+
+    $("#game").style.display = "none";
+
+    $("#menu").style.display = "block";
+
+  }
+);
+
+
+function updateHud() {
+
+  const p = currentP();
+
+  const e = currentE();
+
+
+  if (!p || !e) return;
+
+
+  $("#pName").textContent =
+    p.name +
+    (p.transformed ? " ✨" : "");
+
+
+  $("#eName").textContent =
+    e.name +
+    (e.transformed ? " ✨" : "");
+
+
+  $("#pHp").style.width =
+    Math.max(
+      0,
+      p.hp / p.maxHp * 100
+    ) + "%";
+
+
+  $("#eHp").style.width =
+    Math.max(
+      0,
+      e.hp / e.maxHp * 100
+    ) + "%";
+
+
+  $("#pKi").style.width =
+    Math.max(
+      0,
+      p.ki
+    ) + "%";
+
+
+  $("#eKi").style.width =
+    Math.max(
+      0,
+      e.ki
+    ) + "%";
+
+
+  $("#pTeam").textContent =
+    `${state.pi + 1}/${state.playerTeam.length}
+    ｜HP ${Math.ceil(p.hp)}
+    ｜氣 ${Math.floor(p.ki)}`;
+
+
+  $("#eTeam").textContent =
+    `HP ${Math.ceil(e.hp)}
+    ｜氣 ${Math.floor(e.ki)}
+    ｜${state.ei + 1}/${state.enemyTeam.length}`;
+
+}
+
+
+function showMessage(
+  text,
+  ms = 500
+) {
+
+  $("#message").textContent =
+    text;
+
+
+  clearTimeout(
+    state.messageTimer
+  );
+
+
+  state.messageTimer =
+    setTimeout(
+      () => {
+        $("#message").textContent = "";
+      },
+      ms
+    );
+
+}
+
+
+function movePlayer(dir) {
+
+  if (!state.running) return;
+
+
+  state.px =
+    Math.max(
+      55,
+      Math.min(
+        900,
+        state.px + dir * 34
+      )
+    );
+
+}
+
+
+function jump() {
+
+  if (
+    !state.running ||
+    state.py !== 0
+  ) return;
+
+
+  state.pvy = -670;
+
+}
+
+
+function dist() {
+
+  return Math.abs(
+    state.ex - state.px
+  );
+
+}
+
+
+function punch(player = true) {
+
+  if (!state.running) return;
+
+
+  const a =
+    player ?
+    currentP() :
+    currentE();
+
+
+  const t =
+    player ?
+    currentE() :
+    currentP();
+
+
+  if (!a || !t) return;
+
+
+  a.ki =
+    Math.min(
+      100,
+      a.ki + 6
+    );
+
+
+  state.effects.push({
+
+    type: "slash",
+
+    x:
+      player ?
+      state.px + 45 :
+      state.ex - 45,
+
+    y: 340,
+
+    life: 0.18
+
+  });
+
+
+  if (dist() < 155) {
+
+    let d =
+      a.atk *
+      (
+        a.transformed ?
+        1.35 :
+        1
+      ) *
+      (
+        0.85 +
+        Math.random() * 0.3
+      );
+
+
+    if (!player) {
+
+      d *=
+        diff[
+          state.difficulty
+        ].dmg;
+
+    }
+
+
+    damage(
+      t,
+      d,
+      player
+    );
+
+  }
+
+  else if (player) {
+
+    showMessage(
+      "太遠了！"
+    );
+
+  }
+
+
+  updateHud();
+
+}
+
+
+function charge(
+  player = true
+) {
+
+  if (!state.running) return;
+
+
+  const a =
+    player ?
+    currentP() :
+    currentE();
+
+
+  a.ki =
+    Math.min(
+      100,
+      a.ki +
+      (
+        player ?
+        20 :
+        16
+      )
+    );
+
+
+  state.effects.push({
+
+    type: "aura",
+
+    x:
+      player ?
+      state.px :
+      state.ex,
+
+    y: 345,
+
+    life: 0.45,
+
+    player: player
+
+  });
+
+
+  updateHud();
+
+}
+
+
+function fireProjectile(
+  player = true,
+  big = false,
+  power = 1,
+  label = ""
+) {
+
+  if (!state.running) return;
+
+
+  const a =
+    player ?
+    currentP() :
+    currentE();
+
+
+  const cost =
+    big ?
+    45 :
+    12;
+
+
+  if (a.ki < cost) {
+
+    if (player) {
+
+      showMessage(
+        "氣力不足"
+      );
+
+    }
+
+    return;
+
+  }
+
+
+  a.ki -= cost;
+
+
+  const x =
+    player ?
+    state.px + 50 :
+    state.ex - 50;
+
+
+  state.projectiles.push({
+
+    x: x,
+
+    y: 320,
+
+    vx:
+      (
+        player ?
+        1 :
+        -1
+      ) *
+      (
+        big ?
+        720 :
+        560
+      ),
+
+    r:
+      big ?
+      34 :
+      14,
+
+    player: player,
+
+    damage:
+      (
+        a.kiAtk *
+        (
+          big ?
+          2.3 :
+          0.85
+        ) +
+        (
+          a.transformed ?
+          6 :
+          0
+        )
+      ) *
+      power,
+
+    label: label
+
+  });
+
+
+  if (label) {
+
+    showMessage(
+      label,
+      650
+    );
+
+  }
+
+
+  updateHud();
+
+}
+
+
+function special(
+  player = true
+) {
+
+  const a =
+    player ?
+    currentP() :
+    currentE();
+
+
+  if (!state.running) return;
+
+
+  if (a.ki < 30) {
+
+    if (player) {
+
+      showMessage(
+        "特別技需要 30 氣"
+      );
+
+    }
+
+    return;
+
+  }
+
+
+  a.ki -= 30;
+
+
+  const t =
+    player ?
+    currentE() :
+    currentP();
+
+
+  showMessage(
+    a.special,
+    500
+  );
+
+
+  let d =
+    (
+      a.kiAtk * 1.45 +
+      a.atk * 0.35
+    ) *
+    (
+      a.transformed ?
+      1.25 :
+      1
+    );
+
+
+  if (!player) {
+
+    d *=
+      diff[
+        state.difficulty
+      ].dmg;
+
+  }
+
+
+  if (
+    dist() < 360 ||
+    Math.random() < 0.82
+  ) {
+
+    damage(
+      t,
+      d,
+      player
+    );
+
+  }
+
+  else if (player) {
+
+    showMessage(
+      "MISS!"
+    );
+
+  }
+
+
+  updateHud();
+
+}
+
+
+function ultimate(
+  player = true
+) {
+
+  const a =
+    player ?
+    currentP() :
+    currentE();
+
+
+  if (a.ki < 65) {
+
+    if (player) {
+
+      showMessage(
+        "終極技需要 65 氣"
+      );
+
+    }
+
+    return;
+
+  }
+
+
+  fireProjectile(
+
+    player,
+
+    true,
+
+    player ?
+    1.25 :
+    diff[
+      state.difficulty
+    ].dmg,
+
+    "⚡ " +
+    a.ult +
+    "！"
+
+  );
+
+}
+
+
+function transform(
+  player = true
+) {
+
+  const a =
+    player ?
+    currentP() :
+    currentE();
+
+
+  if (
+    !state.running ||
+    !a
+  ) return;
+
+
+  if (a.transformed) {
+
+    if (player) {
+
+      showMessage(
+        "已經變身"
+      );
+
+    }
+
+    return;
+
+  }
+
+
+  if (a.ki < 45) {
+
+    if (player) {
+
+      showMessage(
+        "變身需要 45 氣"
+      );
+
+    }
+
+    return;
+
+  }
+
+
+  a.ki -= 45;
+
+  a.transformed = true;
+
+  a.maxHp += 20;
+
+  a.hp += 20;
+
+  a.atk += 4;
+
+  a.kiAtk += 4;
+
+
+  showMessage(
+    a.name +
+    " 變身！",
+    700
+  );
+
+
+  updateHud();
+
+}
+
+
+function swap() {
+
+  if (
+    !state.running ||
+    state.playerTeam.length === 1
+  ) return;
+
+
+  const start =
+    state.pi;
+
+
+  do {
+
+    state.pi =
+      (
+        state.pi + 1
+      ) %
+      state.playerTeam.length;
+
+  }
+
+  while (
+    currentP().hp <= 0 &&
+    state.pi !== start
+  );
+
+
+  state.px = 180;
+
+
+  showMessage(
+    "換上 " +
+    currentP().name,
+    550
+  );
+
+
+  updateHud();
+
+}
+
+
+function damage(
+  target,
+  amount,
+  targetIsEnemy
+) {
+
+  target.hp =
+    Math.max(
+      0,
+      target.hp - amount
+    );
+
+
+  const x =
+    targetIsEnemy ?
+    state.ex :
+    state.px;
+
+
+  state.effects.push({
+
+    type: "hit",
+
+    x: x,
+
+    y: 320,
+
+    life: 0.25
+
+  });
+
+
+  if (target.hp <= 0) {
+
+    setTimeout(
+      () => handleKO(
+        targetIsEnemy
+      ),
+      250
+    );
+
+  }
+
+
+  updateHud();
+
+}
+
+
+function handleKO(
+  enemyKO
+) {
+
+  if (!state.running) return;
+
+
+  if (enemyKO) {
+
+    if (
+      state.ei <
+      state.enemyTeam.length - 1
+    ) {
+
+      state.ei++;
+
+      state.ex = 820;
+
+
+      showMessage(
+        "敵方換上 " +
+        currentE().name,
+        700
+      );
+
+    }
+
+    else {
+
+      state.running = false;
+
+
+      showMessage(
+        "🏆 YOU WIN!",
+        2500
+      );
+
+    }
+
+  }
+
+  else {
+
+    if (
+      state.pi <
+      state.playerTeam.length - 1
+    ) {
+
+      state.pi++;
+
+      state.px = 180;
+
+
+      showMessage(
+        "我方換上 " +
+        currentP().name,
+        700
+      );
+
+    }
+
+    else {
+
+      state.running = false;
+
+
+      showMessage(
+        "💥 YOU LOSE",
+        2500
+      );
+
+    }
+
+  }
+
+
+  updateHud();
+
+}
+
+
+function aiAct() {
+
+  if (!state.running) return;
+
+
+  const e = currentE();
+
+
+  if (
+    !e ||
+    e.hp <= 0
+  ) return;
+
+
+  const r =
+    Math.random();
+
+
+  const cfg =
+    diff[
+      state.difficulty
+    ];
+
+
+  if (dist() > 190) {
+
+    if (r < 0.42) {
+
+      state.ex -=
+        Math.min(
+          60,
+          dist() - 160
+        );
+
+    }
+
+    else if (r < 0.62) {
+
+      charge(false);
+
+    }
+
+    else if (
+      e.ki >= 12
+    ) {
+
+      fireProjectile(
+        false,
+        false,
+        cfg.dmg
+      );
+
+    }
+
+  }
+
+  else {
+
+    if (
+      e.ki >= 65 &&
+      r < 0.14
+    ) {
+
+      ultimate(false);
+
+    }
+
+    else if (
+      e.ki >= 30 &&
+      r < 0.34
+    ) {
+
+      special(false);
+
+    }
+
+    else if (
+      r < cfg.aggr
+    ) {
+
+      punch(false);
+
+    }
+
+    else {
+
+      state.ex =
+        Math.min(
+          930,
+          state.ex + 45
+        );
+
+    }
+
+  }
+
+
+  if (
+    !e.transformed &&
+    e.ki >= 55 &&
+    Math.random() < 0.06
+  ) {
+
+    transform(false);
+
+  }
+
+}
+
+
+const canvas =
+  $("#fight");
+
+
+const ctx =
+  canvas.getContext("2d");
+
+
+function drawBackground() {
+
+  const w =
+    canvas.width;
+
+
+  const h =
+    canvas.height;
+
+
+  const g =
+    ctx.createLinearGradient(
+      0,
+      0,
+      0,
+      h
+    );
+
+
+  if (
+    state.arena === "earth"
+  ) {
+
+    g.addColorStop(
+      0,
+      "#263a80"
+    );
+
+    g.addColorStop(
+      0.62,
+      "#263a80"
+    );
+
+    g.addColorStop(
+      0.63,
+      "#e6a85a"
+    );
+
+    g.addColorStop(
+      1,
+      "#6b4734"
+    );
+
+  }
+
+
+  if (
+    state.arena === "time"
+  ) {
+
+    g.addColorStop(
+      0,
+      "#f3f2df"
+    );
+
+    g.addColorStop(
+      0.68,
+      "#d7e5ff"
+    );
+
+    g.addColorStop(
+      0.69,
+      "#eeeeee"
+    );
+
+    g.addColorStop(
+      1,
+      "#cccccc"
+    );
+
+  }
+
+
+  if (
+    state.arena === "space"
+  ) {
+
+    g.addColorStop(
+      0,
+      "#080a18"
+    );
+
+    g.addColorStop(
+      0.55,
+      "#25163e"
+    );
+
+    g.addColorStop(
+      1,
+      "#090b18"
+    );
+
+  }
+
+
+  if (
+    state.arena === "beerus"
+  ) {
+
+    g.addColorStop(
+      0,
+      "#7bd4ff"
+    );
+
+    g.addColorStop(
+      0.58,
+      "#d9b6ff"
+    );
+
+    g.addColorStop(
+      0.59,
+      "#7bc66d"
+    );
+
+    g.addColorStop(
+      1,
+      "#4a9145"
+    );
+
+  }
+
+
+  ctx.fillStyle = g;
+
+  ctx.fillRect(
+    0,
+    0,
+    w,
+    h
+  );
+
+
+  if (
+    state.arena === "space"
+  ) {
+
+    ctx.fillStyle =
+      "#ffffff";
+
+
+    for (
+      let i = 0;
+      i < 70;
+      i++
+    ) {
+
+      ctx.fillRect(
+
+        (i * 137) % w,
+
+        (i * 83) % 330,
+
+        2,
+
+        2
+
+      );
+
+    }
+
+  }
+
+
+  ctx.fillStyle =
+    "#ffffff66";
+
+
+  ctx.fillRect(
+    0,
+    430,
+    w,
+    4
+  );
+
+}
+
+
+function fighterColor(
+  index
+) {
+
+  return palettes[
+    index %
+    palettes.length
+  ];
+
+}
+
+
+function drawFighter(
+  x,
+  y,
+  c,
+  enemy = false
+) {
+
+  const idx =
+    roster.findIndex(
+      r => r.name === c.name
+    );
+
+
+  const p =
+    fighterColor(
+      Math.max(
+        0,
+        idx
+      )
+    );
+
+
+  ctx.save();
+
+
+  ctx.translate(
+    x,
+    430 - y
+  );
+
+
+  if (enemy) {
+
+    ctx.scale(
+      -1,
+      1
+    );
+
+  }
+
+
+  if (
+    c.transformed
+  ) {
+
+    ctx.fillStyle =
+      "#ffe45c44";
+
+
+    ctx.beginPath();
+
+
+    ctx.ellipse(
+
+      0,
+
+      -105,
+
+      58,
+
+      130,
+
+      0,
+
+      0,
+
+      Math.PI * 2
+
+    );
+
+
+    ctx.fill();
+
+  }
+
+
+  ctx.lineWidth = 8;
+
+  ctx.lineCap =
+    "round";
+
+
+  ctx.strokeStyle =
+    p[1];
+
+
+  ctx.beginPath();
+
+
+  ctx.moveTo(
+    -16,
+    -68
+  );
+
+
+  ctx.lineTo(
+    -20,
+    -10
+  );
+
+
+  ctx.moveTo(
+    16,
+    -68
+  );
+
+
+  ctx.lineTo(
+    22,
+    -10
+  );
+
+
+  ctx.stroke();
+
+
+  ctx.fillStyle =
+    p[0];
+
+
+  ctx.strokeStyle =
+    "#111";
+
+
+  ctx.lineWidth =
+    4;
+
+
+  ctx.beginPath();
+
+
+  ctx.roundRect(
+
+    -31,
+
+    -132,
+
+    62,
+
+    68,
+
+    14
+
+  );
+
+
+  ctx.fill();
+
+  ctx.stroke();
+
+
+  ctx.strokeStyle =
+    "#efbf96";
+
+
+  ctx.lineWidth =
+    12;
+
+
+  ctx.beginPath();
+
+
+  ctx.moveTo(
+    -28,
+    -120
+  );
+
+
+  ctx.lineTo(
+    -48,
+    -70
+  );
+
+
+  ctx.moveTo(
+    28,
+    -120
+  );
+
+
+  ctx.lineTo(
+    52,
+    -88
+  );
+
+
+  ctx.stroke();
+
+
+  ctx.fillStyle =
+    "#efbf96";
+
+
+  ctx.strokeStyle =
+    "#111";
+
+
+  ctx.lineWidth =
+    4;
+
+
+  ctx.beginPath();
+
+
+  ctx.arc(
+
+    0,
+
+    -157,
+
+    24,
+
+    0,
+
+    Math.PI * 2
+
+  );
+
+
+  ctx.fill();
+
+  ctx.stroke();
+
+
+  ctx.fillStyle =
+    c.transformed ?
+    "#ffe044" :
+    "#151515";
+
+
+  ctx.beginPath();
+
+
+  ctx.moveTo(
+    -29,
+    -170
+  );
+
+
+  ctx.lineTo(
+    -17,
+    -209
+  );
+
+
+  ctx.lineTo(
+    -4,
+    -182
+  );
+
+
+  ctx.lineTo(
+    4,
+    -220
+  );
+
+
+  ctx.lineTo(
+    13,
+    -183
+  );
+
+
+  ctx.lineTo(
+    34,
+    -209
+  );
+
+
+  ctx.lineTo(
+    24,
+    -169
+  );
+
+
+  ctx.closePath();
+
+  ctx.fill();
+
+
+  ctx.fillStyle =
+    "#222";
+
+
+  ctx.fillRect(
+    9,
+    -160,
+    5,
+    3
+  );
+
+
+  ctx.restore();
+
+
+  ctx.fillStyle =
+    "#ffffffcc";
+
+
+  ctx.font =
+    "bold 18px system-ui";
+
+
+  ctx.textAlign =
+    "center";
+
+
+  ctx.fillText(
+
+    c.name,
+
+    x,
+
+    465 - y
+
+  );
+
+}
+
+
+function drawProjectiles(
+  dt
+) {
+
+  for (
+    let i =
+      state.projectiles.length - 1;
+
+    i >= 0;
+
+    i--
+  ) {
+
+    const b =
+      state.projectiles[i];
+
+
+    b.x +=
+      b.vx * dt;
+
+
+    ctx.save();
+
+
+    ctx.shadowBlur =
+      b.r * 1.3;
+
+
+    ctx.shadowColor =
+      b.r > 20 ?
+      "#ffb347" :
+      "#4ecbff";
+
+
+    ctx.fillStyle =
+      b.r > 20 ?
+      "#fff0a6" :
+      "#d9f7ff";
+
+
+    ctx.beginPath();
+
+
+    ctx.arc(
+
+      b.x,
+
+      b.y,
+
+      b.r,
+
+      0,
+
+      Math.PI * 2
+
+    );
+
+
+    ctx.fill();
+
+
+    ctx.restore();
+
+
+    const hitX =
+      b.player ?
+      state.ex :
+      state.px;
+
+
+    if (
+      Math.abs(
+        b.x - hitX
+      ) < 55
+    ) {
+
+      const target =
+        b.player ?
+        currentE() :
+        currentP();
+
+
+      damage(
+
+        target,
+
+        b.damage,
+
+        b.player
+
+      );
+
+
+      state.projectiles.splice(
+        i,
+        1
+      );
+
+
+      continue;
+
+    }
+
+
+    if (
+      b.x < -80 ||
+      b.x > 1080
+    ) {
+
+      state.projectiles.splice(
+        i,
+        1
+      );
+
+    }
+
+  }
+
+}
+
+
+function drawEffects(
+  dt
+) {
+
+  for (
+    let i =
+      state.effects.length - 1;
+
+    i >= 0;
+
+    i--
+  ) {
+
+    const e =
+      state.effects[i];
+
+
+    e.life -= dt;
+
+
+    if (
+      e.type === "hit"
+    ) {
+
+      ctx.fillStyle =
+        "#ffffff";
+
+
+      ctx.font =
+        "bold 42px system-ui";
+
+
+      ctx.textAlign =
+        "center";
+
+
+      ctx.fillText(
+        "✦",
+        e.x,
+        e.y
+      );
+
+    }
+
+    else if (
+      e.type === "aura"
+    ) {
+
+      ctx.strokeStyle =
+        "#69dfff";
+
+
+      ctx.lineWidth =
+        8;
+
+
+      ctx.globalAlpha =
+        Math.max(
+          0,
+          e.life / 0.45
+        );
+
+
+      ctx.beginPath();
+
+
+      ctx.ellipse(
+
+        e.x,
+
+        325,
+
+        55,
+
+        120,
+
+        0,
+
+        0,
+
+        Math.PI * 2
+
+      );
+
+
+      ctx.stroke();
+
+
+      ctx.globalAlpha =
+        1;
+
+    }
+
+    else {
+
+      ctx.fillStyle =
+        "#ffe16a";
+
+
+      ctx.font =
+        "bold 42px system-ui";
+
+
+      ctx.fillText(
+        "⚡",
+        e.x,
+        e.y
+      );
+
+    }
+
+
+    if (
+      e.life <= 0
+    ) {
+
+      state.effects.splice(
+        i,
+        1
+      );
+
+    }
+
+  }
+
+}
+
+
+function loop(
+  t
+) {
+
+  const dt =
+    Math.min(
+
+      0.033,
+
+      (
+        t -
+        state.lastTime
+      ) /
+      1000
+      ||
+      0
+
+    );
+
+
+  state.lastTime =
+    t;
+
+
+  if (
+    state.running
+  ) {
+
+    state.py =
+      Math.max(
+        0,
+        state.py +
+        state.pvy * dt
+      );
+
+
+    state.pvy +=
+      1500 * dt;
+
+
+    if (
+      state.py === 0 &&
+      state.pvy > 0
+    ) {
+
+      state.pvy = 0;
+
+    }
+
+
+    state.ey =
+      Math.max(
+        0,
+        state.ey +
+        state.evy * dt
+      );
+
+
+    state.evy +=
+      1500 * dt;
+
+
+    if (
+      state.ey === 0 &&
+      state.evy > 0
+    ) {
+
+      state.evy = 0;
+
+    }
+
+
+    state.aiClock +=
+      dt * 1000;
+
+
+    if (
+      state.aiClock >=
+      diff[
+        state.difficulty
+      ].interval
+    ) {
+
+      state.aiClock = 0;
+
+      aiAct();
+
+    }
+
+  }
+
+
+  drawBackground();
+
+
+  if (
+    currentP()
+  ) {
+
+    drawFighter(
+
+      state.px,
+
+      state.py,
+
+      currentP(),
+
+      false
+
+    );
+
+  }
+
+
+  if (
+    currentE()
+  ) {
+
+    drawFighter(
+
+      state.ex,
+
+      state.ey,
+
+      currentE(),
+
+      true
+
+    );
+
+  }
+
+
+  drawProjectiles(
+    dt
+  );
+
+
+  drawEffects(
+    dt
+  );
+
+
+  requestAnimationFrame(
+    loop
+  );
+
+}
+
+
+requestAnimationFrame(
+  loop
+);
+
+
+$("#left")
+.addEventListener(
+  "click",
+  () => movePlayer(-1)
+);
+
+
+$("#right")
+.addEventListener(
+  "click",
+  () => movePlayer(1)
+);
+
+
+$("#jump")
+.addEventListener(
+  "click",
+  jump
+);
+
+
+$("#charge")
+.addEventListener(
+  "click",
+  () => charge(true)
+);
+
+
+$("#punch")
+.addEventListener(
+  "click",
+  () => punch(true)
+);
+
+
+$("#kiShot")
+.addEventListener(
+  "click",
+  () => fireProjectile(true)
+);
+
+
+$("#special")
+.addEventListener(
+  "click",
+  () => special(true)
+);
+
+
+$("#ultimate")
+.addEventListener(
+  "click",
+  () => ultimate(true)
+);
+
+
+$("#transform")
+.addEventListener(
+  "click",
+  () => transform(true)
+);
+
+
+$("#swap")
+.addEventListener(
+  "click",
+  swap
+);
+
+
+document.addEventListener(
+  "keydown",
+  e => {
+
+    if (
+      e.repeat
+    ) return;
+
+
+    const k =
+      e.key.toLowerCase();
+
+
+    if (
+      k === "a"
+    ) {
+
+      movePlayer(-1);
+
+    }
+
+
+    if (
+      k === "d"
+    ) {
+
+      movePlayer(1);
+
+    }
+
+
+    if (
+      k === "w"
+    ) {
+
+      jump();
+
+    }
+
+
+    if (
+      k === "j"
+    ) {
+
+      punch(true);
+
+    }
+
+
+    if (
+      k === "k"
+    ) {
+
+      fireProjectile(true);
+
+    }
+
+
+    if (
+      k === "l"
+    ) {
+
+      special(true);
+
+    }
+
+
+    if (
+      k === "u"
+    ) {
+
+      ultimate(true);
+
+    }
+
+
+    if (
+      k === "i"
+    ) {
+
+      charge(true);
+
+    }
+
+
+    if (
+      k === "t"
+    ) {
+
+      transform(true);
+
+    }
+
+
+    if (
+      k === "r"
+    ) {
+
+      swap();
+
+    }
+
+  }
+);
+
+</script>
+
+</body>
+</html>
