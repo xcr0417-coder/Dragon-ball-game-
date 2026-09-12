@@ -4,1284 +4,7906 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>七龍珠 Ultimate Battle</title>
+
 <style>
 *{box-sizing:border-box}
-:root{--bg:#0d1020;--panel:#191f33;--line:#ffffff22;--gold:#ffd84d;--text:#f7f7ff;--muted:#b9c2da;--hp1:#ff365e;--hp2:#ffb347;--ki1:#3187ff;--ki2:#63efff;--good:#69e38c}
-html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"PingFang TC","Noto Sans TC",sans-serif}
+
+html,body{
+  margin:0;
+  min-height:100%;
+  font-family:system-ui,-apple-system,"PingFang TC","Noto Sans TC",sans-serif;
+  background:#0d1020;
+  color:#fff
+}
+
 button,select,input{font:inherit}
 button{cursor:pointer}
-#app{max-width:1180px;margin:auto;min-height:100vh;padding:12px}
-.panel{background:linear-gradient(180deg,#1b2136,#151a2a);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:0 12px 30px #0003}
-h1{margin:0;color:var(--gold);font-size:26px}
-h2{font-size:18px;margin:0 0 10px;color:#fff1a6}
-.small{font-size:12px;color:var(--muted);line-height:1.45}
-.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.pick,.menuBtn,.shopBtn,.ctrl,.itemBtn{border:1px solid #ffffff2c;background:#2a324c;color:white;border-radius:11px;padding:9px 11px;font-weight:700}
-.pick.active,.menuBtn.active{outline:3px solid var(--gold);background:#594719}
-.primary{background:linear-gradient(180deg,#ffd858,#f5a52d);color:#321900;border:0;font-size:18px;padding:12px 18px}
-.danger{background:#6c2633}
-.good{background:#225d39}
-.topbar{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
-.wallet{display:flex;gap:12px;flex-wrap:wrap;font-weight:800}
-.tabs{display:flex;gap:6px;flex-wrap:wrap}
-.screen{display:none}
-.screen.active{display:block}
-#roster{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:8px;max-height:47vh;overflow:auto;padding:3px}
-.charCard{min-height:112px;text-align:left;position:relative}
-.charCard.locked{filter:saturate(.45);opacity:.72}
-.charCard.selected{outline:3px solid var(--gold);background:#4e421f}
-.charName{font-weight:900;font-size:15px}
-.badge{display:inline-block;font-size:10px;padding:2px 6px;border-radius:999px;margin-top:5px;background:#ffffff17}
-.badge.normal{background:#48526b}.badge.rare{background:#245c8d}.badge.epic{background:#6b3d90}.badge.mega{background:#8f5d16}
-.price{font-size:12px;color:#ffe895}
-#shopGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px}
-.shopCard{background:#20283f;border:1px solid var(--line);border-radius:13px;padding:10px}
-.shopCard b{display:block}
-.notice{padding:10px;border-radius:11px;background:#28314c;border:1px solid #ffffff1c;margin-top:8px}
-#game{display:none}
-#hud{display:grid;grid-template-columns:1fr 118px 1fr;gap:10px;align-items:center;margin-bottom:8px}
-.hud.right{text-align:right}.hudName{font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.bar{height:15px;background:#303851;border-radius:999px;overflow:hidden;margin:4px 0;border:1px solid #ffffff17}
-.hpFill{height:100%;background:linear-gradient(90deg,var(--hp1),var(--hp2))}
-.kiFill{height:100%;background:linear-gradient(90deg,var(--ki1),var(--ki2))}
-#round{text-align:center;font-weight:1000;color:#ffe56d}
-#canvasWrap{position:relative}
-canvas{display:block;width:100%;height:auto;max-height:58vh;background:#18244b;border:1px solid var(--line);border-radius:14px;touch-action:none}
-#message{position:absolute;left:50%;top:13%;transform:translateX(-50%);font-size:28px;font-weight:1000;text-align:center;text-shadow:0 3px 8px #000;pointer-events:none;white-space:nowrap}
-#controls{display:grid;grid-template-columns:155px 1fr;gap:8px;margin-top:8px}
-.movePad,.actionPad{display:grid;gap:5px}
-.movePad{grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,52px)}
-.actionPad{grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,52px)}
-.ctrl{padding:4px;touch-action:none;user-select:none;-webkit-user-select:none}
-.ctrl:active,.itemBtn:active{transform:scale(.96);background:#465272}
-#left{grid-column:1;grid-row:2}#jump{grid-column:2;grid-row:1}#charge{grid-column:2;grid-row:2}#right{grid-column:3;grid-row:2}
-#itemBar{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}
-.itemBtn{font-size:12px;padding:7px 9px}
-#p2Help{display:none;margin-top:8px}
-#resultPanel{display:none;margin-top:8px}
-#wishPanel{display:none}
-select,input[type=file]{background:#2a324c;color:white;border:1px solid #ffffff2b;border-radius:9px;padding:7px}
+
+:root{
+  --panel:#181f33;
+  --panel2:#222b45;
+  --line:#ffffff22;
+  --gold:#ffd84d;
+  --muted:#b8c0d6;
+  --hp:#ff4b63;
+  --ki:#40cfff
+}
+
+#app{
+  max-width:1180px;
+  margin:auto;
+  padding:12px
+}
+
+.panel{
+  background:linear-gradient(#1b2238,#141a2a);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:14px;
+  margin-bottom:12px;
+  box-shadow:0 10px 30px #0004
+}
+
+.top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap
+}
+
+h1{
+  margin:0;
+  color:var(--gold);
+  font-size:26px
+}
+
+h2{
+  margin:0 0 10px;
+  font-size:18px;
+  color:#fff0a0
+}
+
+.small{
+  font-size:12px;
+  color:var(--muted);
+  line-height:1.45
+}
+
+.row{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  flex-wrap:wrap
+}
+
+.wallet{
+  display:flex;
+  gap:14px;
+  font-weight:900
+}
+
+.btn,
+.tab,
+.ctrl,
+.shopBtn,
+.itemBtn{
+  border:1px solid #ffffff2d;
+  background:#2a334f;
+  color:#fff;
+  border-radius:11px;
+  padding:9px 11px;
+  font-weight:750
+}
+
+.btn.active,
+.tab.active{
+  outline:3px solid var(--gold);
+  background:#5b4819
+}
+
+.primary{
+  background:linear-gradient(#ffe36b,#f5a62d);
+  color:#301700;
+  border:0;
+  font-size:18px
+}
+
+.danger{
+  background:#712b37
+}
+
+.good{
+  background:#255f3d
+}
+
+.tabs{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap
+}
+
+.screen{
+  display:none
+}
+
+.screen.active{
+  display:block
+}
+
+.page{
+  display:none
+}
+
+.page.active{
+  display:block
+}
+
+#preview{
+  display:grid;
+  grid-template-columns:180px 1fr;
+  gap:14px;
+  align-items:center;
+  background:#11182a;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:12px;
+  margin:10px 0
+}
+
+.previewArt{
+  height:230px;
+  border-radius:12px;
+  overflow:hidden;
+  background:radial-gradient(circle at 50% 35%,#ffffff20,#0000 62%)
+}
+
+.previewArt svg,
+.portrait svg,
+.shopPortrait svg{
+  width:100%;
+  height:100%;
+  display:block
+}
+
+.previewInfo h3{
+  margin:0 0 6px;
+  color:#ffe36a;
+  font-size:22px
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:6px;
+  margin:8px 0
+}
+
+.chip{
+  background:#252f4a;
+  border:1px solid #ffffff18;
+  border-radius:9px;
+  padding:6px;
+  text-align:center;
+  font-size:12px
+}
+
+#roster{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(175px,1fr));
+  gap:8px;
+  max-height:48vh;
+  overflow:auto;
+  padding:3px
+}
+
+.charCard{
+  min-height:228px;
+  text-align:left
+}
+
+.charCard.locked{
+  opacity:.58;
+  filter:saturate(.45)
+}
+
+.charCard.selected{
+  outline:3px solid var(--gold);
+  background:#4b401f
+}
+
+.portrait{
+  height:102px;
+  border-radius:10px;
+  overflow:hidden;
+  background:radial-gradient(circle at 50% 35%,#ffffff20,#0000 62%);
+  margin-bottom:6px
+}
+
+.charName{
+  font-weight:900
+}
+
+.badge{
+  display:inline-block;
+  border-radius:999px;
+  padding:2px 6px;
+  font-size:10px;
+  margin-top:4px
+}
+
+.normal{background:#4b556d}
+.rare{background:#245d8f}
+.epic{background:#6e4296}
+.mega{background:#99651f}
+
+.price{
+  font-size:12px;
+  color:#ffe690
+}
+
+#shopGrid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+  gap:8px
+}
+
+.shopCard{
+  background:#202941;
+  border:1px solid var(--line);
+  border-radius:13px;
+  padding:10px
+}
+
+.shopPortrait{
+  height:120px;
+  border-radius:10px;
+  overflow:hidden;
+  background:radial-gradient(circle at 50% 35%,#ffffff20,#0000 62%);
+  margin-bottom:7px
+}
+
+.notice{
+  background:#28324e;
+  border:1px solid var(--line);
+  border-radius:11px;
+  padding:10px;
+  margin-top:8px
+}
+
+#game{
+  display:none
+}
+
+.hud{
+  display:grid;
+  grid-template-columns:1fr 110px 1fr;
+  gap:10px;
+  align-items:center;
+  margin-bottom:8px
+}
+
+.right{
+  text-align:right
+}
+
+.name{
+  font-weight:900;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis
+}
+
+.bar{
+  height:15px;
+  background:#303851;
+  border-radius:999px;
+  overflow:hidden;
+  margin:4px 0
+}
+
+.hp{
+  height:100%;
+  background:linear-gradient(90deg,#ff3858,#ffb24a)
+}
+
+.ki{
+  height:100%;
+  background:linear-gradient(90deg,#3187ff,#63efff)
+}
+
+#round{
+  text-align:center;
+  color:#ffe45e;
+  font-weight:1000
+}
+
+#stageWrap{
+  position:relative
+}
+
+canvas{
+  display:block;
+  width:100%;
+  height:auto;
+  max-height:58vh;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:#172449;
+  touch-action:none
+}
+
+#msg{
+  position:absolute;
+  left:50%;
+  top:12%;
+  transform:translateX(-50%);
+  font-size:28px;
+  font-weight:1000;
+  text-shadow:0 3px 8px #000;
+  white-space:nowrap;
+  pointer-events:none
+}
+
+#controls{
+  display:grid;
+  grid-template-columns:150px 1fr;
+  gap:8px;
+  margin-top:8px
+}
+
+.movePad,
+.actPad{
+  display:grid;
+  gap:5px
+}
+
+.movePad{
+  grid-template-columns:repeat(3,1fr);
+  grid-template-rows:repeat(2,52px)
+}
+
+.actPad{
+  grid-template-columns:repeat(4,1fr);
+  grid-template-rows:repeat(2,52px)
+}
+
+.ctrl{
+  padding:4px;
+  touch-action:none;
+  user-select:none;
+  -webkit-user-select:none
+}
+
+.ctrl:active,
+.itemBtn:active{
+  transform:scale(.96);
+  background:#465271
+}
+
+#left{
+  grid-column:1;
+  grid-row:2
+}
+
+#jump{
+  grid-column:2;
+  grid-row:1
+}
+
+#charge{
+  grid-column:2;
+  grid-row:2
+}
+
+#right{
+  grid-column:3;
+  grid-row:2
+}
+
+#itemBar{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  margin-top:7px
+}
+
+.itemBtn{
+  font-size:12px;
+  padding:7px 9px
+}
+
+#result{
+  display:none
+}
+
+select,
+input[type=file]{
+  background:#2a334f;
+  color:white;
+  border:1px solid #ffffff2d;
+  border-radius:9px;
+  padding:7px
+}
+
 @media(max-width:760px){
- #app{padding:7px} h1{font-size:21px} #hud{grid-template-columns:1fr 70px 1fr;font-size:12px}
- #controls{grid-template-columns:112px 1fr}.movePad{grid-template-rows:repeat(2,45px)}.actionPad{grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,45px)}
- .ctrl{font-size:11px}#message{font-size:20px}#roster{grid-template-columns:repeat(2,minmax(0,1fr))}
+
+  #app{
+    padding:7px
+  }
+
+  h1{
+    font-size:21px
+  }
+
+  #preview{
+    grid-template-columns:105px 1fr
+  }
+
+  .previewArt{
+    height:155px
+  }
+
+  .previewInfo h3{
+    font-size:18px
+  }
+
+  #roster{
+    grid-template-columns:repeat(2,minmax(0,1fr))
+  }
+
+  .hud{
+    grid-template-columns:1fr 68px 1fr;
+    font-size:12px
+  }
+
+  #controls{
+    grid-template-columns:112px 1fr
+  }
+
+  .movePad{
+    grid-template-rows:repeat(2,45px)
+  }
+
+  .actPad{
+    grid-template-columns:repeat(3,1fr);
+    grid-template-rows:repeat(3,45px)
+  }
+
+  .ctrl{
+    font-size:11px
+  }
+
+  #msg{
+    font-size:20px
+  }
 }
 </style>
 </head>
+
 <body>
+
 <div id="app">
 
-<section id="menuScreen" class="screen active">
-  <div class="panel topbar">
-    <div>
-      <h1>🐉 七龍珠 Ultimate Battle</h1>
-      <div class="small">單一 index.html｜GitHub Pages 可直接執行｜依你的手稿整理成可玩版本</div>
-    </div>
-    <div class="wallet">
-      <span>🪙 <span id="coins">0</span></span>
-      <span>🐲 龍珠 <span id="balls">0</span>/7</span>
-    </div>
-  </div>
+<section id="menu" class="screen active">
 
-  <div class="panel">
-    <div class="tabs">
-      <button class="menuBtn active" data-tab="battleSetup">戰鬥設定</button>
-      <button class="menuBtn" data-tab="shop">角色商店</button>
-      <button class="menuBtn" data-tab="items">道具</button>
-      <button class="menuBtn" data-tab="dragon">神龍</button>
-      <button class="menuBtn" data-tab="music">音樂</button>
-    </div>
-  </div>
+<div class="panel top">
 
-  <div id="battleSetup" class="tabPage">
-    <div class="panel">
-      <h2>1. 戰鬥方式</h2>
-      <div class="row" id="battleTypeButtons">
-        <button class="pick active" data-type="cpu">單機 VS 電腦</button>
-        <button class="pick" data-type="local">雙人同機</button>
-      </div>
-      <div class="small" style="margin-top:8px">你手稿裡有寫單機和對打。GitHub Pages 是靜態網站，所以這版先做成「單機打電腦」與「雙人同機」。如果你下次要真連線版，我可以再幫你改成需要後端的 WebSocket 版。</div>
-    </div>
+<div>
 
-    <div class="panel">
-      <h2>2. 人數</h2>
-      <div class="row" id="teamSizeButtons">
-        <button class="pick active" data-size="1">1v1</button>
-        <button class="pick" data-size="3">3v3</button>
-        <button class="pick" data-size="5">5v5</button>
-      </div>
-    </div>
+<h1>
+🐉 七龍珠 Ultimate Battle
+</h1>
 
-    <div class="panel">
-      <h2>3. 電腦難度</h2>
-      <select id="difficulty">
-        <option value="easy">easy</option>
-        <option value="normal" selected>normal</option>
-        <option value="hard">hard</option>
-        <option value="difficult">difficult</option>
-        <option value="boss">boss</option>
-      </select>
-    </div>
+<div class="small">
+單一 index.html｜GitHub Pages 可直接執行｜角色頭像＋戰鬥立繪
+</div>
 
-    <div class="panel">
-      <h2>4. 場地</h2>
-      <div class="row" id="arenaButtons">
-        <button class="pick active" data-arena="earth">地球荒野</button>
-        <button class="pick" data-arena="time">精神時光屋</button>
-        <button class="pick" data-arena="gravity">重力室</button>
-        <button class="pick" data-arena="kingkai">界王星</button>
-        <button class="pick" data-arena="supreme">界王神界</button>
-        <button class="pick" data-arena="beerus">比魯斯星球</button>
-        <button class="pick" data-arena="zeno">全王神殿</button>
-      </div>
-    </div>
+</div>
 
-    <div class="panel">
-      <h2>5. 選擇隊伍</h2>
-      <div class="row">
-        <button id="editP1" class="pick active">編輯 P1 隊伍</button>
-        <button id="editP2" class="pick">編輯 P2 隊伍</button>
-        <span class="small">已選：<span id="teamPickText"></span></span>
-      </div>
-      <div class="notice small">點角色加入 / 移除隊伍。鎖住的角色可到商店購買。若隊伍沒選滿，開始戰鬥時會自動補滿。</div>
-      <div id="roster"></div>
-    </div>
+<div class="wallet">
 
-    <div class="panel">
-      <button id="startBtn" class="pick primary">開始戰鬥！</button>
-      <button id="resetSaveBtn" class="pick danger">重設存檔</button>
-    </div>
-  </div>
+<span>
+🪙
+<span id="coins">0</span>
+</span>
 
-  <div id="shop" class="tabPage" style="display:none">
-    <div class="panel">
-      <h2>角色商店</h2>
-      <div class="small">依你紙上內容加入 normal / rare / epic / mega 以及較高級角色價格概念。買過的角色會保存在瀏覽器。</div>
-      <div id="shopGrid"></div>
-    </div>
-  </div>
+<span>
+🐲 龍珠
+<span id="balls">0</span>/7
+</span>
 
-  <div id="items" class="tabPage" style="display:none">
-    <div class="panel">
-      <h2>道具商店</h2>
-      <div id="itemShop"></div>
-    </div>
-  </div>
+</div>
 
-  <div id="dragon" class="tabPage" style="display:none">
-    <div class="panel">
-      <h2>七顆龍珠</h2>
-      <p>目前持有 <b><span id="balls2">0</span>/7</b> 顆龍珠。勝利有機會獲得龍珠，集滿可召喚神龍。</p>
-      <button id="summonBtn" class="pick primary">召喚神龍</button>
-      <div id="wishPanel" class="notice">
-        <b>🐲 神龍：說出你的願望。</b>
-        <div class="row" style="margin-top:8px">
-          <button class="pick wish" data-wish="coins">我要 30,000 金幣</button>
-          <button class="pick wish" data-wish="items">我要大量道具</button>
-          <button class="pick wish" data-wish="unlock">隨機解鎖一名角色</button>
-        </div>
-      </div>
-    </div>
-  </div>
+</div>
 
-  <div id="music" class="tabPage" style="display:none">
-    <div class="panel">
-      <h2>戰鬥音樂</h2>
-      <div class="small">你手稿寫了 Ultimate Battle 和 Blizzard。因為版權關係，我不能直接把這兩首音樂打包進程式，但我幫你做了本機音樂播放器，你可以自己選擇合法持有的音訊檔播放。</div>
-      <div class="row" style="margin-top:10px">
-        <input id="musicFile" type="file" accept="audio/*">
-        <button id="musicPlay" class="pick">播放 / 暫停</button>
-        <button id="musicStop" class="pick">停止</button>
-      </div>
-      <audio id="bgm" loop></audio>
-    </div>
-  </div>
+
+<div class="panel tabs">
+
+<button
+class="tab active"
+data-page="battlePage">
+戰鬥設定
+</button>
+
+<button
+class="tab"
+data-page="shopPage">
+角色商店
+</button>
+
+<button
+class="tab"
+data-page="itemPage">
+道具
+</button>
+
+<button
+class="tab"
+data-page="dragonPage">
+神龍
+</button>
+
+<button
+class="tab"
+data-page="musicPage">
+音樂
+</button>
+
+</div>
+
+
+<div
+id="battlePage"
+class="page active">
+
+
+<div class="panel">
+
+<h2>
+1. 戰鬥方式
+</h2>
+
+<div
+class="row"
+id="battleType">
+
+<button
+class="btn active"
+data-type="cpu">
+單機 VS 電腦
+</button>
+
+<button
+class="btn"
+data-type="local">
+雙人同機
+</button>
+
+</div>
+
+</div>
+
+
+<div class="panel">
+
+<h2>
+2. 人數
+</h2>
+
+<div
+class="row"
+id="teamSize">
+
+<button
+class="btn active"
+data-size="1">
+1v1
+</button>
+
+<button
+class="btn"
+data-size="3">
+3v3
+</button>
+
+<button
+class="btn"
+data-size="5">
+5v5
+</button>
+
+</div>
+
+</div>
+
+
+<div class="panel">
+
+<h2>
+3. 電腦難度
+</h2>
+
+<select id="difficulty">
+
+<option value="easy">
+easy
+</option>
+
+<option
+value="normal"
+selected>
+normal
+</option>
+
+<option value="hard">
+hard
+</option>
+
+<option value="difficult">
+difficult
+</option>
+
+<option value="boss">
+boss
+</option>
+
+</select>
+
+</div>
+
+
+<div class="panel">
+
+<h2>
+4. 場地
+</h2>
+
+<div
+class="row"
+id="arenas">
+
+<button
+class="btn active"
+data-arena="earth">
+地球荒野
+</button>
+
+<button
+class="btn"
+data-arena="time">
+精神時光屋
+</button>
+
+<button
+class="btn"
+data-arena="gravity">
+重力室
+</button>
+
+<button
+class="btn"
+data-arena="kingkai">
+界王星
+</button>
+
+<button
+class="btn"
+data-arena="supreme">
+界王神界
+</button>
+
+<button
+class="btn"
+data-arena="beerus">
+比魯斯星球
+</button>
+
+<button
+class="btn"
+data-arena="zeno">
+全王神殿
+</button>
+
+</div>
+
+</div>
+
+
+<div class="panel">
+
+<h2>
+5. 選擇隊伍
+</h2>
+
+<div class="row">
+
+<button
+id="editP1"
+class="btn active">
+編輯 P1
+</button>
+
+<button
+id="editP2"
+class="btn">
+編輯 P2
+</button>
+
+<span class="small">
+
+已選：
+
+<span id="pickedText"></span>
+
+</span>
+
+</div>
+
+
+<div class="notice small">
+點角色加入或移除隊伍。鎖住角色請先到商店購買。隊伍沒選滿時會自動補滿。
+</div>
+
+<div id="preview"></div>
+
+<div id="roster"></div>
+
+</div>
+
+
+<div class="panel">
+
+<button
+id="start"
+class="btn primary">
+開始戰鬥！
+</button>
+
+<button
+id="resetSave"
+class="btn danger">
+重設存檔
+</button>
+
+</div>
+
+</div>
+
+
+<div
+id="shopPage"
+class="page">
+
+<div class="panel">
+
+<h2>
+角色商店
+</h2>
+
+<div id="shopGrid"></div>
+
+</div>
+
+</div>
+
+
+<div
+id="itemPage"
+class="page">
+
+<div class="panel">
+
+<h2>
+道具商店
+</h2>
+
+<div id="itemShop"></div>
+
+</div>
+
+</div>
+
+
+<div
+id="dragonPage"
+class="page">
+
+<div class="panel">
+
+<h2>
+七顆龍珠
+</h2>
+
+<p>
+
+目前持有
+
+<b>
+
+<span id="balls2">
+0
+</span>
+
+/7
+
+</b>
+
+顆龍珠。
+
+</p>
+
+
+<button
+id="summon"
+class="btn primary">
+召喚神龍
+</button>
+
+
+<div
+id="wishBox"
+class="notice"
+style="display:none">
+
+<b>
+🐲 神龍：說出你的願望。
+</b>
+
+<div
+class="row"
+style="margin-top:8px">
+
+<button
+class="btn wish"
+data-wish="coins">
+30,000 金幣
+</button>
+
+<button
+class="btn wish"
+data-wish="items">
+大量道具
+</button>
+
+<button
+class="btn wish"
+data-wish="unlock">
+隨機角色
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div
+id="musicPage"
+class="page">
+
+<div class="panel">
+
+<h2>
+戰鬥音樂
+</h2>
+
+<div class="small">
+可選擇你自己裝置中的音樂檔。
+</div>
+
+<div
+class="row"
+style="margin-top:8px">
+
+<input
+id="musicFile"
+type="file"
+accept="audio/*">
+
+<button
+id="musicToggle"
+class="btn">
+播放 / 暫停
+</button>
+
+<button
+id="musicStop"
+class="btn">
+停止
+</button>
+
+</div>
+
+<audio
+id="bgm"
+loop>
+</audio>
+
+</div>
+
+</div>
+
 </section>
 
+
 <section id="game">
-  <div id="hud">
-    <div class="hud">
-      <div id="pName" class="hudName"></div>
-      <div class="bar"><div id="pHp" class="hpFill"></div></div>
-      <div class="bar"><div id="pKi" class="kiFill"></div></div>
-      <div id="pTeam" class="small"></div>
-    </div>
-    <div id="round">FIGHT</div>
-    <div class="hud right">
-      <div id="eName" class="hudName"></div>
-      <div class="bar"><div id="eHp" class="hpFill"></div></div>
-      <div class="bar"><div id="eKi" class="kiFill"></div></div>
-      <div id="eTeam" class="small"></div>
-    </div>
-  </div>
 
-  <div id="canvasWrap">
-    <canvas id="fight" width="1100" height="560"></canvas>
-    <div id="message"></div>
-  </div>
+<div class="hud">
 
-  <div id="controls">
-    <div class="movePad">
-      <button class="ctrl" id="jump">跳</button>
-      <button class="ctrl" id="left">◀</button>
-      <button class="ctrl" id="charge">集氣</button>
-      <button class="ctrl" id="right">▶</button>
-    </div>
-    <div class="actionPad">
-      <button class="ctrl" id="punch">拳</button>
-      <button class="ctrl" id="kick">腳</button>
-      <button class="ctrl" id="kiShot">氣彈</button>
-      <button class="ctrl" id="special1">特別技 1</button>
-      <button class="ctrl" id="special2">特別技 2</button>
-      <button class="ctrl" id="ultimate">終極技</button>
-      <button class="ctrl" id="transform">變身</button>
-      <button class="ctrl" id="swap">換人</button>
-    </div>
-  </div>
+<div>
 
-  <div id="itemBar"></div>
-  <div id="p2Help" class="notice small">P2 鍵盤：← → 移動、↑ 跳、1 拳、2 腳、3 氣彈、4 特別技1、5 特別技2、6 終極技、0 集氣、Enter 變身、Shift 換人。</div>
+<div
+id="pName"
+class="name">
+</div>
 
-  <div id="resultPanel" class="notice">
-    <b id="resultText"></b>
-    <div class="row" style="margin-top:8px">
-      <button id="againBtn" class="pick primary">再打一場</button>
-      <button id="menuBtn" class="pick">回主選單</button>
-    </div>
-  </div>
+<div class="bar">
+<div
+id="pHp"
+class="hp">
+</div>
+</div>
 
-  <button id="quitBtn" class="pick" style="margin-top:8px">離開戰鬥</button>
+<div class="bar">
+<div
+id="pKi"
+class="ki">
+</div>
+</div>
+
+<div
+id="pMeta"
+class="small">
+</div>
+
+</div>
+
+
+<div id="round">
+FIGHT
+</div>
+
+
+<div class="right">
+
+<div
+id="eName"
+class="name">
+</div>
+
+<div class="bar">
+<div
+id="eHp"
+class="hp">
+</div>
+</div>
+
+<div class="bar">
+<div
+id="eKi"
+class="ki">
+</div>
+</div>
+
+<div
+id="eMeta"
+class="small">
+</div>
+
+</div>
+
+</div>
+
+
+<div id="stageWrap">
+
+<canvas
+id="fight"
+width="1100"
+height="560">
+</canvas>
+
+<div id="msg"></div>
+
+</div>
+
+
+<div id="controls">
+
+<div class="movePad">
+
+<button
+id="jump"
+class="ctrl">
+跳
+</button>
+
+<button
+id="left"
+class="ctrl">
+◀
+</button>
+
+<button
+id="charge"
+class="ctrl">
+集氣
+</button>
+
+<button
+id="right"
+class="ctrl">
+▶
+</button>
+
+</div>
+
+
+<div class="actPad">
+
+<button
+id="punch"
+class="ctrl">
+拳
+</button>
+
+<button
+id="kick"
+class="ctrl">
+腳
+</button>
+
+<button
+id="kiShot"
+class="ctrl">
+氣彈
+</button>
+
+<button
+id="special1"
+class="ctrl">
+特別技 1
+</button>
+
+<button
+id="special2"
+class="ctrl">
+特別技 2
+</button>
+
+<button
+id="ultimate"
+class="ctrl">
+終極技
+</button>
+
+<button
+id="transform"
+class="ctrl">
+變身
+</button>
+
+<button
+id="swap"
+class="ctrl">
+換人
+</button>
+
+</div>
+
+</div>
+
+
+<div id="itemBar"></div>
+
+
+<div
+id="p2Help"
+class="notice small"
+style="display:none">
+
+P2：
+← → 移動、
+↑ 跳、
+1 拳、
+2 腳、
+3 氣彈、
+4 特別技1、
+5 特別技2、
+6 終極技、
+0 集氣、
+Enter 變身、
+Shift 換人。
+
+</div>
+
+
+<div
+id="result"
+class="notice">
+
+<b id="resultText"></b>
+
+<div
+class="row"
+style="margin-top:8px">
+
+<button
+id="again"
+class="btn primary">
+再打一場
+</button>
+
+<button
+id="backMenu"
+class="btn">
+回主選單
+</button>
+
+</div>
+
+</div>
+
+
+<button
+id="quit"
+class="btn"
+style="margin-top:8px">
+離開戰鬥
+</button>
+
 </section>
 
 </div>
 
+
 <script>
 "use strict";
-const $ = s => document.querySelector(s);
-const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
-const rnd = (a,b) => a + Math.random() * (b - a);
+
+
+const $ =
+s => document.querySelector(s);
+
+
+const clamp =
+(v,a,b) =>
+Math.max(
+a,
+Math.min(b,v)
+);
+
+
+const rnd =
+(a,b) =>
+a +
+Math.random() *
+(b-a);
+
+
 
 const chars = [
-  {id:"goku", name:"孫悟空", price:2000, rarity:"normal", hp:110, atk:13, kiAtk:15, color:["#ef7929","#2350b7"], s1:"龜派氣功", s2:"瞬間移動攻擊", ult:"元氣彈", forms:[["超級賽亞人",35,1.18],["超級賽亞人2",45,1.30],["超級賽亞人3",55,1.45],["超級賽亞人之神",62,1.62],["超級賽亞人藍",70,1.78],["自在極意",85,2.05]]},
-  {id:"vegeta", name:"貝吉達", price:2100, rarity:"normal", hp:108, atk:14, kiAtk:15, color:["#314aa2","#f0f1f6"], s1:"加力砲", s2:"大爆炸攻擊", ult:"終極閃光", forms:[["超級賽亞人",35,1.18],["超級賽亞人2",45,1.30],["超級賽亞人之神",62,1.60],["超級賽亞人藍",70,1.78],["自我極意",85,2.05]]},
-  {id:"gohan", name:"孫悟飯", price:2500, rarity:"normal", hp:112, atk:13, kiAtk:16, color:["#6842a8","#25236d"], s1:"魔閃光", s2:"爆裂亂舞", ult:"親子龜派氣功", forms:[["超級賽亞人",35,1.18],["超級賽亞人2",45,1.34],["究極悟飯",62,1.58],["野獸悟飯",85,2.05]]},
-  {id:"goten", name:"孫悟天", price:2000, rarity:"normal", hp:95, atk:11, kiAtk:13, color:["#e77f34","#3155a3"], s1:"龜派氣功", s2:"高速突擊", ult:"超級悟天攻擊", forms:[["超級賽亞人",35,1.20]]},
-  {id:"trunks", name:"特南克斯", price:2000, rarity:"normal", hp:100, atk:12, kiAtk:14, color:["#5b68b7","#1c429a"], s1:"燃燒攻擊", s2:"劍擊連斬", ult:"終極爆發", forms:[["超級賽亞人",35,1.20],["超級賽亞人2",45,1.34]]},
-  {id:"piccolo", name:"比克", price:2100, rarity:"normal", hp:120, atk:13, kiAtk:16, color:["#4f954d","#673c8d"], s1:"魔貫光殺砲", s2:"巨大化", ult:"橙色爆裂", forms:[["潛能解放",45,1.30],["橙色比克",70,1.72]]},
-  {id:"krillin", name:"克林", price:2000, rarity:"normal", hp:92, atk:10, kiAtk:15, color:["#d97a31","#2f4d94"], s1:"氣圓斬", s2:"太陽拳", ult:"百倍氣圓斬", forms:[]},
-  {id:"yamcha", name:"飲茶", price:2000, rarity:"normal", hp:96, atk:11, kiAtk:12, color:["#d7853d","#40548a"], s1:"狼牙風風拳", s2:"操氣彈", ult:"真・狼牙風風拳", forms:[]},
-  {id:"tien", name:"天津飯", price:2000, rarity:"normal", hp:100, atk:12, kiAtk:15, color:["#5c8f8e","#263658"], s1:"太陽拳", s2:"四身拳", ult:"新氣功砲", forms:[]},
-  {id:"yajirobe", name:"亞奇洛貝", price:2000, rarity:"normal", hp:105, atk:12, kiAtk:8, color:["#6b7e3c","#56341f"], s1:"居合斬", s2:"仙豆支援", ult:"武士一閃", forms:[]},
-  {id:"roshi", name:"龜仙人", price:2000, rarity:"normal", hp:98, atk:12, kiAtk:15, color:["#df6f43","#eeeeee"], s1:"萬國驚天掌", s2:"殘像拳", ult:"最大威力龜派氣功", forms:[["全力形態",45,1.35]]},
-  {id:"a17", name:"人造人17號", price:2500, rarity:"rare", hp:115, atk:14, kiAtk:15, color:["#3d6e8e","#49605b"], s1:"能量屏障", s2:"連續氣彈", ult:"全力能量球", forms:[]},
-  {id:"a18", name:"人造人18號", price:2500, rarity:"rare", hp:112, atk:14, kiAtk:15, color:["#6289b7","#30394f"], s1:"無限能源連擊", s2:"高速氣彈", ult:"雙重能量波", forms:[]},
-  {id:"buu", name:"普烏", price:3000, rarity:"rare", hp:145, atk:14, kiAtk:16, color:["#ef8db7","#f4e8df"], s1:"伸長手臂", s2:"巧克力光線", ult:"毀滅爆破", forms:[["純粹普烏",55,1.48]]},
-  {id:"frieza", name:"弗利沙", price:3000, rarity:"rare", hp:115, atk:15, kiAtk:18, color:["#eeeeee","#9256b2"], s1:"死亡光束", s2:"超能力束縛", ult:"死亡球", forms:[["最終形態",35,1.22],["黃金弗利沙",62,1.65],["黑金弗利沙",85,2.03]]},
-  {id:"cell", name:"賽魯", price:5000, rarity:"rare", hp:130, atk:16, kiAtk:17, color:["#5a9b5e","#593173"], s1:"太陽拳", s2:"吸收能量", ult:"完美龜派氣功", forms:[["完全體",55,1.50]]},
-  {id:"broly", name:"布羅利", price:5000, rarity:"rare", hp:155, atk:18, kiAtk:16, color:["#4f8d3d","#653178"], s1:"狂暴衝擊", s2:"巨型能量彈", ult:"全力爆裂", forms:[["超級賽亞人",45,1.35],["全力超級賽亞人",70,1.82]]},
-  {id:"jiren", name:"吉連", price:12500, rarity:"epic", hp:165, atk:20, kiAtk:20, color:["#b53a3a","#242424"], s1:"震空拳", s2:"力量衝擊", ult:"全力爆炎", forms:[["全力吉連",70,1.65]]},
-  {id:"beerus", name:"比魯斯", price:25000, rarity:"epic", hp:175, atk:22, kiAtk:24, color:["#8168aa","#263b72"], s1:"破壞", s2:"破壞神彈", ult:"破壞神之怒", forms:[]},
-  {id:"whis", name:"維斯", price:25000, rarity:"epic", hp:170, atk:21, kiAtk:25, color:["#83d5e7","#77536f"], s1:"天使迴避", s2:"神速手刀", ult:"天使衝擊", forms:[]},
-  {id:"champa", name:"象帕", price:25000, rarity:"epic", hp:180, atk:23, kiAtk:22, color:["#8662a3","#242e66"], s1:"破壞重擊", s2:"破壞光球", ult:"第六宇宙爆破", forms:[]},
-  {id:"grand", name:"大神官", price:40000, rarity:"mega", hp:195, atk:25, kiAtk:27, color:["#e3efff","#728ccc"], s1:"神速", s2:"空間封鎖", ult:"天界審判", forms:[]},
-  {id:"zeno", name:"全王", price:50000, rarity:"mega", hp:220, atk:26, kiAtk:31, color:["#75a8ff","#e84b83"], s1:"抹除", s2:"王之命令", ult:"全宇宙清除", forms:[]}
+
+{
+id:"goku",
+name:"孫悟空",
+price:2000,
+rarity:"normal",
+hp:110,
+atk:13,
+kiAtk:15,
+colors:[
+"#ef7929",
+"#2350b7"
+],
+style:"goku",
+s1:"龜派氣功",
+s2:"瞬間移動攻擊",
+ult:"元氣彈",
+forms:[
+["超級賽亞人",35,1.18],
+["超級賽亞人2",45,1.30],
+["超級賽亞人3",55,1.45],
+["超級賽亞人之神",62,1.62],
+["超級賽亞人藍",70,1.78],
+["自在極意",85,2.05]
+]
+},
+
+
+{
+id:"vegeta",
+name:"貝吉達",
+price:2100,
+rarity:"normal",
+hp:108,
+atk:14,
+kiAtk:15,
+colors:[
+"#2c4b9f",
+"#f2f2f5"
+],
+style:"vegeta",
+s1:"加力砲",
+s2:"大爆炸攻擊",
+ult:"終極閃光",
+forms:[
+["超級賽亞人",35,1.18],
+["超級賽亞人2",45,1.30],
+["超級賽亞人之神",62,1.60],
+["超級賽亞人藍",70,1.78],
+["自我極意",85,2.05]
+]
+},
+
+
+{
+id:"gohan",
+name:"孫悟飯",
+price:2500,
+rarity:"normal",
+hp:112,
+atk:13,
+kiAtk:16,
+colors:[
+"#6842a8",
+"#25236d"
+],
+style:"gohan",
+s1:"魔閃光",
+s2:"爆裂亂舞",
+ult:"親子龜派氣功",
+forms:[
+["超級賽亞人",35,1.18],
+["超級賽亞人2",45,1.34],
+["究極悟飯",62,1.58],
+["野獸悟飯",85,2.05]
+]
+},
+
+
+{
+id:"goten",
+name:"孫悟天",
+price:2000,
+rarity:"normal",
+hp:95,
+atk:11,
+kiAtk:13,
+colors:[
+"#e77f34",
+"#3155a3"
+],
+style:"goku",
+s1:"龜派氣功",
+s2:"高速突擊",
+ult:"超級悟天攻擊",
+forms:[
+["超級賽亞人",35,1.20]
+]
+},
+
+
+{
+id:"trunks",
+name:"特南克斯",
+price:2000,
+rarity:"normal",
+hp:100,
+atk:12,
+kiAtk:14,
+colors:[
+"#5b68b7",
+"#1c429a"
+],
+style:"trunks",
+s1:"燃燒攻擊",
+s2:"劍擊連斬",
+ult:"終極爆發",
+forms:[
+["超級賽亞人",35,1.20],
+["超級賽亞人2",45,1.34]
+]
+},
+
+
+{
+id:"piccolo",
+name:"比克",
+price:2100,
+rarity:"normal",
+hp:120,
+atk:13,
+kiAtk:16,
+colors:[
+"#6b3c8b",
+"#f5f1ea"
+],
+style:"piccolo",
+s1:"魔貫光殺砲",
+s2:"巨大化",
+ult:"橙色爆裂",
+forms:[
+["潛能解放",45,1.30],
+["橙色比克",70,1.72]
+]
+},
+
+
+{
+id:"krillin",
+name:"克林",
+price:2000,
+rarity:"normal",
+hp:92,
+atk:10,
+kiAtk:15,
+colors:[
+"#d97a31",
+"#2f4d94"
+],
+style:"krillin",
+s1:"氣圓斬",
+s2:"太陽拳",
+ult:"百倍氣圓斬",
+forms:[]
+},
+
+
+{
+id:"yamcha",
+name:"飲茶",
+price:2000,
+rarity:"normal",
+hp:96,
+atk:11,
+kiAtk:12,
+colors:[
+"#d7853d",
+"#40548a"
+],
+style:"yamcha",
+s1:"狼牙風風拳",
+s2:"操氣彈",
+ult:"真・狼牙風風拳",
+forms:[]
+},
+
+
+{
+id:"tien",
+name:"天津飯",
+price:2000,
+rarity:"normal",
+hp:100,
+atk:12,
+kiAtk:15,
+colors:[
+"#5c8f8e",
+"#263658"
+],
+style:"tien",
+s1:"太陽拳",
+s2:"四身拳",
+ult:"新氣功砲",
+forms:[]
+},
+
+
+{
+id:"yajirobe",
+name:"亞奇洛貝",
+price:2000,
+rarity:"normal",
+hp:105,
+atk:12,
+kiAtk:8,
+colors:[
+"#6b7e3c",
+"#56341f"
+],
+style:"yamcha",
+s1:"居合斬",
+s2:"仙豆支援",
+ult:"武士一閃",
+forms:[]
+},
+
+
+{
+id:"roshi",
+name:"龜仙人",
+price:2000,
+rarity:"normal",
+hp:98,
+atk:12,
+kiAtk:15,
+colors:[
+"#df6f43",
+"#eeeeee"
+],
+style:"roshi",
+s1:"萬國驚天掌",
+s2:"殘像拳",
+ult:"最大威力龜派氣功",
+forms:[
+["全力形態",45,1.35]
+]
+},
+
+
+{
+id:"a17",
+name:"人造人17號",
+price:2500,
+rarity:"rare",
+hp:115,
+atk:14,
+kiAtk:15,
+colors:[
+"#3d6e8e",
+"#49605b"
+],
+style:"a17",
+s1:"能量屏障",
+s2:"連續氣彈",
+ult:"全力能量球",
+forms:[]
+},
+
+
+{
+id:"a18",
+name:"人造人18號",
+price:2500,
+rarity:"rare",
+hp:112,
+atk:14,
+kiAtk:15,
+colors:[
+"#6289b7",
+"#30394f"
+],
+style:"a18",
+s1:"無限能源連擊",
+s2:"高速氣彈",
+ult:"雙重能量波",
+forms:[]
+},
+
+
+{
+id:"buu",
+name:"普烏",
+price:3000,
+rarity:"rare",
+hp:145,
+atk:14,
+kiAtk:16,
+colors:[
+"#ef8db7",
+"#f4e8df"
+],
+style:"buu",
+s1:"伸長手臂",
+s2:"巧克力光線",
+ult:"毀滅爆破",
+forms:[
+["純粹普烏",55,1.48]
+]
+},
+
+
+{
+id:"frieza",
+name:"弗利沙",
+price:3000,
+rarity:"rare",
+hp:115,
+atk:15,
+kiAtk:18,
+colors:[
+"#f0f0f0",
+"#9256b2"
+],
+style:"frieza",
+s1:"死亡光束",
+s2:"超能力束縛",
+ult:"死亡球",
+forms:[
+["最終形態",35,1.22],
+["黃金弗利沙",62,1.65],
+["黑金弗利沙",85,2.03]
+]
+},
+
+
+{
+id:"cell",
+name:"賽魯",
+price:5000,
+rarity:"rare",
+hp:130,
+atk:16,
+kiAtk:17,
+colors:[
+"#5a9b5e",
+"#593173"
+],
+style:"cell",
+s1:"太陽拳",
+s2:"吸收能量",
+ult:"完美龜派氣功",
+forms:[
+["完全體",55,1.50]
+]
+},
+
+
+{
+id:"broly",
+name:"布羅利",
+price:5000,
+rarity:"rare",
+hp:155,
+atk:18,
+kiAtk:16,
+colors:[
+"#4f8d3d",
+"#653178"
+],
+style:"broly",
+s1:"狂暴衝擊",
+s2:"巨型能量彈",
+ult:"全力爆裂",
+forms:[
+["超級賽亞人",45,1.35],
+["全力超級賽亞人",70,1.82]
+]
+},
+
+
+{
+id:"jiren",
+name:"吉連",
+price:12500,
+rarity:"epic",
+hp:165,
+atk:20,
+kiAtk:20,
+colors:[
+"#b53a3a",
+"#242424"
+],
+style:"jiren",
+s1:"震空拳",
+s2:"力量衝擊",
+ult:"全力爆炎",
+forms:[
+["全力吉連",70,1.65]
+]
+},
+
+
+{
+id:"beerus",
+name:"比魯斯",
+price:25000,
+rarity:"epic",
+hp:175,
+atk:22,
+kiAtk:24,
+colors:[
+"#8168aa",
+"#263b72"
+],
+style:"beerus",
+s1:"破壞",
+s2:"破壞神彈",
+ult:"破壞神之怒",
+forms:[]
+},
+
+
+{
+id:"whis",
+name:"維斯",
+price:25000,
+rarity:"epic",
+hp:170,
+atk:21,
+kiAtk:25,
+colors:[
+"#83d5e7",
+"#775272"
+],
+style:"whis",
+s1:"天使迴避",
+s2:"神速手刀",
+ult:"天使衝擊",
+forms:[]
+},
+
+
+{
+id:"champa",
+name:"象帕",
+price:25000,
+rarity:"epic",
+hp:180,
+atk:23,
+kiAtk:22,
+colors:[
+"#8562a3",
+"#202b64"
+],
+style:"champa",
+s1:"破壞重擊",
+s2:"破壞光球",
+ult:"第六宇宙爆破",
+forms:[]
+},
+
+
+{
+id:"grand",
+name:"大神官",
+price:40000,
+rarity:"mega",
+hp:195,
+atk:25,
+kiAtk:27,
+colors:[
+"#e2efff",
+"#6c88c9"
+],
+style:"whis",
+s1:"神速",
+s2:"空間封鎖",
+ult:"天界審判",
+forms:[]
+},
+
+
+{
+id:"zeno",
+name:"全王",
+price:50000,
+rarity:"mega",
+hp:220,
+atk:26,
+kiAtk:31,
+colors:[
+"#72a8ff",
+"#e74b86"
+],
+style:"zeno",
+s1:"抹除",
+s2:"王之命令",
+ult:"全宇宙清除",
+forms:[]
+}
+
 ];
 
+
+
 const itemDefs = {
-  senzu: {name:"仙豆", price:1200, desc:"回復 55% 最大生命", icon:"🫘"},
-  potara: {name:"波特拉耳環", price:4500, desc:"與下一位隊友合體，能力大幅提升", icon:"🟢"},
-  zsword: {name:"Z 神劍", price:3000, desc:"本場攻擊力 +35%", icon:"🗡️"},
-  capsule: {name:"萬能膠囊", price:900, desc:"隨機取得戰鬥效果", icon:"💊"},
-  staff: {name:"天使的手杖", price:3800, desc:"立刻補滿氣力並稍微回血", icon:"🪄"}
+
+senzu:{
+name:"仙豆",
+price:1200,
+desc:"回復 55% 最大生命",
+icon:"🫘"
+},
+
+potara:{
+name:"波特拉耳環",
+price:4500,
+desc:"與下一位隊友合體",
+icon:"🟢"
+},
+
+zsword:{
+name:"Z 神劍",
+price:3000,
+desc:"本場攻擊力 +35%",
+icon:"🗡️"
+},
+
+capsule:{
+name:"萬能膠囊",
+price:900,
+desc:"隨機戰鬥效果",
+icon:"💊"
+},
+
+staff:{
+name:"天使的手杖",
+price:3800,
+desc:"補滿氣力並少量回血",
+icon:"🪄"
+}
+
 };
 
-const difficulty = {
-  easy: {interval:1050, dmg:0.80, reward:500, aim:0.68},
-  normal: {interval:800, dmg:1, reward:900, aim:0.76},
-  hard: {interval:600, dmg:1.12, reward:1400, aim:0.82},
-  difficult: {interval:450, dmg:1.24, reward:2100, aim:0.88},
-  boss: {interval:330, dmg:1.38, reward:3200, aim:0.93}
+
+
+const diff = {
+
+easy:{
+interval:1050,
+dmg:.80,
+reward:500,
+aim:.68
+},
+
+normal:{
+interval:800,
+dmg:1,
+reward:900,
+aim:.76
+},
+
+hard:{
+interval:600,
+dmg:1.12,
+reward:1400,
+aim:.82
+},
+
+difficult:{
+interval:450,
+dmg:1.24,
+reward:2100,
+aim:.88
+},
+
+boss:{
+interval:330,
+dmg:1.38,
+reward:3200,
+aim:.93
+}
+
 };
 
-const saveKey = "db_ultimate_battle_v5";
-const starter = ["goku","vegeta","gohan","piccolo","krillin","tien"];
-let save = loadSave();
+
+
+const saveKey =
+"db_ultimate_working_v1";
+
+
+const starters = [
+"goku",
+"vegeta",
+"gohan",
+"piccolo",
+"krillin",
+"tien"
+];
+
+
 
 function loadSave(){
-  const base = {coins:12000, balls:0, unlocked:[...starter], items:{senzu:2,potara:0,zsword:1,capsule:1,staff:0}, wins:0};
-  try{
-    const x = JSON.parse(localStorage.getItem(saveKey) || "null");
-    if(!x) return base;
-    return {...base, ...x, items:{...base.items, ...(x.items || {})}, unlocked:Array.isArray(x.unlocked) ? x.unlocked : base.unlocked};
-  }catch(err){
-    return base;
-  }
-}
-function saveNow(){
-  localStorage.setItem(saveKey, JSON.stringify(save));
-  renderMeta();
-}
 
-const S = {
-  battleType:"cpu",
-  teamSize:1,
-  arena:"earth",
-  difficulty:"normal",
-  editSide:"p1",
-  pickP1:["goku"],
-  pickP2:["vegeta"],
-  playerTeam:[],
-  enemyTeam:[],
-  pi:0,
-  ei:0,
-  px:190,
-  ex:910,
-  py:0,
-  ey:0,
-  pvy:0,
-  evy:0,
-  projectiles:[],
-  effects:[],
-  running:false,
-  ended:false,
-  last:0,
-  aiClock:0,
-  keys:{},
-  messageTimer:0
+const base = {
+
+coins:12000,
+
+balls:0,
+
+unlocked:
+starters.slice(),
+
+items:{
+senzu:2,
+potara:0,
+zsword:1,
+capsule:1,
+staff:0
+},
+
+wins:0
+
 };
 
-function charById(id){ return chars.find(c => c.id === id); }
-function cloneChar(base){
-  return {
-    ...base,
-    maxHp: base.hp,
-    hp: base.hp,
-    ki: 55,
-    formIndex: -1,
-    formName: "普通形態",
-    mult: 1,
-    atkBuff: 1,
-    fused: false,
-    koHandled: false
-  };
-}
-function currentP(){ return S.playerTeam[S.pi]; }
-function currentE(){ return S.enemyTeam[S.ei]; }
-function alive(team){ return team.some(c => c.hp > 0); }
 
-function renderMeta(){
-  $("#coins").textContent = save.coins.toLocaleString();
-  $("#balls").textContent = save.balls;
-  $("#balls2").textContent = save.balls;
-  $("#summonBtn").disabled = save.balls < 7;
-}
-function rarityText(r){ return ({normal:"normal", rare:"rare", epic:"epic", mega:"mega"})[r] || r; }
+try{
 
-function renderRoster(){
-  const box = $("#roster");
-  box.innerHTML = "";
-  const picks = S.editSide === "p1" ? S.pickP1 : S.pickP2;
-  chars.forEach(c => {
-    const unlocked = save.unlocked.includes(c.id);
-    const selected = picks.includes(c.id);
-    const b = document.createElement("button");
-    b.className = "pick charCard" + (!unlocked ? " locked" : "") + (selected ? " selected" : "");
-    b.innerHTML = `<div class="charName">${unlocked ? "" : "🔒 "}${c.name}</div>
-      <span class="badge ${c.rarity}">${rarityText(c.rarity)}</span>
-      <div class="price">🪙 ${c.price.toLocaleString()}</div>
-      <div class="small">${c.s1} / ${c.s2}<br>終極：${c.ult}</div>`;
-    b.addEventListener("click", () => {
-      if(!unlocked){
-        showMenuNotice(`${c.name} 尚未解鎖，請先到商店購買。`);
-        return;
-      }
-      const arr = S.editSide === "p1" ? S.pickP1 : S.pickP2;
-      const ix = arr.indexOf(c.id);
-      if(ix >= 0){
-        arr.splice(ix, 1);
-      }else{
-        if(arr.length >= S.teamSize) arr.shift();
-        arr.push(c.id);
-      }
-      renderRoster();
-      renderTeamPickText();
-    });
-    box.appendChild(b);
-  });
-  renderTeamPickText();
+const x =
+JSON.parse(
+localStorage.getItem(saveKey)
+||
+"null"
+);
+
+
+if(!x)
+return base;
+
+
+return Object.assign(
+base,
+x,
+{
+items:
+Object.assign(
+base.items,
+x.items||{}
+)
+}
+);
+
+}
+catch(e){
+
+return base;
+
 }
 
-function renderTeamPickText(){
-  const p1 = S.pickP1.map(id => charById(id)?.name).filter(Boolean).join("、") || "未選";
-  const p2 = S.pickP2.map(id => charById(id)?.name).filter(Boolean).join("、") || "未選";
-  $("#teamPickText").textContent = S.battleType === "cpu" ? `P1：${p1}` : `P1：${p1}｜P2：${p2}`;
 }
 
-function showMenuNotice(text){
-  const n = document.createElement("div");
-  n.className = "notice";
-  n.textContent = text;
-  $("#battleSetup").prepend(n);
-  setTimeout(() => n.remove(), 1800);
-}
 
-function renderShop(){
-  const box = $("#shopGrid");
-  box.innerHTML = "";
-  chars.forEach(c => {
-    const owned = save.unlocked.includes(c.id);
-    const d = document.createElement("div");
-    d.className = "shopCard";
-    d.innerHTML = `<b>${c.name}</b>
-      <span class="badge ${c.rarity}">${c.rarity}</span>
-      <div class="small">HP ${c.hp}｜格鬥 ${c.atk}｜氣功 ${c.kiAtk}</div>
-      <div class="price">🪙 ${c.price.toLocaleString()}</div>
-      <button class="shopBtn ${owned ? "good" : ""}" ${owned ? "disabled" : ""}>${owned ? "已解鎖" : "購買"}</button>`;
-    d.querySelector("button").addEventListener("click", () => {
-      if(owned) return;
-      if(save.coins < c.price){
-        alert("金幣不足");
-        return;
-      }
-      save.coins -= c.price;
-      save.unlocked.push(c.id);
-      saveNow();
-      renderShop();
-      renderRoster();
-    });
-    box.appendChild(d);
-  });
-}
 
-function renderItemShop(){
-  const box = $("#itemShop");
-  box.innerHTML = "";
-  Object.entries(itemDefs).forEach(([id, it]) => {
-    const d = document.createElement("div");
-    d.className = "notice";
-    d.innerHTML = `<b>${it.icon} ${it.name}</b>　持有：<span>${save.items[id] || 0}</span>
-      <div class="small">${it.desc}</div>
-      <div class="price">🪙 ${it.price.toLocaleString()}</div>
-      <button class="shopBtn">購買</button>`;
-    d.querySelector("button").addEventListener("click", () => {
-      if(save.coins < it.price){
-        alert("金幣不足");
-        return;
-      }
-      save.coins -= it.price;
-      save.items[id] = (save.items[id] || 0) + 1;
-      saveNow();
-      renderItemShop();
-    });
-    box.appendChild(d);
-  });
-}
+let save =
+loadSave();
 
-document.querySelectorAll(".menuBtn").forEach(b => b.addEventListener("click", () => {
-  document.querySelectorAll(".menuBtn").forEach(x => x.classList.remove("active"));
-  b.classList.add("active");
-  document.querySelectorAll(".tabPage").forEach(x => x.style.display = "none");
-  $("#" + b.dataset.tab).style.display = "block";
-  if(b.dataset.tab === "shop") renderShop();
-  if(b.dataset.tab === "items") renderItemShop();
-}));
 
-function bindGroup(sel, fn){
-  document.querySelectorAll(sel + " .pick").forEach(b => b.addEventListener("click", () => {
-    document.querySelectorAll(sel + " .pick").forEach(x => x.classList.remove("active"));
-    b.classList.add("active");
-    fn(b);
-  }));
-}
 
-bindGroup("#battleTypeButtons", b => {
-  S.battleType = b.dataset.type;
-  $("#difficulty").disabled = S.battleType === "local";
-  $("#editP2").style.display = S.battleType === "local" ? "inline-block" : "none";
-  renderTeamPickText();
-});
-bindGroup("#teamSizeButtons", b => {
-  S.teamSize = Number(b.dataset.size);
-  S.pickP1 = S.pickP1.slice(0, S.teamSize);
-  S.pickP2 = S.pickP2.slice(0, S.teamSize);
-  renderRoster();
-});
-bindGroup("#arenaButtons", b => {
-  S.arena = b.dataset.arena;
-});
+const S = {
 
-$("#editP1").addEventListener("click", () => {
-  S.editSide = "p1";
-  $("#editP1").classList.add("active");
-  $("#editP2").classList.remove("active");
-  renderRoster();
-});
-$("#editP2").addEventListener("click", () => {
-  S.editSide = "p2";
-  $("#editP2").classList.add("active");
-  $("#editP1").classList.remove("active");
-  renderRoster();
-});
-$("#editP2").style.display = "none";
+battleType:"cpu",
 
-function fillTeam(picks, n, exclude = []){
-  const ids = [...picks].filter(id => save.unlocked.includes(id));
-  const pool = save.unlocked.filter(id => !ids.includes(id) && !exclude.includes(id) && charById(id));
-  while(ids.length < n && pool.length){
-    ids.push(pool.splice(Math.floor(Math.random() * pool.length), 1)[0]);
-  }
-  while(ids.length < n){
-    ids.push(starter[Math.floor(Math.random() * starter.length)]);
-  }
-  return ids.slice(0, n).map(id => cloneChar(charById(id)));
-}
+teamSize:1,
 
-function enemyCPU(n){
-  let pool = chars.filter(c => c.id !== S.pickP1[0]);
-  const rank = {easy:0, normal:1, hard:2, difficult:3, boss:4}[S.difficulty];
-  if(rank >= 3) pool = pool.filter(c => ["rare","epic","mega"].includes(c.rarity));
-  if(rank === 4) pool = pool.filter(c => ["epic","mega"].includes(c.rarity));
-  const out = [];
-  while(out.length < n){
-    out.push(cloneChar(pool[Math.floor(Math.random() * pool.length)]));
-  }
-  return out;
-}
+arena:"earth",
 
-function startGame(){
-  S.difficulty = $("#difficulty").value;
-  S.playerTeam = fillTeam(S.pickP1, S.teamSize);
-  S.enemyTeam = S.battleType === "cpu" ? enemyCPU(S.teamSize) : fillTeam(S.pickP2, S.teamSize, S.pickP1);
-  S.pi = 0;
-  S.ei = 0;
-  S.px = 190;
-  S.ex = 910;
-  S.py = 0;
-  S.ey = 0;
-  S.pvy = 0;
-  S.evy = 0;
-  S.projectiles = [];
-  S.effects = [];
-  S.keys = {};
-  S.running = true;
-  S.ended = false;
-  S.aiClock = 0;
-  $("#menuScreen").classList.remove("active");
-  $("#game").style.display = "block";
-  $("#resultPanel").style.display = "none";
-  $("#p2Help").style.display = S.battleType === "local" ? "block" : "none";
-  renderItemBar();
-  updateHud();
-  say("FIGHT!", 700);
-}
+difficulty:"normal",
 
-$("#startBtn").addEventListener("click", startGame);
-$("#againBtn").addEventListener("click", startGame);
+edit:"p1",
 
-function backMenu(){
-  S.running = false;
-  $("#game").style.display = "none";
-  $("#menuScreen").classList.add("active");
-  renderMeta();
-  renderRoster();
-}
-$("#menuBtn").addEventListener("click", backMenu);
-$("#quitBtn").addEventListener("click", backMenu);
+preview:"goku",
 
-function updateHud(){
-  const p = currentP();
-  const e = currentE();
-  if(!p || !e) return;
-  $("#pName").textContent = `${p.name}${p.formIndex >= 0 ? "・" + p.formName : ""}`;
-  $("#eName").textContent = `${e.name}${e.formIndex >= 0 ? "・" + e.formName : ""}`;
-  $("#pHp").style.width = clamp(p.hp / p.maxHp * 100, 0, 100) + "%";
-  $("#eHp").style.width = clamp(e.hp / e.maxHp * 100, 0, 100) + "%";
-  $("#pKi").style.width = clamp(p.ki, 0, 100) + "%";
-  $("#eKi").style.width = clamp(e.ki, 0, 100) + "%";
-  $("#pTeam").textContent = `${S.pi + 1}/${S.playerTeam.length}｜HP ${Math.ceil(p.hp)}｜氣 ${Math.floor(p.ki)}`;
-  $("#eTeam").textContent = `HP ${Math.ceil(e.hp)}｜氣 ${Math.floor(e.ki)}｜${S.ei + 1}/${S.enemyTeam.length}`;
-}
+pick1:[
+"goku"
+],
 
-function say(text, ms = 520){
-  $("#message").textContent = text;
-  clearTimeout(S.messageTimer);
-  S.messageTimer = setTimeout(() => {
-    $("#message").textContent = "";
-  }, ms);
-}
-function distance(){ return Math.abs(S.ex - S.px); }
-function actor(player){ return player ? currentP() : currentE(); }
-function target(player){ return player ? currentE() : currentP(); }
-function actorX(player){ return player ? S.px : S.ex; }
+pick2:[
+"vegeta"
+],
 
-function damage(t, amount, targetIsEnemy){
-  if(!S.running || !t || t.hp <= 0) return;
-  t.hp = clamp(t.hp - amount, 0, t.maxHp);
-  S.effects.push({type:"hit", x: targetIsEnemy ? S.ex : S.px, y: 340, life: 0.25});
-  if(t.hp <= 0 && !t.koHandled){
-    t.koHandled = true;
-    setTimeout(() => handleKO(targetIsEnemy), 240);
-  }
-  updateHud();
-}
+pTeam:[],
 
-function handleKO(enemyKO){
-  if(!S.running) return;
-  const team = enemyKO ? S.enemyTeam : S.playerTeam;
-  if(alive(team)){
-    if(enemyKO){
-      do{ S.ei = (S.ei + 1) % team.length; }while(currentE().hp <= 0);
-      S.ex = 910;
-      currentE().koHandled = false;
-      say("敵方換上 " + currentE().name, 700);
-    }else{
-      do{ S.pi = (S.pi + 1) % team.length; }while(currentP().hp <= 0);
-      S.px = 190;
-      currentP().koHandled = false;
-      say("我方換上 " + currentP().name, 700);
-    }
-    updateHud();
-    return;
-  }
-  endBattle(enemyKO);
-}
+eTeam:[],
 
-function endBattle(playerWon){
-  S.running = false;
-  S.ended = true;
-  const msg = playerWon ? "🏆 YOU WIN!" : "💥 YOU LOSE";
-  say(msg, 2500);
-  if(playerWon){
-    const reward = difficulty[S.difficulty].reward * S.teamSize;
-    save.coins += reward;
-    save.wins++;
-    let ball = false;
-    if(Math.random() < Math.min(0.55, 0.18 + 0.06 * S.teamSize)){
-      save.balls = Math.min(7, save.balls + 1);
-      ball = true;
-    }
-    $("#resultText").textContent = `${msg}　獎勵 ${reward.toLocaleString()} 金幣${ball ? "，並找到 1 顆龍珠！" : ""}`;
-    saveNow();
-  }else{
-    $("#resultText").textContent = msg;
-  }
-  $("#resultPanel").style.display = "block";
-}
+pi:0,
 
-function punch(player = true){
-  if(!S.running) return;
-  const a = actor(player), t = target(player);
-  if(!a || !t) return;
-  a.ki = clamp(a.ki + 5, 0, 100);
-  S.effects.push({type:"slash", x: actorX(player) + (player ? 42 : -42), y: 345, life: 0.16});
-  if(distance() < 150){
-    let d = a.atk * a.mult * a.atkBuff * rnd(0.80, 1.12);
-    if(!player && S.battleType === "cpu") d *= difficulty[S.difficulty].dmg;
-    damage(t, d, player);
-  }else if(player){
-    say("太遠了");
-  }
-  updateHud();
-}
+ei:0,
 
-function kick(player = true){
-  if(!S.running) return;
-  const a = actor(player), t = target(player);
-  if(!a || !t) return;
-  a.ki = clamp(a.ki + 4, 0, 100);
-  S.effects.push({type:"kick", x: actorX(player) + (player ? 55 : -55), y: 365, life: 0.18});
-  if(distance() < 165){
-    let d = a.atk * 1.18 * a.mult * a.atkBuff * rnd(0.82, 1.10);
-    if(!player && S.battleType === "cpu") d *= difficulty[S.difficulty].dmg;
-    damage(t, d, player);
-  }else if(player){
-    say("踢不到！");
-  }
-  updateHud();
-}
+px:190,
 
-function charge(player = true){
-  if(!S.running) return;
-  const a = actor(player);
-  a.ki = clamp(a.ki + (player ? 16 : 13), 0, 100);
-  S.effects.push({type:"aura", x: actorX(player), y: 350, life: 0.45, player});
-  updateHud();
-}
+ex:910,
 
-function fire(player = true, big = false, power = 1, label = ""){
-  if(!S.running) return false;
-  const a = actor(player);
-  const cost = big ? 65 : 12;
-  if(a.ki < cost){
-    if(player) say(big ? "終極技需要 65 氣" : "氣力不足");
-    return false;
-  }
-  a.ki -= cost;
-  S.projectiles.push({
-    x: actorX(player) + (player ? 55 : -55),
-    y: 330,
-    vx: (player ? 1 : -1) * (big ? 770 : 590),
-    r: big ? 38 : 14,
-    player,
-    damage: (a.kiAtk * (big ? 2.55 : 0.82) + a.atk * 0.15) * a.mult * power
-  });
-  if(label) say(label, 650);
-  updateHud();
-  return true;
-}
+py:0,
 
-function special(player = true, which = 1){
-  if(!S.running) return;
-  const a = actor(player), t = target(player);
-  if(!a || !t) return;
-  const cost = which === 1 ? 30 : 38;
-  if(a.ki < cost){
-    if(player) say(`特別技 ${which} 需要 ${cost} 氣`);
-    return;
-  }
-  a.ki -= cost;
-  const name = which === 1 ? a.s1 : a.s2;
-  say(name, 520);
-  const ranged = /龜派|砲|彈|光|氣|破壞|爆|魔貫|閃光|圓斬|操氣|驚天掌|抹除/.test(name);
-  let hit = ranged ? Math.random() < (player ? 0.88 : difficulty[S.difficulty].aim) : distance() < (which === 1 ? 250 : 190);
-  if(S.battleType === "local" && !player){
-    hit = ranged ? Math.random() < 0.88 : distance() < 220;
-  }
-  if(hit){
-    let d = (a.kiAtk * (which === 1 ? 1.35 : 1.55) + a.atk * 0.42) * a.mult * a.atkBuff;
-    if(!player && S.battleType === "cpu") d *= difficulty[S.difficulty].dmg;
-    if(name.includes("太陽拳")){
-      S.effects.push({type:"flash", x: actorX(player), y: 320, life: 0.45});
-      d *= 0.75;
-    }
-    if(name.includes("吸收")) a.ki = clamp(a.ki + 22, 0, 100);
-    if(name.includes("仙豆")) a.hp = clamp(a.hp + a.maxHp * 0.25, 0, a.maxHp);
-    if(name.includes("巨大化")) a.atkBuff = Math.max(a.atkBuff, 1.4);
-    damage(t, d, player);
-  }else if(player){
-    say("MISS!");
-  }
-  updateHud();
-}
+ey:0,
 
-function ultimate(player = true){
-  const a = actor(player);
-  if(!a) return;
-  const accuracy = player ? 0.76 : (S.battleType === "cpu" ? difficulty[S.difficulty].aim * 0.86 : 0.76);
-  if(a.ki < 65){
-    if(player) say("終極技需要 65 氣");
-    return;
-  }
-  a.ki -= 65;
-  updateHud();
-  say("⚡ " + a.ult + "！", 650);
-  if(Math.random() > accuracy){
-    if(player) say("終極技落空！", 700);
-    return;
-  }
-  S.projectiles.push({
-    x: actorX(player) + (player ? 55 : -55),
-    y: 330,
-    vx: (player ? 1 : -1) * 800,
-    r: 40,
-    player,
-    damage: (a.kiAtk * 2.75 + a.atk * 0.55) * a.mult * (player ? 1 : (S.battleType === "cpu" ? difficulty[S.difficulty].dmg : 1))
-  });
-}
+pvy:0,
 
-function transform(player = true){
-  if(!S.running) return;
-  const a = actor(player);
-  if(!a) return;
-  if(!a.forms || a.forms.length === 0){
-    if(player) say("這個角色沒有變身階段");
-    return;
-  }
-  const next = a.formIndex + 1;
-  if(next >= a.forms.length){
-    if(player) say("已經是最高形態");
-    return;
-  }
-  const [name, cost, mult] = a.forms[next];
-  if(a.ki < cost){
-    if(player) say(`${name} 需要 ${cost} 氣`);
-    return;
-  }
-  a.ki -= cost;
-  a.formIndex = next;
-  a.formName = name;
-  a.mult = mult;
-  const boost = 12;
-  a.maxHp += boost;
-  a.hp = clamp(a.hp + boost, 0, a.maxHp);
-  S.effects.push({type:"transform", x: actorX(player), y: 330, life: 0.8});
-  say(`${a.name} → ${name}！`, 800);
-  updateHud();
-}
+evy:0,
 
-function swap(player = true){
-  if(!S.running) return;
-  const team = player ? S.playerTeam : S.enemyTeam;
-  if(team.length <= 1) return;
-  if(player){
-    const st = S.pi;
-    do{ S.pi = (S.pi + 1) % team.length; }while(currentP().hp <= 0 && S.pi !== st);
-    S.px = 190;
-    say("換上 " + currentP().name, 500);
-  }else{
-    const st = S.ei;
-    do{ S.ei = (S.ei + 1) % team.length; }while(currentE().hp <= 0 && S.ei !== st);
-    S.ex = 910;
-    say("P2 換上 " + currentE().name, 500);
-  }
-  updateHud();
-}
+shots:[],
 
-function jump(player = true){
-  if(!S.running) return;
-  if(player){
-    if(S.py === 0) S.pvy = -710;
-  }else{
-    if(S.ey === 0) S.evy = -710;
-  }
-}
+fx:[],
 
-function move(player, dir, dt){
-  const speed = 470;
-  if(player){
-    S.px = clamp(S.px + dir * speed * dt, 65, 1030);
-  }else{
-    S.ex = clamp(S.ex + dir * speed * dt, 65, 1030);
-  }
-}
+run:false,
 
-function renderItemBar(){
-  const box = $("#itemBar");
-  box.innerHTML = "<span class='small'>P1 道具：</span>";
-  Object.entries(itemDefs).forEach(([id, it]) => {
-    const b = document.createElement("button");
-    b.className = "itemBtn";
-    b.textContent = `${it.icon}${it.name} ×${save.items[id] || 0}`;
-    b.addEventListener("click", () => useItem(id));
-    box.appendChild(b);
-  });
-}
+last:0,
 
-function useItem(id){
-  if(!S.running) return;
-  if((save.items[id] || 0) <= 0){
-    say("沒有這個道具");
-    return;
-  }
-  const p = currentP();
-  if(id === "senzu"){
-    p.hp = clamp(p.hp + p.maxHp * 0.55, 0, p.maxHp);
-    say("仙豆！生命回復");
-  }
-  if(id === "zsword"){
-    p.atkBuff = Math.max(p.atkBuff, 1.35);
-    say("Z 神劍！攻擊力提升");
-  }
-  if(id === "capsule"){
-    const r = Math.random();
-    if(r < 0.34){
-      p.hp = clamp(p.hp + 35, 0, p.maxHp);
-      say("膠囊：恢復藥");
-    }else if(r < 0.67){
-      p.ki = 100;
-      say("膠囊：氣力全滿");
-    }else{
-      p.atkBuff = Math.max(p.atkBuff, 1.25);
-      say("膠囊：攻擊強化");
-    }
-  }
-  if(id === "staff"){
-    p.ki = 100;
-    p.hp = clamp(p.hp + 20, 0, p.maxHp);
-    say("天使的手杖！氣力全滿");
-  }
-  if(id === "potara"){
-    if(S.playerTeam.length < 2){
-      say("沒有隊友可以合體");
-      return;
-    }
-    const j = (S.pi + 1) % S.playerTeam.length;
-    const other = S.playerTeam[j];
-    if(other.hp <= 0){
-      say("下一位隊友已不能戰鬥");
-      return;
-    }
-    p.name = `${p.name}×${other.name} 合體`;
-    p.maxHp = Math.round((p.maxHp + other.maxHp) * 0.72);
-    p.hp = clamp(p.hp + other.hp * 0.55, 0, p.maxHp);
-    p.atk = Math.round((p.atk + other.atk) * 0.72);
-    p.kiAtk = Math.round((p.kiAtk + other.kiAtk) * 0.72);
-    p.mult *= 1.28;
-    p.fused = true;
-    other.hp = 0;
-    other.koHandled = true;
-    say("波特拉合體成功！", 800);
-  }
-  save.items[id]--;
-  saveNow();
-  renderItemBar();
-  updateHud();
-}
+ai:0,
 
-function aiAct(){
-  if(!S.running || S.battleType !== "cpu") return;
-  const e = currentE();
-  if(!e || e.hp <= 0) return;
-  const r = Math.random();
-  if(distance() > 210){
-    if(r < 0.42){
-      S.ex -= Math.min(68, distance() - 175);
-    }else if(r < 0.63){
-      charge(false);
-    }else if(r < 0.86){
-      fire(false);
-    }else if(e.forms.length && e.ki >= e.forms[Math.min(e.formIndex + 1, e.forms.length - 1)][1]){
-      transform(false);
-    }
-  }else{
-    if(e.ki >= 65 && r < 0.14){
-      ultimate(false);
-    }else if(e.ki >= 38 && r < 0.30){
-      special(false, 2);
-    }else if(e.ki >= 30 && r < 0.44){
-      special(false, 1);
-    }else if(r < 0.72){
-      punch(false);
-    }else if(r < 0.86){
-      kick(false);
-    }else{
-      S.ex = clamp(S.ex + 50, 65, 1030);
-    }
-  }
-  if(S.enemyTeam.length > 1 && e.hp < e.maxHp * 0.22 && Math.random() < 0.18){
-    swap(false);
-  }
-}
+keys:{},
 
-const canvas = $("#fight");
-const ctx = canvas.getContext("2d");
+msgTimer:0
 
-function drawBackground(){
-  const w = canvas.width, h = canvas.height;
-  const g = ctx.createLinearGradient(0, 0, 0, h);
-  const A = {
-    earth:["#223a7c","#dba15b","#714a32"],
-    time:["#f3f1df","#dbe9ff","#dedede"],
-    gravity:["#131827","#5a1e29","#232838"],
-    kingkai:["#122c66","#6cc76b","#466f35"],
-    supreme:["#261446","#a171ca","#677c53"],
-    beerus:["#75d0ff","#ddb8ff","#68b864"],
-    zeno:["#1a1643","#6253a5","#e3d47c"]
-  }[S.arena] || ["#223a7c","#dba15b","#714a32"];
-  g.addColorStop(0, A[0]);
-  g.addColorStop(0.62, A[0]);
-  g.addColorStop(0.63, A[1]);
-  g.addColorStop(1, A[2]);
-  ctx.fillStyle = g;
-  ctx.fillRect(0, 0, w, h);
-  if(["supreme","zeno"].includes(S.arena)){
-    ctx.fillStyle = "#fff";
-    for(let i = 0; i < 65; i++){
-      ctx.fillRect((i * 149) % w, (i * 91) % 330, 2, 2);
-    }
-  }
-  ctx.fillStyle = "#ffffff66";
-  ctx.fillRect(0, 455, w, 4);
-}
+};
 
-function drawFighter(x, y, c, enemy = false){
-  ctx.save();
-  ctx.translate(x, 455 - y);
-  if(enemy) ctx.scale(-1, 1);
-  if(c.formIndex >= 0 || c.fused){
-    let aura = "#ffe76644";
-    if(c.formName.includes("藍")) aura = "#4fdfff44";
-    if(c.formName.includes("自在")) aura = "#e6efff55";
-    if(c.formName.includes("自我")) aura = "#b376ff55";
-    ctx.fillStyle = aura;
-    ctx.beginPath();
-    ctx.ellipse(0, -112, 63, 140, 0, 0, Math.PI * 2);
-    ctx.fill();
-  }
-  ctx.lineCap = "round";
-  ctx.strokeStyle = c.color[1];
-  ctx.lineWidth = 10;
-  ctx.beginPath();
-  ctx.moveTo(-17, -70);
-  ctx.lineTo(-23, -8);
-  ctx.moveTo(17, -70);
-  ctx.lineTo(23, -8);
-  ctx.stroke();
 
-  ctx.fillStyle = c.color[0];
-  ctx.strokeStyle = "#111";
-  ctx.lineWidth = 4;
-  ctx.beginPath();
-  ctx.rect(-34, -140, 68, 72);
-  ctx.fill();
-  ctx.stroke();
 
-  ctx.strokeStyle = "#efbd96";
-  ctx.lineWidth = 13;
-  ctx.beginPath();
-  ctx.moveTo(-28, -125);
-  ctx.lineTo(-51, -76);
-  ctx.moveTo(28, -125);
-  ctx.lineTo(55, -90);
-  ctx.stroke();
+function saveNow(){
 
-  ctx.fillStyle = "#efbd96";
-  ctx.strokeStyle = "#111";
-  ctx.lineWidth = 4;
-  ctx.beginPath();
-  ctx.arc(0, -166, 25, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.stroke();
-
-  let hair = "#121212";
-  if(c.formName.includes("超級") || c.formName.includes("全力")) hair = "#ffe04a";
-  if(c.formName.includes("藍")) hair = "#46d7ff";
-  if(c.formName.includes("自在")) hair = "#e4e8ef";
-  if(c.formName.includes("自我")) hair = "#9d61df";
-  if(c.formName.includes("野獸")) hair = "#eef0f5";
-  ctx.fillStyle = hair;
-  ctx.beginPath();
-  ctx.moveTo(-31, -179);
-  ctx.lineTo(-18, -219);
-  ctx.lineTo(-5, -188);
-  ctx.lineTo(4, -229);
-  ctx.lineTo(14, -189);
-  ctx.lineTo(35, -217);
-  ctx.lineTo(25, -178);
-  ctx.closePath();
-  ctx.fill();
-
-  ctx.fillStyle = "#222";
-  ctx.fillRect(9, -168, 6, 3);
-  ctx.restore();
-
-  ctx.fillStyle = "#fff";
-  ctx.font = "bold 17px system-ui";
-  ctx.textAlign = "center";
-  ctx.fillText(c.name, x, 495 - y);
-}
-
-function drawProjectiles(dt){
-  for(let i = S.projectiles.length - 1; i >= 0; i--){
-    const b = S.projectiles[i];
-    b.x += b.vx * dt;
-    ctx.save();
-    ctx.shadowBlur = b.r * 1.5;
-    ctx.shadowColor = b.r > 25 ? "#ff9e36" : "#4fcfff";
-    ctx.fillStyle = b.r > 25 ? "#fff1a5" : "#dffaff";
-    ctx.beginPath();
-    ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.restore();
-    const hx = b.player ? S.ex : S.px;
-    const hy = b.player ? S.ey : S.py;
-    if(Math.abs(b.x - hx) < 58 && Math.abs(b.y - (330 - hy)) < 95){
-      damage(b.player ? currentE() : currentP(), b.damage, b.player);
-      S.projectiles.splice(i, 1);
-      continue;
-    }
-    if(b.x < -100 || b.x > 1200){
-      S.projectiles.splice(i, 1);
-    }
-  }
-}
-
-function drawEffects(dt){
-  for(let i = S.effects.length - 1; i >= 0; i--){
-    const e = S.effects[i];
-    e.life -= dt;
-    ctx.save();
-    if(e.type === "hit"){
-      ctx.fillStyle = "#fff";
-      ctx.font = "bold 48px system-ui";
-      ctx.textAlign = "center";
-      ctx.fillText("✦", e.x, e.y);
-    }else if(e.type === "slash" || e.type === "kick"){
-      ctx.fillStyle = "#ffe46a";
-      ctx.font = "bold 42px system-ui";
-      ctx.fillText(e.type === "kick" ? "💥" : "⚡", e.x, e.y);
-    }else if(e.type === "aura" || e.type === "transform"){
-      ctx.globalAlpha = clamp(e.life / (e.type === "transform" ? 0.8 : 0.45), 0, 1);
-      ctx.strokeStyle = e.type === "transform" ? "#ffe75c" : "#66e5ff";
-      ctx.lineWidth = 9;
-      ctx.beginPath();
-      ctx.ellipse(e.x, 350, 60, 128, 0, 0, Math.PI * 2);
-      ctx.stroke();
-    }else if(e.type === "flash"){
-      ctx.fillStyle = "#ffffffcc";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-    }
-    ctx.restore();
-    if(e.life <= 0) S.effects.splice(i, 1);
-  }
-}
-
-function loop(t){
-  const dt = Math.min(0.033, (t - S.last) / 1000 || 0);
-  S.last = t;
-  if(S.running){
-    if(S.keys["a"]) move(true, -1, dt);
-    if(S.keys["d"]) move(true, 1, dt);
-    if(S.battleType === "local"){
-      if(S.keys["arrowleft"]) move(false, -1, dt);
-      if(S.keys["arrowright"]) move(false, 1, dt);
-    }
-    S.py = Math.max(0, S.py + S.pvy * dt);
-    S.pvy += 1550 * dt;
-    if(S.py === 0 && S.pvy > 0) S.pvy = 0;
-    S.ey = Math.max(0, S.ey + S.evy * dt);
-    S.evy += 1550 * dt;
-    if(S.ey === 0 && S.evy > 0) S.evy = 0;
-    if(S.battleType === "cpu"){
-      S.aiClock += dt * 1000;
-      if(S.aiClock >= difficulty[S.difficulty].interval){
-        S.aiClock = 0;
-        aiAct();
-      }
-    }
-  }
-  drawBackground();
-  if(currentP()) drawFighter(S.px, S.py, currentP(), false);
-  if(currentE()) drawFighter(S.ex, S.ey, currentE(), true);
-  drawProjectiles(dt);
-  drawEffects(dt);
-  requestAnimationFrame(loop);
-}
-requestAnimationFrame(loop);
-
-function holdButton(id, key){
-  const el = $(id);
-  const on = e => {
-    e.preventDefault();
-    S.keys[key] = true;
-    if(el.setPointerCapture) el.setPointerCapture(e.pointerId);
-  };
-  const off = () => {
-    S.keys[key] = false;
-  };
-  el.addEventListener("pointerdown", on);
-  el.addEventListener("pointerup", off);
-  el.addEventListener("pointercancel", off);
-  el.addEventListener("lostpointercapture", off);
-}
-
-holdButton("#left", "a");
-holdButton("#right", "d");
-
-$("#jump").addEventListener("click", () => jump(true));
-$("#charge").addEventListener("click", () => charge(true));
-$("#punch").addEventListener("click", () => punch(true));
-$("#kick").addEventListener("click", () => kick(true));
-$("#kiShot").addEventListener("click", () => fire(true));
-$("#special1").addEventListener("click", () => special(true, 1));
-$("#special2").addEventListener("click", () => special(true, 2));
-$("#ultimate").addEventListener("click", () => ultimate(true));
-$("#transform").addEventListener("click", () => transform(true));
-$("#swap").addEventListener("click", () => swap(true));
-
-document.addEventListener("keydown", e => {
-  const k = e.key.toLowerCase();
-  S.keys[k] = true;
-  if(e.repeat) return;
-  if(k === "w") jump(true);
-  if(k === "j") punch(true);
-  if(k === "h") kick(true);
-  if(k === "k") fire(true);
-  if(k === "l") special(true, 1);
-  if(k === ";") special(true, 2);
-  if(k === "u") ultimate(true);
-  if(k === "i") charge(true);
-  if(k === "t") transform(true);
-  if(k === "r") swap(true);
-  if(S.battleType === "local"){
-    if(k === "arrowup") jump(false);
-    if(k === "1") punch(false);
-    if(k === "2") kick(false);
-    if(k === "3") fire(false);
-    if(k === "4") special(false, 1);
-    if(k === "5") special(false, 2);
-    if(k === "6") ultimate(false);
-    if(k === "0") charge(false);
-    if(k === "enter") transform(false);
-    if(k === "shift") swap(false);
-  }
-});
-
-document.addEventListener("keyup", e => {
-  S.keys[e.key.toLowerCase()] = false;
-});
-
-$("#summonBtn").addEventListener("click", () => {
-  $("#wishPanel").style.display = save.balls >= 7 ? "block" : "none";
-});
-document.querySelectorAll(".wish").forEach(b => b.addEventListener("click", () => {
-  if(save.balls < 7) return;
-  save.balls -= 7;
-  if(b.dataset.wish === "coins") save.coins += 30000;
-  if(b.dataset.wish === "items") Object.keys(itemDefs).forEach(id => save.items[id] = (save.items[id] || 0) + 3);
-  if(b.dataset.wish === "unlock"){
-    const locked = chars.filter(c => !save.unlocked.includes(c.id));
-    if(locked.length){
-      save.unlocked.push(locked[Math.floor(Math.random() * locked.length)].id);
-    }else{
-      save.coins += 20000;
-    }
-  }
-  saveNow();
-  $("#wishPanel").style.display = "none";
-  renderRoster();
-  renderShop();
-  alert("神龍已實現你的願望！");
-}));
-
-$("#resetSaveBtn").addEventListener("click", () => {
-  if(confirm("確定要重設金幣、角色、道具和龍珠嗎？")){
-    localStorage.removeItem(saveKey);
-    save = loadSave();
-    saveNow();
-    S.pickP1 = ["goku"];
-    S.pickP2 = ["vegeta"];
-    renderRoster();
-    renderShop();
-    renderItemShop();
-  }
-});
-
-const bgm = $("#bgm");
-const musicFile = $("#musicFile");
-musicFile.addEventListener("change", () => {
-  const f = musicFile.files?.[0];
-  if(!f) return;
-  bgm.src = URL.createObjectURL(f);
-  bgm.play().catch(() => {});
-});
-$("#musicPlay").addEventListener("click", () => {
-  if(!bgm.src){
-    alert("請先選擇你自己的音樂檔");
-    return;
-  }
-  if(bgm.paused) bgm.play().catch(() => {});
-  else bgm.pause();
-});
-$("#musicStop").addEventListener("click", () => {
-  bgm.pause();
-  bgm.currentTime = 0;
-});
+localStorage.setItem(
+saveKey,
+JSON.stringify(save)
+);
 
 renderMeta();
+
+}
+
+
+
+function byId(id){
+
+return chars.find(
+c=>c.id===id
+);
+
+}
+
+
+
+function cloneChar(c){
+
+return Object.assign(
+{},
+c,
+{
+
+maxHp:c.hp,
+
+hp:c.hp,
+
+ki:55,
+
+formIndex:-1,
+
+formName:"普通形態",
+
+mult:1,
+
+atkBuff:1,
+
+fused:false,
+
+koHandled:false
+
+}
+);
+
+}
+
+
+
+function P(){
+
+return S.pTeam[S.pi];
+
+}
+
+
+
+function E(){
+
+return S.eTeam[S.ei];
+
+}
+
+
+
+function anyAlive(team){
+
+return team.some(
+c=>c.hp>0
+);
+
+}
+
+
+
+function styleData(c){
+
+const map = {
+
+goku:{
+skin:"#efbd96",
+hair:"#161616",
+hairStyle:"goku"
+},
+
+vegeta:{
+skin:"#efbd96",
+hair:"#161616",
+hairStyle:"vegeta",
+armor:true
+},
+
+gohan:{
+skin:"#efbd96",
+hair:"#161616",
+hairStyle:"gohan"
+},
+
+goten:{
+skin:"#efbd96",
+hair:"#161616",
+hairStyle:"goku"
+},
+
+trunks:{
+skin:"#efbd96",
+hair:"#a996dc",
+hairStyle:"trunks"
+},
+
+piccolo:{
+skin:"#62a34f",
+hair:"#62a34f",
+hairStyle:"none",
+namek:true,
+cape:true
+},
+
+krillin:{
+skin:"#efbd96",
+hair:"#161616",
+hairStyle:"bald"
+},
+
+yamcha:{
+skin:"#efbd96",
+hair:"#161616",
+hairStyle:"yamcha"
+},
+
+tien:{
+skin:"#efbd96",
+hair:"#161616",
+hairStyle:"bald",
+thirdEye:true
+},
+
+yajirobe:{
+skin:"#efbd96",
+hair:"#161616",
+hairStyle:"yamcha"
+},
+
+roshi:{
+skin:"#efbd96",
+hair:"#fff",
+hairStyle:"bald",
+roshi:true
+},
+
+a17:{
+skin:"#efbd96",
+hair:"#161616",
+hairStyle:"a17"
+},
+
+a18:{
+skin:"#efbd96",
+hair:"#f1df76",
+hairStyle:"a18"
+},
+
+buu:{
+skin:"#ef8db7",
+hair:"#ef8db7",
+hairStyle:"buu"
+},
+
+frieza:{
+skin:"#f2f2f3",
+hair:"#9256b2",
+hairStyle:"frieza"
+},
+
+cell:{
+skin:"#6ea557",
+hair:"#5c9d5b",
+hairStyle:"cell"
+},
+
+broly:{
+skin:"#efbd96",
+hair:"#161616",
+hairStyle:"broly",
+big:true
+},
+
+jiren:{
+skin:"#cfcfd1",
+hair:"#111",
+hairStyle:"bald",
+big:true
+},
+
+beerus:{
+skin:"#8d6fb1",
+hair:"#8d6fb1",
+hairStyle:"cat"
+},
+
+whis:{
+skin:"#d9eff5",
+hair:"#e7f6ff",
+hairStyle:"whis",
+angel:true
+},
+
+champa:{
+skin:"#946caf",
+hair:"#946caf",
+hairStyle:"cat",
+big:true
+},
+
+grand:{
+skin:"#e7f3f8",
+hair:"#f3f9ff",
+hairStyle:"whis",
+angel:true
+},
+
+zeno:{
+skin:"#72a8ff",
+hair:"#e74b86",
+hairStyle:"zeno"
+}
+
+};
+
+
+return Object.assign(
+{
+
+skin:"#efbd96",
+
+hair:"#161616",
+
+hairStyle:"goku",
+
+armor:false,
+
+namek:false,
+
+cape:false,
+
+thirdEye:false,
+
+roshi:false,
+
+big:false,
+
+angel:false
+
+},
+map[c.id]||{}
+);
+
+}
+
+
+
+function hairColor(
+c,
+s
+){
+
+if(
+c.formIndex < 0
+)
+return s.hair;
+
+
+const f =
+c.formName || "";
+
+
+if(
+f.includes("藍")
+)
+return "#45d8ff";
+
+
+if(
+f.includes("自在")
+)
+return "#e9edf2";
+
+
+if(
+f.includes("自我")
+)
+return "#a66cec";
+
+
+if(
+f.includes("野獸")
+)
+return "#f1f2f5";
+
+
+if(
+f.includes("黃金")
+)
+return "#f3c43d";
+
+
+if(
+f.includes("黑金")
+)
+return "#25252a";
+
+
+if(
+f.includes("超級")
+||
+f.includes("全力")
+)
+return "#ffe14a";
+
+
+return s.hair;
+
+}
+
+
+
+function portraitSVG(c){
+
+const s =
+styleData(c);
+
+
+const temp =
+Object.assign(
+{
+formIndex:-1,
+formName:""
+},
+c
+);
+
+
+const hair =
+hairColor(
+temp,
+s
+);
+
+
+let hairSvg =
+"";
+
+
+if(
+s.hairStyle==="goku"
+||
+s.hairStyle==="gohan"
+||
+s.hairStyle==="broly"
+){
+
+hairSvg =
+`
+<path
+d="M46 59 55 21 68 43 79 8 89 43 104 17 114 59Q81 43 46 59Z"
+fill="${hair}"
+/>
+`;
+
+}
+
+else if(
+s.hairStyle==="vegeta"
+){
+
+hairSvg =
+`
+<path
+d="M48 58 57 15 70 44 80 7 90 44 105 13 112 58Q82 44 48 58Z"
+fill="${hair}"
+/>
+`;
+
+}
+
+else if(
+s.hairStyle==="trunks"
+||
+s.hairStyle==="a18"
+){
+
+hairSvg =
+`
+<path
+d="M48 59Q52 25 79 22Q107 24 112 59Q94 43 80 49Q64 42 48 59Z"
+fill="${hair}"
+/>
+`;
+
+}
+
+else if(
+s.hairStyle==="yamcha"
+||
+s.hairStyle==="a17"
+){
+
+hairSvg =
+`
+<path
+d="M44 61Q45 23 79 19Q114 22 117 62Q100 39 81 45Q61 36 44 61Z"
+fill="${hair}"
+/>
+`;
+
+}
+
+else if(
+s.hairStyle==="whis"
+){
+
+hairSvg =
+`
+<path
+d="M48 58Q80 13 112 58Q103 29 80 22Q57 29 48 58Z"
+fill="${hair}"
+/>
+`;
+
+}
+
+else if(
+s.hairStyle==="cat"
+){
+
+hairSvg =
+`
+<path
+d="M51 53 56 13 72 46ZM89 46 104 13 109 53Z"
+fill="${s.skin}"
+stroke="#111"
+stroke-width="3"
+/>
+`;
+
+}
+
+else if(
+s.hairStyle==="buu"
+){
+
+hairSvg =
+`
+<path
+d="M72 35C70 12 87 10 89 30C91 42 87 48 81 51Z"
+fill="${s.skin}"
+/>
+`;
+
+}
+
+else if(
+s.hairStyle==="frieza"
+){
+
+hairSvg =
+`
+<ellipse
+cx="80"
+cy="47"
+rx="22"
+ry="13"
+fill="${s.hair}"
+/>
+`;
+
+}
+
+else if(
+s.hairStyle==="cell"
+){
+
+hairSvg =
+`
+<path
+d="M48 56 58 14 73 46 87 18 104 56Z"
+fill="${s.hair}"
+stroke="#111"
+stroke-width="3"
+/>
+`;
+
+}
+
+else if(
+s.hairStyle==="zeno"
+){
+
+hairSvg =
+`
+<path
+d="M45 50Q80 10 115 50L108 68H52Z"
+fill="${s.hair}"
+/>
+`;
+
+}
+
+
+const cape =
+s.cape
+?
+`
+<path
+d="M38 126Q80 107 122 126L137 190Q80 210 23 190Z"
+fill="#f4f2eb"
+stroke="#111"
+stroke-width="3"
+/>
+`
+:
+"";
+
+
+const armor =
+s.armor
+?
+`
+<path
+d="M42 128Q80 112 118 128L110 184H50Z"
+fill="#f2f2f5"
+stroke="#111"
+stroke-width="3"
+/>
+
+<path
+d="M61 134H99L94 181H66Z"
+fill="#254696"
+/>
+`
+:
+`
+<path
+d="M42 128Q80 112 118 128L111 190H49Z"
+fill="${c.colors[0]}"
+stroke="#111"
+stroke-width="3"
+/>
+
+<path
+d="M68 129H92V190H68Z"
+fill="${c.colors[1]}"
+opacity=".8"
+/>
+`;
+
+
+const third =
+s.thirdEye
+?
+`
+<ellipse
+cx="80"
+cy="68"
+rx="4"
+ry="3"
+fill="#111"
+/>
+`
+:
+"";
+
+
+const namek =
+s.namek
+?
+`
+<path
+d="M54 54Q43 47 49 38M106 54Q117 47 111 38"
+stroke="${s.skin}"
+stroke-width="4"
+fill="none"
+/>
+
+<path
+d="M48 65 35 70 49 75ZM112 65 125 70 111 75Z"
+fill="${s.skin}"
+/>
+`
+:
+"";
+
+
+const roshi =
+s.roshi
+?
+`
+<circle
+cx="62"
+cy="68"
+r="9"
+fill="#111"
+/>
+
+<circle
+cx="98"
+cy="68"
+r="9"
+fill="#111"
+/>
+
+<path
+d="M57 82Q80 103 103 82Q97 112 80 116Q63 112 57 82Z"
+fill="#f2f2f2"
+/>
+`
+:
+"";
+
+
+const halo =
+s.angel
+?
+`
+<ellipse
+cx="80"
+cy="31"
+rx="28"
+ry="8"
+fill="none"
+stroke="#70d9ef"
+stroke-width="5"
+/>
+`
+:
+"";
+
+
+return `
+<svg
+viewBox="0 0 160 200"
+xmlns="http://www.w3.org/2000/svg"
+>
+
+<rect
+width="160"
+height="200"
+rx="14"
+fill="#11182a"
+/>
+
+${cape}
+
+${armor}
+
+<rect
+x="48"
+y="113"
+width="64"
+height="22"
+rx="10"
+fill="${s.skin}"
+/>
+
+<ellipse
+cx="80"
+cy="76"
+rx="33"
+ry="38"
+fill="${s.skin}"
+stroke="#111"
+stroke-width="3"
+/>
+
+${namek}
+
+${halo}
+
+${hairSvg}
+
+<path
+d="M60 69Q68 63 75 68M85 68Q94 63 101 68"
+stroke="#222"
+stroke-width="3"
+fill="none"
+/>
+
+<ellipse
+cx="68"
+cy="73"
+rx="3"
+ry="4"
+fill="#111"
+/>
+
+<ellipse
+cx="93"
+cy="73"
+rx="3"
+ry="4"
+fill="#111"
+/>
+
+${third}
+
+<path
+d="M75 89Q80 92 85 89"
+stroke="#9c5d50"
+stroke-width="2"
+fill="none"
+/>
+
+<path
+d="M69 99Q80 105 92 99"
+stroke="#6a3232"
+stroke-width="2.5"
+fill="none"
+/>
+
+${roshi}
+
+<circle
+cx="80"
+cy="145"
+r="11"
+fill="#ffd84d"
+/>
+
+<text
+x="80"
+y="149"
+text-anchor="middle"
+font-size="10"
+font-weight="900"
+fill="#111"
+>
+
+${
+c.id==="goku"
+?
+"悟"
+:
+c.id==="vegeta"
+?
+"V"
+:
+"✦"
+}
+
+</text>
+
+</svg>
+`;
+
+}
+
+
+
+function renderMeta(){
+
+$("#coins").textContent =
+save.coins.toLocaleString();
+
+
+$("#balls").textContent =
+save.balls;
+
+
+$("#balls2").textContent =
+save.balls;
+
+
+$("#summon").disabled =
+save.balls < 7;
+
+}
+
+
+
+function renderPreview(){
+
+const c =
+byId(S.preview)
+||
+byId(S.pick1[0])
+||
+chars[0];
+
+
+const forms =
+c.forms.length
+?
+c.forms
+.map(
+f=>f[0]
+)
+.join(" → ")
+:
+"無變身";
+
+
+$("#preview").innerHTML =
+`
+
+<div class="previewArt">
+
+${portraitSVG(c)}
+
+</div>
+
+<div class="previewInfo">
+
+<h3>
+
+${save.unlocked.includes(c.id)?"":"🔒 "}
+
+${c.name}
+
+</h3>
+
+<span class="badge ${c.rarity}">
+${c.rarity}
+</span>
+
+<span class="price">
+🪙 ${c.price.toLocaleString()}
+</span>
+
+<div class="stats">
+
+<div class="chip">
+
+HP
+<br>
+
+<b>
+${c.hp}
+</b>
+
+</div>
+
+<div class="chip">
+
+格鬥
+<br>
+
+<b>
+${c.atk}
+</b>
+
+</div>
+
+<div class="chip">
+
+氣功
+<br>
+
+<b>
+${c.kiAtk}
+</b>
+
+</div>
+
+</div>
+
+<div class="small">
+
+特別技1：
+${c.s1}
+
+<br>
+
+特別技2：
+${c.s2}
+
+<br>
+
+終極技：
+${c.ult}
+
+<br>
+
+變身：
+${forms}
+
+</div>
+
+</div>
+
+`;
+
+}
+
+
+
+function pickedText(){
+
+const a =
+S.pick1
+.map(
+id=>{
+
+const c =
+byId(id);
+
+return c
+?
+c.name
+:
+null;
+
+}
+)
+.filter(Boolean)
+.join("、")
+||
+"未選";
+
+
+const b =
+S.pick2
+.map(
+id=>{
+
+const c =
+byId(id);
+
+return c
+?
+c.name
+:
+null;
+
+}
+)
+.filter(Boolean)
+.join("、")
+||
+"未選";
+
+
+$("#pickedText").textContent =
+S.battleType==="cpu"
+?
+`P1：${a}`
+:
+`P1：${a}｜P2：${b}`;
+
+}
+
+
+
+function renderRoster(){
+
+const box =
+$("#roster");
+
+
+const picks =
+S.edit==="p1"
+?
+S.pick1
+:
+S.pick2;
+
+
+box.innerHTML =
+"";
+
+
+chars.forEach(
+c=>{
+
+const unlocked =
+save.unlocked.includes(c.id);
+
+
+const selected =
+picks.includes(c.id);
+
+
+const b =
+document.createElement("button");
+
+
+b.className =
+"btn charCard"
++
+(!unlocked?" locked":"")
++
+(selected?" selected":"");
+
+
+b.innerHTML =
+`
+
+<div class="portrait">
+${portraitSVG(c)}
+</div>
+
+<div class="charName">
+
+${unlocked?"":"🔒 "}
+
+${c.name}
+
+</div>
+
+<span class="badge ${c.rarity}">
+${c.rarity}
+</span>
+
+<div class="price">
+🪙 ${c.price.toLocaleString()}
+</div>
+
+<div class="small">
+
+${c.s1}
+
+/
+
+${c.s2}
+
+<br>
+
+終極：
+
+${c.ult}
+
+</div>
+
+`;
+
+
+const show =
+()=>{
+
+S.preview =
+c.id;
+
+renderPreview();
+
+};
+
+
+b.addEventListener(
+"mouseenter",
+show
+);
+
+
+b.addEventListener(
+"focus",
+show
+);
+
+
+b.addEventListener(
+"click",
+()=>{
+
+show();
+
+
+if(
+!unlocked
+){
+
+alert(
+`${c.name} 尚未解鎖`
+);
+
+return;
+
+}
+
+
+const arr =
+S.edit==="p1"
+?
+S.pick1
+:
+S.pick2;
+
+
+const ix =
+arr.indexOf(c.id);
+
+
+if(
+ix>=0
+){
+
+arr.splice(
+ix,
+1
+);
+
+}
+
+else{
+
+if(
+arr.length>=
+S.teamSize
+)
+arr.shift();
+
+
+arr.push(c.id);
+
+}
+
+
 renderRoster();
+
+}
+);
+
+
+box.appendChild(b);
+
+}
+);
+
+
+pickedText();
+
+renderPreview();
+
+}
+
+
+
+function renderShop(){
+
+const box =
+$("#shopGrid");
+
+
+box.innerHTML =
+"";
+
+
+chars.forEach(
+c=>{
+
+const owned =
+save.unlocked.includes(c.id);
+
+
+const d =
+document.createElement("div");
+
+
+d.className =
+"shopCard";
+
+
+d.innerHTML =
+`
+
+<div class="shopPortrait">
+${portraitSVG(c)}
+</div>
+
+<b>
+${c.name}
+</b>
+
+<span class="badge ${c.rarity}">
+${c.rarity}
+</span>
+
+<div class="small">
+
+HP ${c.hp}
+
+｜
+
+格鬥 ${c.atk}
+
+｜
+
+氣功 ${c.kiAtk}
+
+</div>
+
+<div class="price">
+🪙 ${c.price.toLocaleString()}
+</div>
+
+<button
+class="shopBtn ${owned?"good":""}"
+${owned?"disabled":""}
+>
+
+${owned?"已解鎖":"購買"}
+
+</button>
+
+`;
+
+
+d.querySelector("button")
+.addEventListener(
+"click",
+()=>{
+
+if(owned)
+return;
+
+
+if(
+save.coins <
+c.price
+){
+
+alert(
+"金幣不足"
+);
+
+return;
+
+}
+
+
+save.coins -=
+c.price;
+
+
+save.unlocked.push(
+c.id
+);
+
+
+saveNow();
+
 renderShop();
-renderItemShop();
+
+renderRoster();
+
+}
+);
+
+
+box.appendChild(d);
+
+}
+);
+
+}
+
+
+
+function renderItems(){
+
+const box =
+$("#itemShop");
+
+
+box.innerHTML =
+"";
+
+
+Object.entries(itemDefs)
+.forEach(
+([id,it])=>{
+
+const d =
+document.createElement("div");
+
+
+d.className =
+"notice";
+
+
+d.innerHTML =
+`
+
+<b>
+
+${it.icon}
+
+${it.name}
+
+</b>
+
+　持有：
+
+${save.items[id]||0}
+
+<div class="small">
+${it.desc}
+</div>
+
+<div class="price">
+🪙 ${it.price.toLocaleString()}
+</div>
+
+<button class="shopBtn">
+購買
+</button>
+
+`;
+
+
+d.querySelector("button")
+.addEventListener(
+"click",
+()=>{
+
+if(
+save.coins <
+it.price
+){
+
+alert(
+"金幣不足"
+);
+
+return;
+
+}
+
+
+save.coins -=
+it.price;
+
+
+save.items[id] =
+(save.items[id]||0)
++
+1;
+
+
+saveNow();
+
+renderItems();
+
+}
+);
+
+
+box.appendChild(d);
+
+}
+);
+
+}
+
+
+
+document.querySelectorAll(
+".tab"
+)
+.forEach(
+b=>
+b.addEventListener(
+"click",
+()=>{
+
+document.querySelectorAll(
+".tab"
+)
+.forEach(
+x=>
+x.classList.remove("active")
+);
+
+
+b.classList.add(
+"active"
+);
+
+
+document.querySelectorAll(
+".page"
+)
+.forEach(
+x=>
+x.classList.remove("active")
+);
+
+
+$("#"+b.dataset.page)
+.classList.add(
+"active"
+);
+
+
+if(
+b.dataset.page==="shopPage"
+)
+renderShop();
+
+
+if(
+b.dataset.page==="itemPage"
+)
+renderItems();
+
+}
+)
+);
+
+
+
+function bindGroup(
+root,
+fn
+){
+
+document.querySelectorAll(
+root+" .btn"
+)
+.forEach(
+b=>
+b.addEventListener(
+"click",
+()=>{
+
+document.querySelectorAll(
+root+" .btn"
+)
+.forEach(
+x=>
+x.classList.remove("active")
+);
+
+
+b.classList.add(
+"active"
+);
+
+
+fn(b);
+
+}
+)
+);
+
+}
+
+
+
+bindGroup(
+"#battleType",
+b=>{
+
+S.battleType =
+b.dataset.type;
+
+
+$("#difficulty").disabled =
+S.battleType==="local";
+
+
+$("#editP2").style.display =
+S.battleType==="local"
+?
+"inline-block"
+:
+"none";
+
+
+pickedText();
+
+}
+);
+
+
+
+bindGroup(
+"#teamSize",
+b=>{
+
+S.teamSize =
+Number(
+b.dataset.size
+);
+
+
+S.pick1 =
+S.pick1.slice(
+0,
+S.teamSize
+);
+
+
+S.pick2 =
+S.pick2.slice(
+0,
+S.teamSize
+);
+
+
+renderRoster();
+
+}
+);
+
+
+
+bindGroup(
+"#arenas",
+b=>{
+
+S.arena =
+b.dataset.arena;
+
+}
+);
+
+
+
+$("#editP1")
+.addEventListener(
+"click",
+()=>{
+
+S.edit =
+"p1";
+
+
+$("#editP1")
+.classList.add(
+"active"
+);
+
+
+$("#editP2")
+.classList.remove(
+"active"
+);
+
+
+renderRoster();
+
+}
+);
+
+
+
+$("#editP2")
+.addEventListener(
+"click",
+()=>{
+
+S.edit =
+"p2";
+
+
+$("#editP2")
+.classList.add(
+"active"
+);
+
+
+$("#editP1")
+.classList.remove(
+"active"
+);
+
+
+renderRoster();
+
+}
+);
+
+
+$("#editP2")
+.style.display =
+"none";
+
+
+
+function fillTeam(
+picks,
+n,
+exclude=[]
+){
+
+const ids =
+picks.filter(
+id=>
+save.unlocked.includes(id)
+);
+
+
+const pool =
+save.unlocked
+.filter(
+id=>
+!ids.includes(id)
+&&
+!exclude.includes(id)
+&&
+byId(id)
+);
+
+
+while(
+ids.length<n
+&&
+pool.length
+){
+
+ids.push(
+pool.splice(
+Math.floor(
+Math.random()*pool.length
+),
+1
+)[0]
+);
+
+}
+
+
+while(
+ids.length<n
+){
+
+ids.push(
+starters[
+Math.floor(
+Math.random()*starters.length
+)
+]
+);
+
+}
+
+
+return ids
+.slice(
+0,
+n
+)
+.map(
+id=>
+cloneChar(
+byId(id)
+)
+);
+
+}
+
+
+
+function cpuTeam(n){
+
+let pool =
+chars.filter(
+c=>
+c.id !==
+S.pick1[0]
+);
+
+
+const rank =
+{
+easy:0,
+normal:1,
+hard:2,
+difficult:3,
+boss:4
+}
+[S.difficulty];
+
+
+if(
+rank>=3
+){
+
+pool =
+pool.filter(
+c=>
+[
+"rare",
+"epic",
+"mega"
+]
+.includes(
+c.rarity
+)
+);
+
+}
+
+
+if(
+rank===4
+){
+
+pool =
+pool.filter(
+c=>
+[
+"epic",
+"mega"
+]
+.includes(
+c.rarity
+)
+);
+
+}
+
+
+const out =
+[];
+
+
+while(
+out.length<n
+){
+
+out.push(
+cloneChar(
+pool[
+Math.floor(
+Math.random()*pool.length
+)
+]
+)
+);
+
+}
+
+
+return out;
+
+}
+
+
+
+function startGame(){
+
+S.difficulty =
+$("#difficulty").value;
+
+
+S.pTeam =
+fillTeam(
+S.pick1,
+S.teamSize
+);
+
+
+S.eTeam =
+S.battleType==="cpu"
+?
+cpuTeam(
+S.teamSize
+)
+:
+fillTeam(
+S.pick2,
+S.teamSize,
+S.pick1
+);
+
+
+S.pi =
+0;
+
+
+S.ei =
+0;
+
+
+S.px =
+190;
+
+
+S.ex =
+910;
+
+
+S.py =
+0;
+
+
+S.ey =
+0;
+
+
+S.pvy =
+0;
+
+
+S.evy =
+0;
+
+
+S.shots =
+[];
+
+
+S.fx =
+[];
+
+
+S.keys =
+{};
+
+
+S.run =
+true;
+
+
+S.ai =
+0;
+
+
+$("#menu")
+.classList.remove(
+"active"
+);
+
+
+$("#game")
+.style.display =
+"block";
+
+
+$("#result")
+.style.display =
+"none";
+
+
+$("#p2Help")
+.style.display =
+S.battleType==="local"
+?
+"block"
+:
+"none";
+
+
+renderItemBar();
+
+updateHud();
+
+say(
+"FIGHT!",
+700
+);
+
+}
+
+
+
+$("#start")
+.addEventListener(
+"click",
+startGame
+);
+
+
+
+$("#again")
+.addEventListener(
+"click",
+startGame
+);
+
+
+
+function backMenu(){
+
+S.run =
+false;
+
+
+$("#game")
+.style.display =
+"none";
+
+
+$("#menu")
+.classList.add(
+"active"
+);
+
+
+renderMeta();
+
+renderRoster();
+
+}
+
+
+
+$("#backMenu")
+.addEventListener(
+"click",
+backMenu
+);
+
+
+
+$("#quit")
+.addEventListener(
+"click",
+backMenu
+);
+
+
+
+function updateHud(){
+
+const p =
+P();
+
+
+const e =
+E();
+
+
+if(
+!p
+||
+!e
+)
+return;
+
+
+$("#pName").textContent =
+p.name
++
+(
+p.formIndex>=0
+?
+"・"+p.formName
+:
+""
+);
+
+
+$("#eName").textContent =
+e.name
++
+(
+e.formIndex>=0
+?
+"・"+e.formName
+:
+""
+);
+
+
+$("#pHp").style.width =
+clamp(
+p.hp/p.maxHp*100,
+0,
+100
+)
++
+"%";
+
+
+$("#eHp").style.width =
+clamp(
+e.hp/e.maxHp*100,
+0,
+100
+)
++
+"%";
+
+
+$("#pKi").style.width =
+clamp(
+p.ki,
+0,
+100
+)
++
+"%";
+
+
+$("#eKi").style.width =
+clamp(
+e.ki,
+0,
+100
+)
++
+"%";
+
+
+$("#pMeta").textContent =
+`${S.pi+1}/${S.pTeam.length}｜HP ${Math.ceil(p.hp)}｜氣 ${Math.floor(p.ki)}`;
+
+
+$("#eMeta").textContent =
+`HP ${Math.ceil(e.hp)}｜氣 ${Math.floor(e.ki)}｜${S.ei+1}/${S.eTeam.length}`;
+
+}
+
+
+
+function say(
+t,
+ms=520
+){
+
+$("#msg").textContent =
+t;
+
+
+clearTimeout(
+S.msgTimer
+);
+
+
+S.msgTimer =
+setTimeout(
+()=>{
+
+$("#msg").textContent =
+"";
+
+},
+ms
+);
+
+}
+
+
+
+function dist(){
+
+return Math.abs(
+S.ex-S.px
+);
+
+}
+
+
+
+function actor(pl){
+
+return pl
+?
+P()
+:
+E();
+
+}
+
+
+
+function target(pl){
+
+return pl
+?
+E()
+:
+P();
+
+}
+
+
+
+function ax(pl){
+
+return pl
+?
+S.px
+:
+S.ex;
+
+}
+
+
+
+function damage(
+t,
+amount,
+enemyTarget
+){
+
+if(
+!S.run
+||
+!t
+||
+t.hp<=0
+)
+return;
+
+
+t.hp =
+clamp(
+t.hp-amount,
+0,
+t.maxHp
+);
+
+
+S.fx.push({
+
+type:"hit",
+
+x:
+enemyTarget
+?
+S.ex
+:
+S.px,
+
+y:340,
+
+life:.25
+
+});
+
+
+if(
+t.hp<=0
+&&
+!t.koHandled
+){
+
+t.koHandled =
+true;
+
+
+setTimeout(
+()=>handleKO(
+enemyTarget
+),
+240
+);
+
+}
+
+
+updateHud();
+
+}
+
+
+
+function handleKO(
+enemyKO
+){
+
+if(
+!S.run
+)
+return;
+
+
+const team =
+enemyKO
+?
+S.eTeam
+:
+S.pTeam;
+
+
+if(
+anyAlive(team)
+){
+
+if(enemyKO){
+
+do{
+
+S.ei =
+(S.ei+1)
+%
+team.length;
+
+}
+while(
+E().hp<=0
+);
+
+
+S.ex =
+910;
+
+
+E().koHandled =
+false;
+
+
+say(
+"敵方換上 "
++
+E().name,
+700
+);
+
+}
+
+else{
+
+do{
+
+S.pi =
+(S.pi+1)
+%
+team.length;
+
+}
+while(
+P().hp<=0
+);
+
+
+S.px =
+190;
+
+
+P().koHandled =
+false;
+
+
+say(
+"我方換上 "
++
+P().name,
+700
+);
+
+}
+
+
+updateHud();
+
+return;
+
+}
+
+
+finish(
+enemyKO
+);
+
+}
+
+
+
+function finish(win){
+
+S.run =
+false;
+
+
+const msg =
+win
+?
+"🏆 YOU WIN!"
+:
+"💥 YOU LOSE";
+
+
+say(
+msg,
+2500
+);
+
+
+if(win){
+
+const reward =
+diff[S.difficulty]
+.reward
+*
+S.teamSize;
+
+
+save.coins +=
+reward;
+
+
+save.wins++;
+
+
+let ball =
+false;
+
+
+if(
+Math.random()
+<
+Math.min(
+.55,
+.18+.06*S.teamSize
+)
+){
+
+save.balls =
+Math.min(
+7,
+save.balls+1
+);
+
+
+ball =
+true;
+
+}
+
+
+$("#resultText").textContent =
+`${msg}　獎勵 ${reward.toLocaleString()} 金幣${ball?"，並找到 1 顆龍珠！":""}`;
+
+
+saveNow();
+
+}
+
+else{
+
+$("#resultText").textContent =
+msg;
+
+}
+
+
+$("#result")
+.style.display =
+"block";
+
+}
+
+
+
+function punch(
+pl=true
+){
+
+if(
+!S.run
+)
+return;
+
+
+const a =
+actor(pl);
+
+
+const t =
+target(pl);
+
+
+a.ki =
+clamp(
+a.ki+5,
+0,
+100
+);
+
+
+S.fx.push({
+
+type:"slash",
+
+x:
+ax(pl)
++
+(
+pl
+?
+42
+:
+-42
+),
+
+y:345,
+
+life:.16
+
+});
+
+
+if(
+dist()<150
+){
+
+let d =
+a.atk
+*
+a.mult
+*
+a.atkBuff
+*
+rnd(
+.80,
+1.12
+);
+
+
+if(
+!pl
+&&
+S.battleType==="cpu"
+){
+
+d *=
+diff[S.difficulty]
+.dmg;
+
+}
+
+
+damage(
+t,
+d,
+pl
+);
+
+}
+
+else if(pl){
+
+say(
+"太遠了"
+);
+
+}
+
+
+updateHud();
+
+}
+
+
+
+function kick(
+pl=true
+){
+
+if(
+!S.run
+)
+return;
+
+
+const a =
+actor(pl);
+
+
+const t =
+target(pl);
+
+
+a.ki =
+clamp(
+a.ki+4,
+0,
+100
+);
+
+
+S.fx.push({
+
+type:"kick",
+
+x:
+ax(pl)
++
+(
+pl
+?
+55
+:
+-55
+),
+
+y:365,
+
+life:.18
+
+});
+
+
+if(
+dist()<165
+){
+
+let d =
+a.atk
+*
+1.18
+*
+a.mult
+*
+a.atkBuff
+*
+rnd(
+.82,
+1.10
+);
+
+
+if(
+!pl
+&&
+S.battleType==="cpu"
+){
+
+d *=
+diff[S.difficulty]
+.dmg;
+
+}
+
+
+damage(
+t,
+d,
+pl
+);
+
+}
+
+else if(pl){
+
+say(
+"踢不到！"
+);
+
+}
+
+
+updateHud();
+
+}
+
+
+
+function charge(
+pl=true
+){
+
+if(
+!S.run
+)
+return;
+
+
+const a =
+actor(pl);
+
+
+a.ki =
+clamp(
+a.ki
++
+(
+pl
+?
+16
+:
+13
+),
+0,
+100
+);
+
+
+S.fx.push({
+
+type:"aura",
+
+x:
+ax(pl),
+
+y:350,
+
+life:.45
+
+});
+
+
+updateHud();
+
+}
+
+
+
+function fire(
+pl=true
+){
+
+if(
+!S.run
+)
+return;
+
+
+const a =
+actor(pl);
+
+
+if(
+a.ki<12
+){
+
+if(pl)
+say(
+"氣力不足"
+);
+
+
+return;
+
+}
+
+
+a.ki -=
+12;
+
+
+S.shots.push({
+
+x:
+ax(pl)
++
+(
+pl
+?
+55
+:
+-55
+),
+
+y:330,
+
+vx:
+(
+pl
+?
+1
+:
+-1
+)
+*
+590,
+
+r:14,
+
+player:pl,
+
+damage:
+(
+a.kiAtk*.82
++
+a.atk*.15
+)
+*
+a.mult
+
+});
+
+
+updateHud();
+
+}
+
+
+
+function special(
+pl=true,
+which=1
+){
+
+if(
+!S.run
+)
+return;
+
+
+const a =
+actor(pl);
+
+
+const t =
+target(pl);
+
+
+const cost =
+which===1
+?
+30
+:
+38;
+
+
+if(
+a.ki<cost
+){
+
+if(pl)
+say(
+`特別技 ${which} 需要 ${cost} 氣`
+);
+
+
+return;
+
+}
+
+
+a.ki -=
+cost;
+
+
+const name =
+which===1
+?
+a.s1
+:
+a.s2;
+
+
+say(
+name,
+520
+);
+
+
+const ranged =
+/龜派|砲|彈|光|氣|破壞|爆|魔貫|閃光|圓斬|操氣|驚天掌|抹除/
+.test(
+name
+);
+
+
+let hit =
+ranged
+?
+Math.random()
+<
+(
+pl
+?
+.88
+:
+diff[S.difficulty].aim
+)
+:
+dist()
+<
+(
+which===1
+?
+250
+:
+190
+);
+
+
+if(
+S.battleType==="local"
+&&
+!pl
+){
+
+hit =
+ranged
+?
+Math.random()<.88
+:
+dist()<220;
+
+}
+
+
+if(hit){
+
+let d =
+(
+a.kiAtk
+*
+(
+which===1
+?
+1.35
+:
+1.55
+)
++
+a.atk*.42
+)
+*
+a.mult
+*
+a.atkBuff;
+
+
+if(
+!pl
+&&
+S.battleType==="cpu"
+){
+
+d *=
+diff[S.difficulty]
+.dmg;
+
+}
+
+
+if(
+name.includes("太陽拳")
+){
+
+S.fx.push({
+
+type:"flash",
+
+life:.45
+
+});
+
+
+d *=
+.75;
+
+}
+
+
+if(
+name.includes("吸收")
+){
+
+a.ki =
+clamp(
+a.ki+22,
+0,
+100
+);
+
+}
+
+
+if(
+name.includes("仙豆")
+){
+
+a.hp =
+clamp(
+a.hp+a.maxHp*.25,
+0,
+a.maxHp
+);
+
+}
+
+
+if(
+name.includes("巨大化")
+){
+
+a.atkBuff =
+Math.max(
+a.atkBuff,
+1.4
+);
+
+}
+
+
+damage(
+t,
+d,
+pl
+);
+
+}
+
+else if(pl){
+
+say(
+"MISS!"
+);
+
+}
+
+
+updateHud();
+
+}
+
+
+
+function ultimate(
+pl=true
+){
+
+const a =
+actor(pl);
+
+
+if(
+!S.run
+||
+!a
+)
+return;
+
+
+if(
+a.ki<65
+){
+
+if(pl)
+say(
+"終極技需要 65 氣"
+);
+
+
+return;
+
+}
+
+
+a.ki -=
+65;
+
+
+updateHud();
+
+
+say(
+"⚡ "
++
+a.ult
++
+"！",
+650
+);
+
+
+const accuracy =
+pl
+?
+.76
+:
+(
+S.battleType==="cpu"
+?
+diff[S.difficulty].aim*.86
+:
+.76
+);
+
+
+if(
+Math.random()
+>
+accuracy
+){
+
+if(pl)
+say(
+"終極技落空！",
+700
+);
+
+
+return;
+
+}
+
+
+S.shots.push({
+
+x:
+ax(pl)
++
+(
+pl
+?
+55
+:
+-55
+),
+
+y:330,
+
+vx:
+(
+pl
+?
+1
+:
+-1
+)
+*
+800,
+
+r:40,
+
+player:pl,
+
+damage:
+(
+a.kiAtk*2.75
++
+a.atk*.55
+)
+*
+a.mult
+*
+(
+pl
+?
+1
+:
+(
+S.battleType==="cpu"
+?
+diff[S.difficulty].dmg
+:
+1
+)
+)
+
+});
+
+}
+
+
+
+function transform(
+pl=true
+){
+
+if(
+!S.run
+)
+return;
+
+
+const a =
+actor(pl);
+
+
+if(
+!a.forms.length
+){
+
+if(pl)
+say(
+"這個角色沒有變身階段"
+);
+
+
+return;
+
+}
+
+
+const next =
+a.formIndex+1;
+
+
+if(
+next>=a.forms.length
+){
+
+if(pl)
+say(
+"已經是最高形態"
+);
+
+
+return;
+
+}
+
+
+const f =
+a.forms[next];
+
+
+if(
+a.ki<f[1]
+){
+
+if(pl)
+say(
+`${f[0]} 需要 ${f[1]} 氣`
+);
+
+
+return;
+
+}
+
+
+a.ki -=
+f[1];
+
+
+a.formIndex =
+next;
+
+
+a.formName =
+f[0];
+
+
+a.mult =
+f[2];
+
+
+a.maxHp +=
+12;
+
+
+a.hp =
+clamp(
+a.hp+12,
+0,
+a.maxHp
+);
+
+
+S.fx.push({
+
+type:"transform",
+
+x:
+ax(pl),
+
+y:350,
+
+life:.8
+
+});
+
+
+say(
+`${a.name} → ${a.formName}！`,
+800
+);
+
+
+updateHud();
+
+}
+
+
+
+function swap(
+pl=true
+){
+
+if(
+!S.run
+)
+return;
+
+
+const team =
+pl
+?
+S.pTeam
+:
+S.eTeam;
+
+
+if(
+team.length<=1
+)
+return;
+
+
+if(pl){
+
+const st =
+S.pi;
+
+
+do{
+
+S.pi =
+(S.pi+1)
+%
+team.length;
+
+}
+while(
+P().hp<=0
+&&
+S.pi!==st
+);
+
+
+S.px =
+190;
+
+
+say(
+"換上 "
++
+P().name,
+500
+);
+
+}
+
+else{
+
+const st =
+S.ei;
+
+
+do{
+
+S.ei =
+(S.ei+1)
+%
+team.length;
+
+}
+while(
+E().hp<=0
+&&
+S.ei!==st
+);
+
+
+S.ex =
+910;
+
+
+say(
+"P2 換上 "
++
+E().name,
+500
+);
+
+}
+
+
+updateHud();
+
+}
+
+
+
+function jump(
+pl=true
+){
+
+if(
+!S.run
+)
+return;
+
+
+if(pl){
+
+if(
+S.py===0
+)
+S.pvy =
+-710;
+
+}
+
+else{
+
+if(
+S.ey===0
+)
+S.evy =
+-710;
+
+}
+
+}
+
+
+
+function move(
+pl,
+dir,
+dt
+){
+
+const speed =
+470;
+
+
+if(pl){
+
+S.px =
+clamp(
+S.px
++
+dir*speed*dt,
+65,
+1030
+);
+
+}
+
+else{
+
+S.ex =
+clamp(
+S.ex
++
+dir*speed*dt,
+65,
+1030
+);
+
+}
+
+}
+
+
+
+function renderItemBar(){
+
+const box =
+$("#itemBar");
+
+
+box.innerHTML =
+"<span class='small'>P1 道具：</span>";
+
+
+Object.entries(itemDefs)
+.forEach(
+([id,it])=>{
+
+const b =
+document.createElement("button");
+
+
+b.className =
+"itemBtn";
+
+
+b.textContent =
+`${it.icon}${it.name} ×${save.items[id]||0}`;
+
+
+b.addEventListener(
+"click",
+()=>useItem(id)
+);
+
+
+box.appendChild(b);
+
+}
+);
+
+}
+
+
+
+function useItem(id){
+
+if(
+!S.run
+)
+return;
+
+
+if(
+(save.items[id]||0)<=0
+){
+
+say(
+"沒有這個道具"
+);
+
+return;
+
+}
+
+
+const p =
+P();
+
+
+if(
+id==="senzu"
+){
+
+p.hp =
+clamp(
+p.hp+p.maxHp*.55,
+0,
+p.maxHp
+);
+
+
+say(
+"仙豆！生命回復"
+);
+
+}
+
+else if(
+id==="zsword"
+){
+
+p.atkBuff =
+Math.max(
+p.atkBuff,
+1.35
+);
+
+
+say(
+"Z 神劍！攻擊力提升"
+);
+
+}
+
+else if(
+id==="capsule"
+){
+
+const r =
+Math.random();
+
+
+if(r<.34){
+
+p.hp =
+clamp(
+p.hp+35,
+0,
+p.maxHp
+);
+
+
+say(
+"膠囊：恢復藥"
+);
+
+}
+
+else if(r<.67){
+
+p.ki =
+100;
+
+
+say(
+"膠囊：氣力全滿"
+);
+
+}
+
+else{
+
+p.atkBuff =
+Math.max(
+p.atkBuff,
+1.25
+);
+
+
+say(
+"膠囊：攻擊強化"
+);
+
+}
+
+}
+
+else if(
+id==="staff"
+){
+
+p.ki =
+100;
+
+
+p.hp =
+clamp(
+p.hp+20,
+0,
+p.maxHp
+);
+
+
+say(
+"天使的手杖！"
+);
+
+}
+
+else if(
+id==="potara"
+){
+
+if(
+S.pTeam.length<2
+){
+
+say(
+"沒有隊友可以合體"
+);
+
+return;
+
+}
+
+
+const other =
+S.pTeam[
+(S.pi+1)
+%
+S.pTeam.length
+];
+
+
+if(
+other.hp<=0
+){
+
+say(
+"下一位隊友不能戰鬥"
+);
+
+return;
+
+}
+
+
+p.name =
+`${p.name}×${other.name} 合體`;
+
+
+p.maxHp =
+Math.round(
+(p.maxHp+other.maxHp)
+*
+.72
+);
+
+
+p.hp =
+clamp(
+p.hp
++
+other.hp*.55,
+0,
+p.maxHp
+);
+
+
+p.atk =
+Math.round(
+(p.atk+other.atk)
+*
+.72
+);
+
+
+p.kiAtk =
+Math.round(
+(p.kiAtk+other.kiAtk)
+*
+.72
+);
+
+
+p.mult *=
+1.28;
+
+
+p.fused =
+true;
+
+
+other.hp =
+0;
+
+
+other.koHandled =
+true;
+
+
+say(
+"波特拉合體成功！",
+800
+);
+
+}
+
+
+save.items[id]--;
+
+
+saveNow();
+
+renderItemBar();
+
+updateHud();
+
+}
+
+
+
+function aiAct(){
+
+if(
+!S.run
+||
+S.battleType!=="cpu"
+)
+return;
+
+
+const e =
+E();
+
+
+if(
+!e
+||
+e.hp<=0
+)
+return;
+
+
+const r =
+Math.random();
+
+
+if(
+dist()>210
+){
+
+if(r<.42){
+
+S.ex -=
+Math.min(
+68,
+dist()-175
+);
+
+}
+
+else if(r<.63){
+
+charge(false);
+
+}
+
+else if(r<.86){
+
+fire(false);
+
+}
+
+else if(
+e.forms.length
+&&
+e.formIndex+1
+<
+e.forms.length
+&&
+e.ki
+>=
+e.forms[e.formIndex+1][1]
+){
+
+transform(false);
+
+}
+
+}
+
+else{
+
+if(
+e.ki>=65
+&&
+r<.14
+){
+
+ultimate(false);
+
+}
+
+else if(
+e.ki>=38
+&&
+r<.30
+){
+
+special(
+false,
+2
+);
+
+}
+
+else if(
+e.ki>=30
+&&
+r<.44
+){
+
+special(
+false,
+1
+);
+
+}
+
+else if(
+r<.72
+){
+
+punch(false);
+
+}
+
+else if(
+r<.86
+){
+
+kick(false);
+
+}
+
+else{
+
+S.ex =
+clamp(
+S.ex+50,
+65,
+1030
+);
+
+}
+
+}
+
+
+if(
+S.eTeam.length>1
+&&
+e.hp<e.maxHp*.22
+&&
+Math.random()<.18
+){
+
+swap(false);
+
+}
+
+}
+
+
+
+const canvas =
+$("#fight");
+
+
+const ctx =
+canvas.getContext("2d");
+
+
+
+function bg(){
+
+const A =
+{
+
+earth:[
+"#223a7c",
+"#dba15b",
+"#714a32"
+],
+
+time:[
+"#f3f1df",
+"#dbe9ff",
+"#dedede"
+],
+
+gravity:[
+"#131827",
+"#5a1e29",
+"#232838"
+],
+
+kingkai:[
+"#122c66",
+"#6cc76b",
+"#466f35"
+],
+
+supreme:[
+"#261446",
+"#a171ca",
+"#677c53"
+],
+
+beerus:[
+"#75d0ff",
+"#ddb8ff",
+"#68b864"
+],
+
+zeno:[
+"#1a1643",
+"#6253a5",
+"#e3d47c"
+]
+
+}
+[S.arena]
+||
+[
+"#223a7c",
+"#dba15b",
+"#714a32"
+];
+
+
+const g =
+ctx.createLinearGradient(
+0,
+0,
+0,
+canvas.height
+);
+
+
+g.addColorStop(
+0,
+A[0]
+);
+
+
+g.addColorStop(
+.62,
+A[0]
+);
+
+
+g.addColorStop(
+.63,
+A[1]
+);
+
+
+g.addColorStop(
+1,
+A[2]
+);
+
+
+ctx.fillStyle =
+g;
+
+
+ctx.fillRect(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+
+if(
+[
+"supreme",
+"zeno"
+]
+.includes(
+S.arena
+)
+){
+
+ctx.fillStyle =
+"#fff";
+
+
+for(
+let i=0;
+i<65;
+i++
+){
+
+ctx.fillRect(
+(i*149)%canvas.width,
+(i*91)%330,
+2,
+2
+);
+
+}
+
+}
+
+
+ctx.fillStyle =
+"#ffffff66";
+
+
+ctx.fillRect(
+0,
+455,
+canvas.width,
+4
+);
+
+}
+
+
+
+function drawHair(
+style,
+color,
+skin
+){
+
+ctx.fillStyle =
+color;
+
+
+ctx.strokeStyle =
+"#111";
+
+
+ctx.lineWidth =
+3;
+
+
+ctx.beginPath();
+
+
+if(
+style==="vegeta"
+){
+
+ctx.moveTo(-30,-184);
+ctx.lineTo(-22,-225);
+ctx.lineTo(-9,-196);
+ctx.lineTo(0,-238);
+ctx.lineTo(10,-196);
+ctx.lineTo(25,-226);
+ctx.lineTo(31,-183);
+
+}
+
+else if(
+style==="trunks"
+||
+style==="a18"
+){
+
+ctx.moveTo(-30,-184);
+ctx.quadraticCurveTo(-24,-220,0,-222);
+ctx.quadraticCurveTo(26,-220,31,-183);
+ctx.quadraticCurveTo(12,-199,0,-195);
+ctx.quadraticCurveTo(-14,-201,-30,-184);
+
+}
+
+else if(
+style==="yamcha"
+||
+style==="a17"
+){
+
+ctx.moveTo(-32,-183);
+ctx.quadraticCurveTo(-35,-221,0,-225);
+ctx.quadraticCurveTo(36,-222,34,-183);
+ctx.quadraticCurveTo(12,-205,0,-199);
+ctx.quadraticCurveTo(-15,-207,-32,-183);
+
+}
+
+else if(
+style==="whis"
+){
+
+ctx.moveTo(-31,-185);
+ctx.quadraticCurveTo(0,-235,31,-185);
+ctx.quadraticCurveTo(12,-207,0,-205);
+ctx.quadraticCurveTo(-15,-208,-31,-185);
+
+}
+
+else if(
+style==="cat"
+){
+
+ctx.fillStyle =
+skin;
+
+
+ctx.moveTo(-25,-185);
+ctx.lineTo(-19,-229);
+ctx.lineTo(-4,-190);
+
+ctx.moveTo(25,-185);
+ctx.lineTo(19,-229);
+ctx.lineTo(4,-190);
+
+}
+
+else if(
+style==="buu"
+){
+
+ctx.fillStyle =
+skin;
+
+
+ctx.moveTo(-6,-195);
+ctx.quadraticCurveTo(-8,-235,10,-225);
+ctx.quadraticCurveTo(22,-216,8,-193);
+
+}
+
+else if(
+style==="frieza"
+){
+
+ctx.ellipse(
+0,
+-191,
+18,
+10,
+0,
+0,
+Math.PI*2
+);
+
+}
+
+else if(
+style==="cell"
+){
+
+ctx.moveTo(-26,-190);
+ctx.lineTo(-14,-226);
+ctx.lineTo(0,-197);
+ctx.lineTo(15,-225);
+ctx.lineTo(27,-189);
+
+}
+
+else if(
+style==="zeno"
+){
+
+ctx.moveTo(-30,-184);
+ctx.quadraticCurveTo(0,-228,30,-184);
+ctx.lineTo(25,-168);
+ctx.lineTo(-25,-168);
+
+}
+
+else if(
+style==="bald"
+||
+style==="none"
+){
+
+return;
+
+}
+
+else{
+
+ctx.moveTo(-31,-184);
+ctx.lineTo(-24,-221);
+ctx.lineTo(-12,-197);
+ctx.lineTo(0,-237);
+ctx.lineTo(10,-198);
+ctx.lineTo(25,-223);
+ctx.lineTo(31,-183);
+
+}
+
+
+ctx.closePath();
+
+ctx.fill();
+
+ctx.stroke();
+
+}
+
+
+
+function drawFighter(
+x,
+y,
+c,
+enemy=false
+){
+
+const s =
+styleData(c);
+
+
+const hair =
+hairColor(
+c,
+s
+);
+
+
+const scale =
+s.big
+?
+1.12
+:
+1;
+
+
+ctx.save();
+
+
+ctx.translate(
+x,
+455-y
+);
+
+
+if(enemy){
+
+ctx.scale(
+-1,
+1
+);
+
+}
+
+
+ctx.scale(
+scale,
+scale
+);
+
+
+if(
+c.formIndex>=0
+||
+c.fused
+){
+
+let aura =
+"#ffe76655";
+
+
+if(
+c.formName.includes("藍")
+)
+aura =
+"#4fdfff55";
+
+
+if(
+c.formName.includes("自在")
+)
+aura =
+"#f4f7ff66";
+
+
+if(
+c.formName.includes("自我")
+)
+aura =
+"#ad72ff66";
+
+
+ctx.fillStyle =
+aura;
+
+
+ctx.beginPath();
+
+
+ctx.ellipse(
+0,
+-112,
+67,
+145,
+0,
+0,
+Math.PI*2
+);
+
+
+ctx.fill();
+
+}
+
+
+ctx.fillStyle =
+"#0005";
+
+
+ctx.beginPath();
+
+
+ctx.ellipse(
+0,
+-2,
+45,
+10,
+0,
+0,
+Math.PI*2
+);
+
+
+ctx.fill();
+
+
+ctx.strokeStyle =
+c.colors[1];
+
+
+ctx.lineWidth =
+15;
+
+
+ctx.lineCap =
+"round";
+
+
+ctx.beginPath();
+
+
+ctx.moveTo(
+-18,
+-67
+);
+
+
+ctx.lineTo(
+-22,
+-17
+);
+
+
+ctx.moveTo(
+18,
+-67
+);
+
+
+ctx.lineTo(
+22,
+-17
+);
+
+
+ctx.stroke();
+
+
+if(
+s.cape
+){
+
+ctx.fillStyle =
+"#f3f1ea";
+
+
+ctx.strokeStyle =
+"#111";
+
+
+ctx.lineWidth =
+3;
+
+
+ctx.beginPath();
+
+
+ctx.moveTo(
+-38,
+-135
+);
+
+
+ctx.quadraticCurveTo(
+-72,
+-77,
+-54,
+-25
+);
+
+
+ctx.quadraticCurveTo(
+0,
+-3,
+54,
+-25
+);
+
+
+ctx.quadraticCurveTo(
+72,
+-77,
+38,
+-135
+);
+
+
+ctx.closePath();
+
+ctx.fill();
+
+ctx.stroke();
+
+}
+
+
+ctx.fillStyle =
+s.armor
+?
+"#f2f2f5"
+:
+c.colors[0];
+
+
+ctx.strokeStyle =
+"#111";
+
+
+ctx.lineWidth =
+4;
+
+
+ctx.beginPath();
+
+
+ctx.moveTo(
+-38,
+-139
+);
+
+
+ctx.lineTo(
+38,
+-139
+);
+
+
+ctx.lineTo(
+33,
+-66
+);
+
+
+ctx.lineTo(
+-33,
+-66
+);
+
+
+ctx.closePath();
+
+ctx.fill();
+
+ctx.stroke();
+
+
+if(
+s.armor
+){
+
+ctx.fillStyle =
+c.colors[0];
+
+
+ctx.fillRect(
+-23,
+-135,
+46,
+65
+);
+
+}
+
+else{
+
+ctx.fillStyle =
+c.colors[1];
+
+
+ctx.fillRect(
+-8,
+-138,
+16,
+70
+);
+
+}
+
+
+if(
+s.angel
+){
+
+ctx.strokeStyle =
+"#76d7eb";
+
+
+ctx.lineWidth =
+7;
+
+
+ctx.beginPath();
+
+
+ctx.arc(
+0,
+-111,
+49,
+0,
+Math.PI*2
+);
+
+
+ctx.stroke();
+
+}
+
+
+ctx.strokeStyle =
+s.skin;
+
+
+ctx.lineWidth =
+14;
+
+
+ctx.beginPath();
+
+
+ctx.moveTo(
+-31,
+-124
+);
+
+
+ctx.lineTo(
+-52,
+-76
+);
+
+
+ctx.moveTo(
+31,
+-124
+);
+
+
+ctx.lineTo(
+56,
+-89
+);
+
+
+ctx.stroke();
+
+
+ctx.fillStyle =
+s.skin;
+
+
+ctx.strokeStyle =
+"#111";
+
+
+ctx.lineWidth =
+4;
+
+
+ctx.beginPath();
+
+
+ctx.ellipse(
+0,
+-166,
+27,
+31,
+0,
+0,
+Math.PI*2
+);
+
+
+ctx.fill();
+
+ctx.stroke();
+
+
+if(
+s.namek
+){
+
+ctx.strokeStyle =
+s.skin;
+
+
+ctx.lineWidth =
+4;
+
+
+ctx.beginPath();
+
+
+ctx.moveTo(
+-20,
+-184
+);
+
+
+ctx.lineTo(
+-35,
+-198
+);
+
+
+ctx.moveTo(
+20,
+-184
+);
+
+
+ctx.lineTo(
+35,
+-198
+);
+
+
+ctx.stroke();
+
+
+ctx.fillStyle =
+s.skin;
+
+
+ctx.beginPath();
+
+
+ctx.moveTo(
+-25,
+-170
+);
+
+
+ctx.lineTo(
+-43,
+-164
+);
+
+
+ctx.lineTo(
+-25,
+-157
+);
+
+
+ctx.fill();
+
+
+ctx.beginPath();
+
+
+ctx.moveTo(
+25,
+-170
+);
+
+
+ctx.lineTo(
+43,
+-164
+);
+
+
+ctx.lineTo(
+25,
+-157
+);
+
+
+ctx.fill();
+
+}
+
+
+drawHair(
+s.hairStyle,
+hair,
+s.skin
+);
+
+
+ctx.strokeStyle =
+"#2a2020";
+
+
+ctx.lineWidth =
+3;
+
+
+ctx.beginPath();
+
+
+ctx.moveTo(
+-16,
+-169
+);
+
+
+ctx.lineTo(
+-7,
+-171
+);
+
+
+ctx.moveTo(
+8,
+-171
+);
+
+
+ctx.lineTo(
+17,
+-169
+);
+
+
+ctx.stroke();
+
+
+ctx.fillStyle =
+"#111";
+
+
+ctx.beginPath();
+
+
+ctx.ellipse(
+-10,
+-165,
+3.5,
+4,
+0,
+0,
+Math.PI*2
+);
+
+
+ctx.fill();
+
+
+ctx.beginPath();
+
+
+ctx.ellipse(
+11,
+-165,
+3.5,
+4,
+0,
+0,
+Math.PI*2
+);
+
+
+ctx.fill();
+
+
+if(
+s.thirdEye
+){
+
+ctx.beginPath();
+
+
+ctx.ellipse(
+0,
+-180,
+3.8,
+4.5,
+0,
+0,
+Math.PI*2
+);
+
+
+ctx.fill();
+
+}
+
+
+if(
+s.roshi
+){
+
+ctx.beginPath();
+
+
+ctx.arc(
+-11,
+-166,
+10,
+0,
+Math.PI*2
+);
+
+
+ctx.fill();
+
+
+ctx.beginPath();
+
+
+ctx.arc(
+11,
+-166,
+10,
+0,
+Math.PI*2
+);
+
+
+ctx.fill();
+
+
+ctx.fillStyle =
+"#eee";
+
+
+ctx.beginPath();
+
+
+ctx.moveTo(
+-22,
+-149
+);
+
+
+ctx.quadraticCurveTo(
+0,
+-124,
+22,
+-149
+);
+
+
+ctx.quadraticCurveTo(
+15,
+-116,
+0,
+-116
+);
+
+
+ctx.quadraticCurveTo(
+-15,
+-116,
+-22,
+-149
+);
+
+
+ctx.fill();
+
+}
+
+
+ctx.strokeStyle =
+"#87483f";
+
+
+ctx.lineWidth =
+2;
+
+
+ctx.beginPath();
+
+
+ctx.moveTo(
+-7,
+-151
+);
+
+
+ctx.quadraticCurveTo(
+0,
+-146,
+8,
+-151
+);
+
+
+ctx.stroke();
+
+
+ctx.fillStyle =
+"#ffd84d";
+
+
+ctx.beginPath();
+
+
+ctx.arc(
+0,
+-95,
+10,
+0,
+Math.PI*2
+);
+
+
+ctx.fill();
+
+
+ctx.fillStyle =
+"#111";
+
+
+ctx.font =
+"bold 10px system-ui";
+
+
+ctx.textAlign =
+"center";
+
+
+ctx.fillText(
+c.id==="goku"
+?
+"悟"
+:
+c.id==="vegeta"
+?
+"V"
+:
+"✦",
+0,
+-92
+);
+
+
+ctx.restore();
+
+
+ctx.fillStyle =
+"#fff";
+
+
+ctx.font =
+"bold 17px system-ui";
+
+
+ctx.textAlign =
+"center";
+
+
+ctx.fillText(
+c.name,
+x,
+497-y
+);
+
+}
+
+
+
+function drawShots(dt){
+
+for(
+let i=
+S.shots.length-1;
+i>=0;
+i--
+){
+
+const b =
+S.shots[i];
+
+
+b.x +=
+b.vx*dt;
+
+
+ctx.save();
+
+
+ctx.shadowBlur =
+b.r*1.5;
+
+
+ctx.shadowColor =
+b.r>25
+?
+"#ff9e36"
+:
+"#4fcfff";
+
+
+ctx.fillStyle =
+b.r>25
+?
+"#fff1a5"
+:
+"#dffaff";
+
+
+ctx.beginPath();
+
+
+ctx.arc(
+b.x,
+b.y,
+b.r,
+0,
+Math.PI*2
+);
+
+
+ctx.fill();
+
+
+ctx.restore();
+
+
+const hx =
+b.player
+?
+S.ex
+:
+S.px;
+
+
+const hy =
+b.player
+?
+S.ey
+:
+S.py;
+
+
+if(
+Math.abs(
+b.x-hx
+)
+<
+58
+&&
+Math.abs(
+b.y-(330-hy)
+)
+<
+95
+){
+
+damage(
+b.player
+?
+E()
+:
+P(),
+b.damage,
+b.player
+);
+
+
+S.shots.splice(
+i,
+1
+);
+
+
+continue;
+
+}
+
+
+if(
+b.x < -100
+||
+b.x > 1200
+){
+
+S.shots.splice(
+i,
+1
+);
+
+}
+
+}
+
+}
+
+
+
+function drawFx(dt){
+
+for(
+let i=
+S.fx.length-1;
+i>=0;
+i--
+){
+
+const f =
+S.fx[i];
+
+
+f.life -=
+dt;
+
+
+ctx.save();
+
+
+if(
+f.type==="hit"
+){
+
+ctx.fillStyle =
+"#fff";
+
+
+ctx.font =
+"bold 48px system-ui";
+
+
+ctx.fillText(
+"✦",
+f.x,
+f.y
+);
+
+}
+
+else if(
+f.type==="slash"
+||
+f.type==="kick"
+){
+
+ctx.fillStyle =
+"#ffe46a";
+
+
+ctx.font =
+"bold 42px system-ui";
+
+
+ctx.fillText(
+f.type==="kick"
+?
+"💥"
+:
+"⚡",
+f.x,
+f.y
+);
+
+}
+
+else if(
+f.type==="aura"
+||
+f.type==="transform"
+){
+
+ctx.globalAlpha =
+clamp(
+f.life
+/
+(
+f.type==="transform"
+?
+.8
+:
+.45
+),
+0,
+1
+);
+
+
+ctx.strokeStyle =
+f.type==="transform"
+?
+"#ffe75c"
+:
+"#66e5ff";
+
+
+ctx.lineWidth =
+9;
+
+
+ctx.beginPath();
+
+
+ctx.ellipse(
+f.x,
+350,
+60,
+128,
+0,
+0,
+Math.PI*2
+);
+
+
+ctx.stroke();
+
+}
+
+else if(
+f.type==="flash"
+){
+
+ctx.fillStyle =
+"#ffffffcc";
+
+
+ctx.fillRect(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+}
+
+
+ctx.restore();
+
+
+if(
+f.life<=0
+){
+
+S.fx.splice(
+i,
+1
+);
+
+}
+
+}
+
+}
+
+
+
+function loop(t){
+
+const dt =
+Math.min(
+.033,
+(t-S.last)/1000
+||
+0
+);
+
+
+S.last =
+t;
+
+
+if(
+S.run
+){
+
+if(
+S.keys.a
+){
+
+move(
+true,
+-1,
+dt
+);
+
+}
+
+
+if(
+S.keys.d
+){
+
+move(
+true,
+1,
+dt
+);
+
+}
+
+
+if(
+S.battleType==="local"
+){
+
+if(
+S.keys.arrowleft
+){
+
+move(
+false,
+-1,
+dt
+);
+
+}
+
+
+if(
+S.keys.arrowright
+){
+
+move(
+false,
+1,
+dt
+);
+
+}
+
+}
+
+
+S.py =
+Math.max(
+0,
+S.py+S.pvy*dt
+);
+
+
+S.pvy +=
+1550*dt;
+
+
+if(
+S.py===0
+&&
+S.pvy>0
+){
+
+S.pvy =
+0;
+
+}
+
+
+S.ey =
+Math.max(
+0,
+S.ey+S.evy*dt
+);
+
+
+S.evy +=
+1550*dt;
+
+
+if(
+S.ey===0
+&&
+S.evy>0
+){
+
+S.evy =
+0;
+
+}
+
+
+if(
+S.battleType==="cpu"
+){
+
+S.ai +=
+dt*1000;
+
+
+if(
+S.ai
+>=
+diff[S.difficulty]
+.interval
+){
+
+S.ai =
+0;
+
+
+aiAct();
+
+}
+
+}
+
+}
+
+
+bg();
+
+
+if(
+P()
+){
+
+drawFighter(
+S.px,
+S.py,
+P(),
+false
+);
+
+}
+
+
+if(
+E()
+){
+
+drawFighter(
+S.ex,
+S.ey,
+E(),
+true
+);
+
+}
+
+
+drawShots(
+dt
+);
+
+
+drawFx(
+dt
+);
+
+
+requestAnimationFrame(
+loop
+);
+
+}
+
+
+
+requestAnimationFrame(
+loop
+);
+
+
+
+function hold(
+id,
+key
+){
+
+const el =
+$(id);
+
+
+const off =
+()=>{
+
+S.keys[key] =
+false;
+
+};
+
+
+el.addEventListener(
+"pointerdown",
+e=>{
+
+e.preventDefault();
+
+
+S.keys[key] =
+true;
+
+
+if(
+el.setPointerCapture
+){
+
+el.setPointerCapture(
+e.pointerId
+);
+
+}
+
+}
+);
+
+
+el.addEventListener(
+"pointerup",
+off
+);
+
+
+el.addEventListener(
+"pointercancel",
+off
+);
+
+
+el.addEventListener(
+"lostpointercapture",
+off
+);
+
+}
+
+
+
+hold(
+"#left",
+"a"
+);
+
+
+hold(
+"#right",
+"d"
+);
+
+
+
+$("#jump")
+.addEventListener(
+"click",
+()=>jump(true)
+);
+
+
+$("#charge")
+.addEventListener(
+"click",
+()=>charge(true)
+);
+
+
+$("#punch")
+.addEventListener(
+"click",
+()=>punch(true)
+);
+
+
+$("#kick")
+.addEventListener(
+"click",
+()=>kick(true)
+);
+
+
+$("#kiShot")
+.addEventListener(
+"click",
+()=>fire(true)
+);
+
+
+$("#special1")
+.addEventListener(
+"click",
+()=>special(
+true,
+1
+)
+);
+
+
+$("#special2")
+.addEventListener(
+"click",
+()=>special(
+true,
+2
+)
+);
+
+
+$("#ultimate")
+.addEventListener(
+"click",
+()=>ultimate(true)
+);
+
+
+$("#transform")
+.addEventListener(
+"click",
+()=>transform(true)
+);
+
+
+$("#swap")
+.addEventListener(
+"click",
+()=>swap(true)
+);
+
+
+
+document.addEventListener(
+"keydown",
+e=>{
+
+const k =
+e.key.toLowerCase();
+
+
+S.keys[k] =
+true;
+
+
+if(
+e.repeat
+)
+return;
+
+
+if(
+k==="w"
+)
+jump(true);
+
+
+if(
+k==="j"
+)
+punch(true);
+
+
+if(
+k==="h"
+)
+kick(true);
+
+
+if(
+k==="k"
+)
+fire(true);
+
+
+if(
+k==="l"
+)
+special(
+true,
+1
+);
+
+
+if(
+k===";"
+)
+special(
+true,
+2
+);
+
+
+if(
+k==="u"
+)
+ultimate(true);
+
+
+if(
+k==="i"
+)
+charge(true);
+
+
+if(
+k==="t"
+)
+transform(true);
+
+
+if(
+k==="r"
+)
+swap(true);
+
+
+if(
+S.battleType==="local"
+){
+
+if(
+k==="arrowup"
+)
+jump(false);
+
+
+if(
+k==="1"
+)
+punch(false);
+
+
+if(
+k==="2"
+)
+kick(false);
+
+
+if(
+k==="3"
+)
+fire(false);
+
+
+if(
+k==="4"
+)
+special(
+false,
+1
+);
+
+
+if(
+k==="5"
+)
+special(
+false,
+2
+);
+
+
+if(
+k==="6"
+)
+ultimate(false);
+
+
+if(
+k==="0"
+)
+charge(false);
+
+
+if(
+k==="enter"
+)
+transform(false);
+
+
+if(
+k==="shift"
+)
+swap(false);
+
+}
+
+}
+);
+
+
+
+document.addEventListener(
+"keyup",
+e=>{
+
+S.keys[
+e.key.toLowerCase()
+]
+=
+false;
+
+}
+);
+
+
+
+$("#summon")
+.addEventListener(
+"click",
+()=>{
+
+$("#wishBox")
+.style.display =
+save.balls>=7
+?
+"block"
+:
+"none";
+
+}
+);
+
+
+
+document.querySelectorAll(
+".wish"
+)
+.forEach(
+b=>
+b.addEventListener(
+"click",
+()=>{
+
+if(
+save.balls<7
+)
+return;
+
+
+save.balls -=
+7;
+
+
+if(
+b.dataset.wish==="coins"
+){
+
+save.coins +=
+30000;
+
+}
+
+else if(
+b.dataset.wish==="items"
+){
+
+Object.keys(itemDefs)
+.forEach(
+id=>{
+
+save.items[id] =
+(save.items[id]||0)
++
+3;
+
+}
+);
+
+}
+
+else{
+
+const locked =
+chars.filter(
+c=>
+!save.unlocked.includes(c.id)
+);
+
+
+if(
+locked.length
+){
+
+save.unlocked.push(
+locked[
+Math.floor(
+Math.random()*locked.length
+)
+]
+.id
+);
+
+}
+
+else{
+
+save.coins +=
+20000;
+
+}
+
+}
+
+
+saveNow();
+
+
+$("#wishBox")
+.style.display =
+"none";
+
+
+renderRoster();
+
+renderShop();
+
+
+alert(
+"神龍已實現你的願望！"
+);
+
+}
+)
+);
+
+
+
+$("#resetSave")
+.addEventListener(
+"click",
+()=>{
+
+if(
+confirm(
+"確定重設金幣、角色、道具和龍珠嗎？"
+)
+){
+
+localStorage.removeItem(
+saveKey
+);
+
+
+save =
+loadSave();
+
+
+S.pick1 = [
+"goku"
+];
+
+
+S.pick2 = [
+"vegeta"
+];
+
+
+saveNow();
+
+renderRoster();
+
+renderShop();
+
+renderItems();
+
+}
+
+}
+);
+
+
+
+const bgm =
+$("#bgm");
+
+
+const musicFile =
+$("#musicFile");
+
+
+
+musicFile
+.addEventListener(
+"change",
+()=>{
+
+const f =
+musicFile.files
+&&
+musicFile.files[0];
+
+
+if(
+!f
+)
+return;
+
+
+bgm.src =
+URL.createObjectURL(f);
+
+
+bgm.play()
+.catch(
+()=>{}
+);
+
+}
+);
+
+
+
+$("#musicToggle")
+.addEventListener(
+"click",
+()=>{
+
+if(
+!bgm.src
+){
+
+alert(
+"請先選擇音樂檔"
+);
+
+return;
+
+}
+
+
+if(
+bgm.paused
+){
+
+bgm.play()
+.catch(
+()=>{}
+);
+
+}
+
+else{
+
+bgm.pause();
+
+}
+
+}
+);
+
+
+
+$("#musicStop")
+.addEventListener(
+"click",
+()=>{
+
+bgm.pause();
+
+
+bgm.currentTime =
+0;
+
+}
+);
+
+
+
+renderMeta();
+
+renderRoster();
+
+renderShop();
+
+renderItems();
+
 </script>
+
 </body>
 </html>
