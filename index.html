@@ -1,9165 +1,2202 @@
 <!doctype html>
 <html lang="zh-Hant">
-<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>七龍珠 Ultimate Battle</title>
+<title>七龍珠 Ultimate Battle · 時期角色版</title>
 
 <style>
 *{box-sizing:border-box}
-
-:root{
-  --bg:#0d1020;
-  --panel:#181f33;
-  --line:#ffffff22;
-  --gold:#ffd84d;
-  --muted:#b8c0d6;
-}
-
-html,body{
-  margin:0;
-  min-height:100%;
-  font-family:system-ui,-apple-system,"PingFang TC","Noto Sans TC",sans-serif;
-  background:var(--bg);
-  color:#fff;
-}
-
-button,select,input{font:inherit}
-button{cursor:pointer}
-
-#app{
-  max-width:1180px;
-  margin:auto;
-  padding:12px;
-}
-
-.panel{
-  background:linear-gradient(#1b2238,#141a2a);
-  border:1px solid var(--line);
-  border-radius:16px;
-  padding:14px;
-  margin-bottom:12px;
-}
-
-.top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-  flex-wrap:wrap;
-}
-
-h1{
-  margin:0;
-  color:var(--gold);
-  font-size:26px;
-}
-
-h2{
-  margin:0 0 10px;
-  font-size:18px;
-  color:#fff0a0;
-}
-
-.small{
-  font-size:12px;
-  color:var(--muted);
-  line-height:1.5;
-}
-
-.row{
-  display:flex;
-  gap:8px;
-  align-items:center;
-  flex-wrap:wrap;
-}
-
-.wallet{
-  display:flex;
-  gap:14px;
-  font-weight:900;
-}
-
-.btn,
-.tab,
-.ctrl,
-.shopBtn,
-.itemBtn{
-  border:1px solid #ffffff2d;
-  background:#2a334f;
-  color:#fff;
-  border-radius:11px;
-  padding:9px 11px;
-  font-weight:750;
-}
-
-.btn.active,
-.tab.active{
-  outline:3px solid var(--gold);
-  background:#5b4819;
-}
-
-.primary{
-  background:linear-gradient(#ffe36b,#f5a62d);
-  color:#301700;
-  border:0;
-  font-size:18px;
-}
-
-.danger{
-  background:#712b37;
-}
-
-.good{
-  background:#255f3d;
-}
-
-.tabs{
-  display:flex;
-  gap:6px;
-  flex-wrap:wrap;
-}
-
-.screen{display:none}
-.screen.active{display:block}
-
-.page{display:none}
-.page.active{display:block}
-
-#preview{
-  display:grid;
-  grid-template-columns:180px 1fr;
-  gap:14px;
-  align-items:center;
-  background:#11182a;
-  border:1px solid var(--line);
-  border-radius:14px;
-  padding:12px;
-  margin:10px 0;
-}
-
-.previewArt{
-  height:230px;
-  border-radius:12px;
-  overflow:hidden;
-  background:radial-gradient(circle at 50% 35%,#ffffff20,#0000 62%);
-}
-
-.previewArt svg,
-.portrait svg,
-.shopPortrait svg{
-  width:100%;
-  height:100%;
-  display:block;
-}
-
-.previewInfo h3{
-  margin:0 0 6px;
-  color:#ffe36a;
-  font-size:22px;
-}
-
-.stats{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:6px;
-  margin:8px 0;
-}
-
-.chip{
-  background:#252f4a;
-  border:1px solid #ffffff18;
-  border-radius:9px;
-  padding:6px;
-  text-align:center;
-  font-size:12px;
-}
-
-#roster{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(175px,1fr));
-  gap:8px;
-  max-height:48vh;
-  overflow:auto;
-  padding:3px;
-}
-
-.charCard{
-  min-height:228px;
-  text-align:left;
-}
-
-.charCard.locked{
-  opacity:.58;
-  filter:saturate(.45);
-}
-
-.charCard.selected{
-  outline:3px solid var(--gold);
-  background:#4b401f;
-}
-
-.portrait{
-  height:102px;
-  border-radius:10px;
-  overflow:hidden;
-  background:radial-gradient(circle at 50% 35%,#ffffff20,#0000 62%);
-  margin-bottom:6px;
-}
-
-.charName{
-  font-weight:900;
-}
-
-.badge{
-  display:inline-block;
-  border-radius:999px;
-  padding:2px 6px;
-  font-size:10px;
-  margin-top:4px;
-}
-
-.normal{background:#4b556d}
-.rare{background:#245d8f}
-.epic{background:#6e4296}
-.mega{background:#99651f}
-
-.price{
-  font-size:12px;
-  color:#ffe690;
-}
-
-#shopGrid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
-  gap:8px;
-}
-
-.shopCard{
-  background:#202941;
-  border:1px solid var(--line);
-  border-radius:13px;
-  padding:10px;
-}
-
-.shopPortrait{
-  height:120px;
-  border-radius:10px;
-  overflow:hidden;
-  background:radial-gradient(circle at 50% 35%,#ffffff20,#0000 62%);
-  margin-bottom:7px;
-}
-
-.notice{
-  background:#28324e;
-  border:1px solid var(--line);
-  border-radius:11px;
-  padding:10px;
-  margin-top:8px;
-}
-
-/* =========================
-   戰鬥畫面
-========================= */
-
-#game{
-  display:none;
-}
-
-.hud{
-  display:grid;
-  grid-template-columns:1fr 110px 1fr;
-  gap:10px;
-  align-items:center;
-  margin-bottom:8px;
-}
-
-.right{
-  text-align:right;
-}
-
-.name{
-  font-weight:900;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-
-.bar{
-  height:15px;
-  background:#303851;
-  border-radius:999px;
-  overflow:hidden;
-  margin:4px 0;
-}
-
-.hp{
-  height:100%;
-  background:linear-gradient(90deg,#ff3858,#ffb24a);
-}
-
-.ki{
-  height:100%;
-  background:linear-gradient(90deg,#3187ff,#63efff);
-}
-
-#round{
-  text-align:center;
-  color:#ffe45e;
-  font-weight:1000;
-}
-
-#stageWrap{
-  position:relative;
-}
-
-canvas{
-  display:block;
-  width:100%;
-  height:auto;
-  max-height:58vh;
-  border:1px solid var(--line);
-  border-radius:14px;
-  background:#172449;
-  touch-action:none;
-}
-
-#msg{
-  position:absolute;
-  left:50%;
-  top:12%;
-  transform:translateX(-50%);
-  font-size:28px;
-  font-weight:1000;
-  text-shadow:0 3px 8px #000;
-  white-space:nowrap;
-  pointer-events:none;
-}
-
-#controls{
-  display:grid;
-  grid-template-columns:170px 1fr;
-  gap:8px;
-  margin-top:8px;
-}
-
-.movePad,
-.actPad{
-  display:grid;
-  gap:5px;
-}
-
-.movePad{
-  grid-template-columns:repeat(3,1fr);
-  grid-template-rows:repeat(2,52px);
-}
-
-.actPad{
-  grid-template-columns:repeat(4,1fr);
-  grid-template-rows:repeat(2,52px);
-}
-
-.ctrl{
-  padding:4px;
-  touch-action:none;
-  user-select:none;
-  -webkit-user-select:none;
-}
-
-.ctrl:active,
-.itemBtn:active,
-.ctrl.holding{
-  transform:scale(.96);
-  background:#465271;
-}
-
-.ctrl.blocking{
-  background:#684e17;
-  outline:2px solid #ffe36b;
-}
-
-.ctrl.charging{
-  background:#174f68;
-  outline:2px solid #62e9ff;
-}
-
-#jump{
-  grid-column:2;
-  grid-row:1;
-}
-
-#block{
-  grid-column:3;
-  grid-row:1;
-}
-
-#left{
-  grid-column:1;
-  grid-row:2;
-}
-
-#charge{
-  grid-column:2;
-  grid-row:2;
-}
-
-#right{
-  grid-column:3;
-  grid-row:2;
-}
-
-#itemBar{
-  display:flex;
-  gap:6px;
-  flex-wrap:wrap;
-  margin-top:7px;
-}
-
-.itemBtn{
-  font-size:12px;
-  padding:7px 9px;
-}
-
-#result{
-  display:none;
-}
-
-select,
-input[type=file]{
-  background:#2a334f;
-  color:white;
-  border:1px solid #ffffff2d;
-  border-radius:9px;
-  padding:7px;
-}
-
-@media(max-width:760px){
-
-  #app{
-    padding:7px;
-  }
-
-  h1{
-    font-size:21px;
-  }
-
-  #preview{
-    grid-template-columns:105px 1fr;
-  }
-
-  .previewArt{
-    height:155px;
-  }
-
-  .previewInfo h3{
-    font-size:18px;
-  }
-
-  #roster{
-    grid-template-columns:repeat(2,minmax(0,1fr));
-  }
-
-  .hud{
-    grid-template-columns:1fr 68px 1fr;
-    font-size:12px;
-  }
-
-  #controls{
-    grid-template-columns:126px 1fr;
-  }
-
-  .movePad{
-    grid-template-rows:repeat(2,46px);
-  }
-
-  .actPad{
-    grid-template-columns:repeat(3,1fr);
-    grid-template-rows:repeat(3,46px);
-  }
-
-  .ctrl{
-    font-size:11px;
-  }
-
-  #msg{
-    font-size:20px;
-  }
+body{margin:0;background:#0b1020;color:#f5f5ff;font:15px system-ui,-apple-system,'PingFang TC',sans-serif}
+main{max-width:1180px;margin:auto;padding:16px}
+h1{color:#ffdb60;font-size:27px;margin:0}
+h2{font-size:19px}
+p{line-height:1.7}
+button,select,input,textarea{font:inherit}
+button,select,.file{border:1px solid #47546b;background:#25324b;color:white;border-radius:10px;padding:10px;cursor:pointer}
+button:disabled{opacity:.45;cursor:default}
+.primary{background:#ffd75b;color:#161d31;font-weight:900}
+.panel{background:#151e31;border:1px solid #2e3b54;padding:16px;border-radius:16px;margin:12px 0}
+.row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.between{justify-content:space-between}
+.small{font-size:12px;color:#b4c5dd}
+.tabs button.active,.selected{outline:2px solid #ffd75b}
+.page[hidden],[hidden]{display:none!important}
+#roster,#shop{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:9px}
+.card{text-align:center;padding:9px}
+.card canvas{width:100%;height:125px}
+.locked{opacity:.55}
+.chip{color:#80deff;font-size:12px}
+.hud{display:grid;grid-template-columns:1fr 60px 1fr;gap:12px}
+.bar{height:12px;background:#2b3649;border-radius:8px;overflow:hidden;margin:6px 0}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#ec425d,#ffbe69)}
+.bar.ki i{background:#53c5ff}
+#stage{position:relative}
+#fight{width:100%;display:block;aspect-ratio:1100/560;border-radius:14px;touch-action:none}
+#message{position:absolute;top:10%;width:100%;text-align:center;font-size:24px;font-weight:900;text-shadow:0 2px 5px black;pointer-events:none}
+#pads{display:grid;grid-template-columns:180px 1fr;gap:10px;margin-top:10px}
+#movement,#actions{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+#actions{grid-template-columns:repeat(5,1fr)}
+.control{min-height:56px;touch-action:none;user-select:none;-webkit-user-select:none}
+.held{background:#856c27}
+.notice{padding:10px;background:#202e45;border-radius:10px;margin:8px 0}
+textarea{width:100%;min-height:155px;background:#0b1527;color:#d7efff;padding:12px}
+pre{white-space:pre-wrap;overflow-wrap:anywhere}
+#toast{position:fixed;bottom:15px;left:50%;transform:translateX(-50%);z-index:10;background:#ffd75b;color:#192031;padding:12px 20px;border-radius:12px;max-width:94%;pointer-events:none}
+label{display:inline-flex;gap:8px;align-items:center}
+a{color:#8ad9ff}
+@media(max-width:700px){
+ main{padding:7px}
+ h1{font-size:21px}
+ .panel{padding:10px}
+ #pads{grid-template-columns:120px 1fr}
+ #actions{grid-template-columns:repeat(3,1fr)}
+ .control{font-size:12px;padding:5px;min-height:49px}
+ .hud{font-size:12px}
+ #message{font-size:18px}
+ #roster,#shop{grid-template-columns:repeat(2,1fr)}
 }
 </style>
-</head>
 
-<body>
-
-<div id="app">
-
-<section id="menu" class="screen active">
-
-<div class="panel top">
-
-<div>
-<h1>🐉 七龍珠 Ultimate Battle</h1>
-
-<div class="small">
-單一 index.html｜角色動作版｜真正跳躍閃避｜格擋減傷｜技能飛行與爆炸特效
-</div>
-</div>
-
-<div class="wallet">
-<span>🪙 <span id="coins">0</span></span>
-<span>🐲 龍珠 <span id="balls">0</span>/7</span>
-</div>
-
-</div>
-
-
-<div class="panel tabs">
-
-<button class="tab active" data-page="battlePage">
-戰鬥設定
-</button>
-
-<button class="tab" data-page="shopPage">
-角色商店
-</button>
-
-<button class="tab" data-page="itemPage">
-道具
-</button>
-
-<button class="tab" data-page="dragonPage">
-神龍
-</button>
-
-<button class="tab" data-page="musicPage">
-音樂
-</button>
-
-</div>
-
-
-<div id="battlePage" class="page active">
-
-<div class="panel">
-
-<h2>1. 戰鬥方式</h2>
-
-<div class="row" id="battleType">
-
-<button class="btn active" data-type="cpu">
-單機 VS 電腦
-</button>
-
-<button class="btn" data-type="local">
-雙人同機
-</button>
-
-</div>
-
-</div>
-
-
-<div class="panel">
-
-<h2>2. 人數</h2>
-
-<div class="row" id="teamSize">
-
-<button class="btn active" data-size="1">
-1v1
-</button>
-
-<button class="btn" data-size="3">
-3v3
-</button>
-
-<button class="btn" data-size="5">
-5v5
-</button>
-
-</div>
-
-</div>
-
-
-<div class="panel">
-
-<h2>3. 電腦難度</h2>
-
-<select id="difficulty">
-
-<option value="easy">
-easy
-</option>
-
-<option value="normal" selected>
-normal
-</option>
-
-<option value="hard">
-hard
-</option>
-
-<option value="difficult">
-difficult
-</option>
-
-<option value="boss">
-boss
-</option>
-
-</select>
-
-</div>
-
-
-<div class="panel">
-
-<h2>4. 場地</h2>
-
-<div class="row" id="arenas">
-
-<button class="btn active" data-arena="earth">
-地球荒野
-</button>
-
-<button class="btn" data-arena="time">
-精神時光屋
-</button>
-
-<button class="btn" data-arena="gravity">
-重力室
-</button>
-
-<button class="btn" data-arena="kingkai">
-界王星
-</button>
-
-<button class="btn" data-arena="supreme">
-界王神界
-</button>
-
-<button class="btn" data-arena="beerus">
-比魯斯星球
-</button>
-
-<button class="btn" data-arena="zeno">
-全王神殿
-</button>
-
-</div>
-
-</div>
-
-
-<div class="panel">
-
-<h2>5. 選擇隊伍</h2>
-
-<div class="row">
-
-<button id="editP1" class="btn active">
-編輯 P1
-</button>
-
-<button id="editP2" class="btn">
-編輯 P2
-</button>
-
-<span class="small">
-已選：
-<span id="pickedText"></span>
-</span>
-
-</div>
-
-<div class="notice small">
-拳、踢即使沒有碰到對方，也會完整做完攻擊動作。
-氣彈、特別技、終極技會真的出現在場上飛行。
-跳躍會改變角色真正的碰撞位置，可以跳過低空攻擊。
-按住格擋可以把受到的傷害減少為一半。
-</div>
-
-<div id="preview"></div>
-
-<div id="roster"></div>
-
-</div>
-
-
-<div class="panel">
-
-<button id="start" class="btn primary">
-開始戰鬥！
-</button>
-
-<button id="resetSave" class="btn danger">
-重設存檔
-</button>
-
-</div>
-
-</div>
-
-
-<div id="shopPage" class="page">
-
-<div class="panel">
-
-<h2>角色商店</h2>
-
-<div id="shopGrid"></div>
-
-</div>
-
-</div>
-
-
-<div id="itemPage" class="page">
-
-<div class="panel">
-
-<h2>道具商店</h2>
-
-<div id="itemShop"></div>
-
-</div>
-
-</div>
-
-
-<div id="dragonPage" class="page">
-
-<div class="panel">
-
-<h2>七顆龍珠</h2>
-
-<p>
-目前持有
-<b>
-<span id="balls2">0</span>/7
-</b>
-顆龍珠。
-</p>
-
-<button id="summon" class="btn primary">
-召喚神龍
-</button>
-
-<div id="wishBox" class="notice" style="display:none">
-
-<b>
-🐲 神龍：說出你的願望。
-</b>
-
-<div class="row" style="margin-top:8px">
-
-<button class="btn wish" data-wish="coins">
-30,000 金幣
-</button>
-
-<button class="btn wish" data-wish="items">
-大量道具
-</button>
-
-<button class="btn wish" data-wish="unlock">
-隨機角色
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-
-<div id="musicPage" class="page">
-
-<div class="panel">
-
-<h2>戰鬥音樂</h2>
-
-<div class="small">
-可選擇你自己裝置中的音樂檔。
-</div>
-
-<div class="row" style="margin-top:8px">
-
-<input
-id="musicFile"
-type="file"
-accept="audio/*"
->
-
-<button id="musicToggle" class="btn">
-播放 / 暫停
-</button>
-
-<button id="musicStop" class="btn">
-停止
-</button>
-
-</div>
-
-<audio id="bgm" loop></audio>
-
-</div>
-
-</div>
-
+<main>
+<header class="panel row between">
+  <div>
+    <div class="small">ULTIMATE BATTLE / 時期角色版</div>
+    <h1>🐉 七龍珠 Ultimate Battle</h1>
+  </div>
+  <b id="wallet"></b>
+</header>
+
+<section id="menu">
+  <nav class="row tabs">
+    <button data-tab="setup" class="active">戰鬥設定</button>
+    <button data-tab="shop">角色商店</button>
+    <button data-tab="items">道具</button>
+    <button data-tab="dragon">神龍</button>
+    <button data-tab="account">存檔 / Google</button>
+    <button data-tab="music">音樂</button>
+  </nav>
+
+  <div id="setup" class="panel page">
+    <div class="row">
+      <label>方式
+        <select id="mode">
+          <option value="cpu">單機 VS 電腦</option>
+          <option value="local">雙人同機（鍵盤）</option>
+        </select>
+      </label>
+      <label>隊伍
+        <select id="size"><option>1</option><option>3</option><option>5</option></select>
+      </label>
+      <label>難度
+        <select id="difficulty">
+          <option>easy</option>
+          <option selected>normal</option>
+          <option>hard</option>
+          <option>difficult</option>
+          <option>boss</option>
+        </select>
+      </label>
+      <label>場地<select id="arena"></select></label>
+    </div>
+
+    <p class="small">
+      各時期分別設定身高、服裝、髮型、招式和變身上限。
+      未登場或無戰鬥表現的時期不硬加版本。
+      真正跳躍、方向自動轉身、空中出招、格擋減傷 50%。
+      近戰技能需靠近，揮空也會播放動作。閃現消耗 15 氣。
+    </p>
+
+    <div class="row">
+      <button id="edit1" class="selected">編輯 P1</button>
+      <button id="edit2" hidden>編輯 P2</button>
+      <label>時期
+        <select id="eraFilter">
+          <option value="all">全部時期</option>
+          <option>Z 前</option>
+          <option>Z</option>
+          <option>超</option>
+          <option>GT</option>
+          <option>大魔</option>
+        </select>
+      </label>
+    </div>
+
+    <p id="picked"></p>
+    <div id="detail" class="notice"></div>
+
+    <div class="row">
+      <label>形態預覽<select id="formPreview"></select></label>
+      <span class="small">
+        預覽不會跳過戰鬥中的變身條件。
+        年齡以劇情階段呈現，能力數字為遊戲平衡值。
+      </span>
+    </div>
+
+    <canvas id="characterPreview" width="420" height="280"
+      style="max-width:100%;height:210px"></canvas>
+
+    <div id="roster"></div>
+    <p><button id="start" class="primary">開始戰鬥！</button></p>
+  </div>
+
+  <div id="shop" class="panel page" hidden></div>
+  <div id="items" class="panel page" hidden></div>
+
+  <div id="dragon" class="panel page" hidden>
+    <h2>🐲 七顆龍珠</h2>
+    <p>勝利有機會獲得龍珠。集滿七顆可許一個願望。</p>
+    <button data-wish="coins">30,000 金幣</button>
+    <button data-wish="items">每種道具 +3</button>
+    <button data-wish="unlock">隨機解鎖角色</button>
+  </div>
+
+  <div id="account" class="panel page" hidden>
+    <h2>本機與 Google 雲端存檔</h2>
+    <p id="cloudStatus">本機自動存檔已啟用。Google 功能需先設定 Firebase。</p>
+
+    <div class="row">
+      <button id="login">Google 登入</button>
+      <button id="logout">登出</button>
+      <button id="upload">儲存到雲端</button>
+      <button id="download">讀取雲端</button>
+      <button id="exportSave">匯出備份</button>
+      <label class="file">
+        匯入備份
+        <input id="importSave" type="file" accept="application/json,.json" hidden>
+      </label>
+      <button id="reset">重設本機存檔</button>
+    </div>
+
+    <p class="small">
+      本機會自動存檔；雲端採手動「儲存／讀取」，
+      避免登入時覆蓋另一台裝置的進度。可先匯出 JSON 備份。
+      單人遊戲存檔，不含線上對戰或防作弊。
+    </p>
+
+    <details>
+      <summary>第一次啟用 Google：設定步驟</summary>
+      <ol>
+        <li>到 Firebase Console 建立自己的專案、新增 Web App，複製 firebaseConfig 物件。</li>
+        <li>Authentication 開啟 Google 登入，設定支援信箱，並在授權網域加入遊戲網域，例如你的 GitHub Pages 網域。</li>
+        <li>建立 Cloud Firestore（預設資料庫），將以下規則發布到 Rules。</li>
+        <li>將 Web 設定以 JSON 格式貼到下方，按「套用設定」。只貼 Web 設定，不要貼服務帳號私鑰。</li>
+        <li>透過 HTTPS 網站或 localhost 開啟本遊戲。直接開 file:// 檔案可玩本機，但不能完成 Google 登入。iPad 請用 Safari 網站頁面並允許登入彈出視窗。</li>
+        <li>若要讓其他裝置免貼設定，可把同一物件填入原始碼的 FIREBASE_CONFIG。</li>
+      </ol>
+
+      <pre>rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /saves/{uid} {
+      allow read, write: if request.auth != null &amp;&amp; request.auth.uid == uid;
+    }
+  }
+}</pre>
+
+      <textarea id="config" placeholder='{"apiKey":"…","authDomain":"專案.firebaseapp.com","projectId":"專案","appId":"…"}'></textarea>
+      <button id="applyConfig">套用設定並重新載入</button>
+      <p>
+        <a href="https://firebase.google.com/docs/auth/web/google-signin" target="_blank" rel="noopener">Google 登入官方說明</a>
+        ·
+        <a href="https://firebase.google.com/docs/firestore/security/rules-conditions" target="_blank" rel="noopener">存檔存取規則</a>
+      </p>
+    </details>
+  </div>
+
+  <div id="music" class="panel page" hidden>
+    <h2>戰鬥音樂</h2>
+    <input id="musicFile" type="file" accept="audio/*">
+    <audio id="bgm" controls loop style="width:100%;margin-top:12px"></audio>
+  </div>
 </section>
 
-
-<section id="game">
-
-<div class="hud">
-
-<div>
-
-<div id="pName" class="name"></div>
-
-<div class="bar">
-<div id="pHp" class="hp"></div>
-</div>
-
-<div class="bar">
-<div id="pKi" class="ki"></div>
-</div>
-
-<div id="pMeta" class="small"></div>
-
-</div>
-
-
-<div id="round">
-FIGHT
-</div>
-
-
-<div class="right">
-
-<div id="eName" class="name"></div>
-
-<div class="bar">
-<div id="eHp" class="hp"></div>
-</div>
-
-<div class="bar">
-<div id="eKi" class="ki"></div>
-</div>
-
-<div id="eMeta" class="small"></div>
-
-</div>
-
-</div>
-
-
-<div id="stageWrap">
-
-<canvas
-id="fight"
-width="1100"
-height="560">
-</canvas>
-
-<div id="msg"></div>
-
-</div>
-
-
-<div id="controls">
-
-<div class="movePad">
-
-<button id="jump" class="ctrl">
-跳
-</button>
-
-<button id="block" class="ctrl">
-格擋
-</button>
-
-<button id="left" class="ctrl">
-◀
-</button>
-
-<button id="charge" class="ctrl">
-集氣
-</button>
-
-<button id="right" class="ctrl">
-▶
-</button>
-
-</div>
-
-
-<div class="actPad">
-
-<button id="punch" class="ctrl">
-拳
-</button>
-
-<button id="kick" class="ctrl">
-踢
-</button>
-
-<button id="kiShot" class="ctrl">
-氣彈
-</button>
-
-<button id="special1" class="ctrl">
-特別技 1
-</button>
-
-<button id="special2" class="ctrl">
-特別技 2
-</button>
-
-<button id="ultimate" class="ctrl">
-終極技
-</button>
-
-<button id="transform" class="ctrl">
-變身
-</button>
-
-<button id="swap" class="ctrl">
-換人
-</button>
-
-</div>
-
-</div>
-
-
-<div class="notice small">
-
-P1：
-A / D 移動、
-W 跳、
-<b>G 按住格擋</b>、
-I 按住集氣、
-J 拳、
-H 踢、
-K 氣彈、
-L 特別技1、
-; 特別技2、
-U 終極技、
-T 變身、
-R 換人。
-
-</div>
-
-
-<div
-id="p2Help"
-class="notice small"
-style="display:none">
-
-P2：
-← / → 移動、
-↑ 跳、
-<b>7 按住格擋</b>、
-0 按住集氣、
-1 拳、
-2 踢、
-3 氣彈、
-4 特別技1、
-5 特別技2、
-6 終極技、
-Enter 變身、
-Shift 換人。
-
-</div>
-
-
-<div id="itemBar"></div>
-
-
-<div id="result" class="notice">
-
-<b id="resultText"></b>
-
-<div class="row" style="margin-top:8px">
-
-<button id="again" class="btn primary">
-再打一場
-</button>
-
-<button id="backMenu" class="btn">
-回主選單
-</button>
-
-</div>
-
-</div>
-
-
-<button id="quit" class="btn" style="margin-top:8px">
-離開戰鬥
-</button>
-
+<section id="game" hidden>
+  <div class="panel hud">
+    <div>
+      <b id="pn"></b>
+      <div class="bar"><i id="ph"></i></div>
+      <div class="bar ki"><i id="pk"></i></div>
+      <small id="pm"></small>
+    </div>
+    <b style="text-align:center">VS</b>
+    <div style="text-align:right">
+      <b id="en"></b>
+      <div class="bar"><i id="eh"></i></div>
+      <div class="bar ki"><i id="ek"></i></div>
+      <small id="em"></small>
+    </div>
+  </div>
+
+  <div id="stage">
+    <canvas id="fight" width="1100" height="560"></canvas>
+    <div id="message" aria-live="polite"></div>
+  </div>
+
+  <div id="pads">
+    <div id="movement">
+      <button class="control" data-act="jump">跳 W</button>
+      <button class="control" data-hold="block">格擋 G</button>
+      <button class="control" data-act="blink">閃現 F<br>15 氣</button>
+      <button class="control" data-hold="left">◀ A</button>
+      <button class="control" data-hold="charge">集氣 I</button>
+      <button class="control" data-hold="right">D ▶</button>
+    </div>
+    <div id="actions"></div>
+  </div>
+
+  <div id="itemBar" class="row" style="margin-top:10px"></div>
+
+  <p class="small">
+    P1：A/D 移動，W 跳，G 格擋，I 集氣，F 閃現，
+    J 拳，H 踢，K 氣彈，L／; 特別技，U 終極，T 變身，R 換人。
+    <br>
+    P2：←/→ 移動，↑ 跳，7 格擋，0 集氣，8 閃現，
+    1 拳，2 踢，3 氣彈，4／5 特別技，6 終極，Enter 變身，Shift 換人。
+    Esc 暫停。
+  </p>
+
+  <div class="row">
+    <button id="pause">暫停</button>
+    <button id="quit">回主選單</button>
+  </div>
+
+  <div id="result" class="notice" hidden>
+    <b id="resultText"></b>
+    <p><button id="again" class="primary">再打一場</button></p>
+  </div>
 </section>
 
-</div>
-
+<div id="toast" hidden></div>
+</main>
 
 <script>
-"use strict";
+'use strict';
 
+// 可填入自己的 Firebase Web 公開設定。
+// 本機遊戲功能不依賴 Firebase。
+const FIREBASE_CONFIG = null;
 
 const $ = s => document.querySelector(s);
+const clamp = (v,a,b) => Math.max(a,Math.min(b,v));
 
-const clamp = (v,a,b) =>
-Math.max(a,Math.min(b,v));
+const forms = {
+  s1:['超級賽亞人',35,1.18],
+  s2:['超級賽亞人2',45,1.3],
+  s3:['超級賽亞人3',55,1.45],
+  god:['超級賽亞人之神',62,1.62],
+  blue:['超級賽亞人藍',70,1.78],
+  ui:['自在極意',85,2.05],
+  ss4:['超級賽亞人4',70,1.82]
+};
 
-const rnd = (a,b) =>
-a + Math.random() * (b-a);
+// 明確指定技能類型，近戰技能不會被誤判成氣彈。
+const skill = (name,type='beam') => ({name,type});
+const chars = [];
 
-const GROUND = 455;
-
-
-/* ======================================================
-   角色資料
-====================================================== */
-
-const chars = [
-
-{
-id:"goku",
-name:"孫悟空",
-price:2000,
-rarity:"normal",
-hp:110,
-atk:13,
-kiAtk:15,
-colors:["#ef7929","#2350b7"],
-style:"goku",
-s1:"龜派氣功",
-s2:"瞬間移動攻擊",
-ult:"元氣彈",
-forms:[
-["超級賽亞人",35,1.18],
-["超級賽亞人2",45,1.30],
-["超級賽亞人3",55,1.45],
-["超級賽亞人之神",62,1.62],
-["超級賽亞人藍",70,1.78],
-["自在極意",85,2.05]
-]
-},
-
-{
-id:"vegeta",
-name:"貝吉達",
-price:2100,
-rarity:"normal",
-hp:108,
-atk:14,
-kiAtk:15,
-colors:["#2c4b9f","#f2f2f5"],
-style:"vegeta",
-s1:"加力砲",
-s2:"大爆炸攻擊",
-ult:"終極閃光",
-forms:[
-["超級賽亞人",35,1.18],
-["超級賽亞人2",45,1.30],
-["超級賽亞人之神",62,1.60],
-["超級賽亞人藍",70,1.78],
-["自我極意",85,2.05]
-]
-},
-
-{
-id:"gohan",
-name:"孫悟飯",
-price:2500,
-rarity:"normal",
-hp:112,
-atk:13,
-kiAtk:16,
-colors:["#6842a8","#25236d"],
-style:"gohan",
-s1:"魔閃光",
-s2:"爆裂亂舞",
-ult:"親子龜派氣功",
-forms:[
-["超級賽亞人",35,1.18],
-["超級賽亞人2",45,1.34],
-["究極悟飯",62,1.58],
-["野獸悟飯",85,2.05]
-]
-},
-
-{
-id:"goten",
-name:"孫悟天",
-price:2000,
-rarity:"normal",
-hp:95,
-atk:11,
-kiAtk:13,
-colors:["#e77f34","#3155a3"],
-style:"goku",
-s1:"龜派氣功",
-s2:"高速突擊",
-ult:"超級悟天攻擊",
-forms:[
-["超級賽亞人",35,1.20]
-]
-},
-
-{
-id:"trunks",
-name:"特南克斯",
-price:2000,
-rarity:"normal",
-hp:100,
-atk:12,
-kiAtk:14,
-colors:["#5b68b7","#1c429a"],
-style:"trunks",
-s1:"燃燒攻擊",
-s2:"劍擊連斬",
-ult:"終極爆發",
-forms:[
-["超級賽亞人",35,1.20],
-["超級賽亞人2",45,1.34]
-]
-},
-
-{
-id:"piccolo",
-name:"比克",
-price:2100,
-rarity:"normal",
-hp:120,
-atk:13,
-kiAtk:16,
-colors:["#6b3c8b","#f5f1ea"],
-style:"piccolo",
-s1:"魔貫光殺砲",
-s2:"巨大化衝拳",
-ult:"橙色爆裂",
-forms:[
-["潛能解放",45,1.30],
-["橙色比克",70,1.72]
-]
-},
-
-{
-id:"krillin",
-name:"克林",
-price:2000,
-rarity:"normal",
-hp:92,
-atk:10,
-kiAtk:15,
-colors:["#d97a31","#2f4d94"],
-style:"krillin",
-s1:"氣圓斬",
-s2:"太陽拳突擊",
-ult:"百倍氣圓斬",
-forms:[]
-},
-
-{
-id:"yamcha",
-name:"飲茶",
-price:2000,
-rarity:"normal",
-hp:96,
-atk:11,
-kiAtk:12,
-colors:["#d7853d","#40548a"],
-style:"yamcha",
-s1:"狼牙風風拳",
-s2:"操氣彈",
-ult:"真・狼牙風風拳",
-forms:[]
-},
-
-{
-id:"tien",
-name:"天津飯",
-price:2000,
-rarity:"normal",
-hp:100,
-atk:12,
-kiAtk:15,
-colors:["#5c8f8e","#263658"],
-style:"tien",
-s1:"太陽拳衝擊",
-s2:"四身拳",
-ult:"新氣功砲",
-forms:[]
-},
-
-{
-id:"yajirobe",
-name:"亞奇洛貝",
-price:2000,
-rarity:"normal",
-hp:105,
-atk:12,
-kiAtk:8,
-colors:["#6b7e3c","#56341f"],
-style:"yamcha",
-s1:"居合斬",
-s2:"仙豆支援斬",
-ult:"武士一閃",
-forms:[]
-},
-
-{
-id:"roshi",
-name:"龜仙人",
-price:2000,
-rarity:"normal",
-hp:98,
-atk:12,
-kiAtk:15,
-colors:["#df6f43","#eeeeee"],
-style:"roshi",
-s1:"萬國驚天掌",
-s2:"殘像拳突擊",
-ult:"最大威力龜派氣功",
-forms:[
-["全力形態",45,1.35]
-]
-},
-
-{
-id:"a17",
-name:"人造人17號",
-price:2500,
-rarity:"rare",
-hp:115,
-atk:14,
-kiAtk:15,
-colors:["#3d6e8e","#49605b"],
-style:"a17",
-s1:"能量屏障衝擊",
-s2:"連續氣彈",
-ult:"全力能量球",
-forms:[]
-},
-
-{
-id:"a18",
-name:"人造人18號",
-price:2500,
-rarity:"rare",
-hp:112,
-atk:14,
-kiAtk:15,
-colors:["#6289b7","#30394f"],
-style:"a18",
-s1:"無限能源連擊",
-s2:"高速氣彈",
-ult:"雙重能量波",
-forms:[]
-},
-
-{
-id:"buu",
-name:"普烏",
-price:3000,
-rarity:"rare",
-hp:145,
-atk:14,
-kiAtk:16,
-colors:["#ef8db7","#f4e8df"],
-style:"buu",
-s1:"伸長手臂",
-s2:"巧克力光線",
-ult:"毀滅爆破",
-forms:[
-["純粹普烏",55,1.48]
-]
-},
-
-{
-id:"frieza",
-name:"弗利沙",
-price:3000,
-rarity:"rare",
-hp:115,
-atk:15,
-kiAtk:18,
-colors:["#f0f0f0","#9256b2"],
-style:"frieza",
-s1:"死亡光束",
-s2:"超能力衝擊",
-ult:"死亡球",
-forms:[
-["最終形態",35,1.22],
-["黃金弗利沙",62,1.65],
-["黑金弗利沙",85,2.03]
-]
-},
-
-{
-id:"cell",
-name:"賽魯",
-price:5000,
-rarity:"rare",
-hp:130,
-atk:16,
-kiAtk:17,
-colors:["#5a9b5e","#593173"],
-style:"cell",
-s1:"太陽拳衝擊",
-s2:"吸收突擊",
-ult:"完美龜派氣功",
-forms:[
-["完全體",55,1.50]
-]
-},
-
-{
-id:"broly",
-name:"布羅利",
-price:5000,
-rarity:"rare",
-hp:155,
-atk:18,
-kiAtk:16,
-colors:["#4f8d3d","#653178"],
-style:"broly",
-s1:"狂暴衝擊",
-s2:"巨型能量彈",
-ult:"全力爆裂",
-forms:[
-["超級賽亞人",45,1.35],
-["全力超級賽亞人",70,1.82]
-]
-},
-
-{
-id:"jiren",
-name:"吉連",
-price:12500,
-rarity:"epic",
-hp:165,
-atk:20,
-kiAtk:20,
-colors:["#b53a3a","#242424"],
-style:"jiren",
-s1:"震空拳",
-s2:"力量衝擊",
-ult:"全力爆炎",
-forms:[
-["全力吉連",70,1.65]
-]
-},
-
-{
-id:"beerus",
-name:"比魯斯",
-price:25000,
-rarity:"epic",
-hp:175,
-atk:22,
-kiAtk:24,
-colors:["#8168aa","#263b72"],
-style:"beerus",
-s1:"破壞",
-s2:"破壞神彈",
-ult:"破壞神之怒",
-forms:[]
-},
-
-{
-id:"whis",
-name:"維斯",
-price:25000,
-rarity:"epic",
-hp:170,
-atk:21,
-kiAtk:25,
-colors:["#83d5e7","#775272"],
-style:"whis",
-s1:"天使瞬擊",
-s2:"神速手刀",
-ult:"天使衝擊",
-forms:[]
-},
-
-{
-id:"champa",
-name:"象帕",
-price:25000,
-rarity:"epic",
-hp:180,
-atk:23,
-kiAtk:22,
-colors:["#8562a3","#202b64"],
-style:"champa",
-s1:"破壞重擊",
-s2:"破壞光球",
-ult:"第六宇宙爆破",
-forms:[]
-},
-
-{
-id:"grand",
-name:"大神官",
-price:40000,
-rarity:"mega",
-hp:195,
-atk:25,
-kiAtk:27,
-colors:["#e2efff","#6c88c9"],
-style:"whis",
-s1:"神速突擊",
-s2:"空間衝擊",
-ult:"天界審判",
-forms:[]
-},
-
-{
-id:"zeno",
-name:"全王",
-price:50000,
-rarity:"mega",
-hp:220,
-atk:26,
-kiAtk:31,
-colors:["#72a8ff","#e74b86"],
-style:"zeno",
-s1:"抹除光球",
-s2:"王之衝擊",
-ult:"全宇宙清除",
-forms:[]
+function add(id,name,price,hp,atk,ki,color,style,s1,s2,ult,fs=[],era='超',extra={}){
+  chars.push({
+    id,name,price,hp,atk,kiAtk:ki,color,style,
+    s1:skill(...s1),
+    s2:skill(...s2),
+    ult:skill(...ult),
+    forms:fs.map(f=>typeof f==='string'?forms[f]:f),
+    era,...extra
+  });
 }
 
+add('goku','孫悟空',2000,110,13,15,'#f07728','goku',
+ ['龜派氣功'],['瞬間移動攻擊','rush'],['元氣彈','orb'],
+ ['s1','s2','s3','god','blue','ui']);
+
+add('vegeta','貝吉達',2100,108,14,15,'#2453b0','vegeta',
+ ['加力砲'],['大爆炸攻擊','orb'],['終極閃光'],
+ ['s1','s2','god','blue',['自我極意',85,2.05]]);
+
+add('gohan','孫悟飯',2500,112,13,16,'#7848a5','gohan',
+ ['魔閃光'],['爆裂亂舞','combo'],['親子龜派氣功'],
+ ['s1','s2',['究極悟飯',62,1.58],['野獸悟飯',85,2.05]]);
+
+add('goten','孫悟天',2000,95,11,13,'#ef852b','goku',
+ ['龜派氣功'],['高速突擊','rush'],['超級悟天攻擊','combo'],
+ ['s1'],'Z',{child:true});
+
+add('trunks','特南克斯',2000,100,12,14,'#7576b9','trunks',
+ ['燃燒攻擊','orb'],['劍擊連斬','sword'],['終極爆發','orb'],
+ ['s1','s2']);
+
+add('piccolo','比克',2100,120,13,16,'#724394','piccolo',
+ ['魔貫光殺砲','laser'],['巨大化衝拳','rush'],['橙色爆裂','orb'],
+ [['潛能解放',45,1.3],['橙色比克',70,1.72]]);
+
+add('krillin','克林',2000,92,10,15,'#ed802e','bald',
+ ['氣圓斬','disc'],['太陽拳突擊','rush'],['百倍氣圓斬','disc']);
+
+add('yamcha','飲茶',2000,96,11,12,'#ea862e','long',
+ ['狼牙風風拳','combo'],['操氣彈','orb'],['真・狼牙風風拳','combo']);
+
+add('tien','天津飯',2000,100,12,15,'#499976','bald',
+ ['太陽拳衝擊','rush'],['四身拳','combo'],['新氣功砲']);
+
+add('yajirobe','亞奇洛貝',2000,105,12,8,'#827b3e','long',
+ ['居合斬','sword'],['仙豆支援斬','sword'],['武士一閃','sword'],[],'Z 前');
+
+add('roshi','龜仙人',2000,98,12,15,'#de7850','bald',
+ ['萬國驚天掌','laser'],['殘像拳突擊','rush'],['最大威力龜派氣功'],
+ [['全力形態',45,1.35]]);
+
+add('a17','人造人17號',2500,115,14,15,'#3b805a','long',
+ ['能量屏障衝擊','rush'],['連續氣彈','volley'],['全力能量球','orb']);
+
+add('a18','人造人18號',2500,112,14,15,'#5a87b9','bob',
+ ['無限能源連擊','combo'],['高速氣彈','volley'],['雙重能量波']);
+
+add('buu','普烏',3000,145,14,16,'#f5eeee','buu',
+ ['伸長手臂','stretch'],['巧克力光線','pink'],['毀滅爆破','orb'],
+ [['純粹普烏',55,1.48]],'Z');
+
+add('frieza','弗利沙',3000,115,15,18,'#edeff8','frieza',
+ ['死亡光束','laser'],['超能力衝擊','orb'],['死亡球','orb'],
+ [['最終形態',35,1.22],['黃金弗利沙',62,1.65],['黑金弗利沙',85,2.03]]);
+
+add('cell','賽魯',5000,130,16,17,'#619c4e','cell',
+ ['太陽拳衝擊','rush'],['吸收突擊','rush'],['完美龜派氣功'],
+ [['完全體',55,1.5]],'Z');
+
+add('broly','布羅利',5000,155,18,16,'#72ab48','goku',
+ ['狂暴衝擊','rush'],['巨型能量彈','orb'],['全力爆裂','orb'],
+ ['s1',['全力超級賽亞人',70,1.82]],'超',{big:true});
+
+add('jiren','吉連',12500,165,20,20,'#c9393e','bald',
+ ['震空拳','rush'],['力量衝擊','orb'],['全力爆炎','orb'],
+ [['全力吉連',70,1.65]],'超',{big:true});
+
+add('beerus','比魯斯',25000,175,22,24,'#263d70','cat',
+ ['破壞','destruction'],['破壞神彈','orb'],['破壞神之怒','orb']);
+
+add('whis','維斯',25000,170,21,25,'#893c61','angel',
+ ['天使瞬擊','rush'],['神速手刀','combo'],['天使衝擊']);
+
+add('champa','象帕',25000,180,23,22,'#394177','cat',
+ ['破壞重擊','rush'],['破壞光球','orb'],['第六宇宙爆破','orb'],
+ [],'超',{big:true});
+
+add('grand','大神官',40000,195,25,27,'#677bcc','angel',
+ ['神速突擊','rush'],['空間衝擊','orb'],['天界審判']);
+
+add('zeno','全王',50000,220,26,31,'#ca428c','zeno',
+ ['抹除光球','orb'],['王之衝擊','orb'],['全宇宙清除','orb']);
+
+add('goku_kid','孫悟空・少年',2000,98,12,13,'#e87528','goku',
+ ['龜派氣功'],['如意棒連擊','staff'],['少年龍拳','rush'],
+ [],'Z 前',{child:true,tail:true});
+
+add('goku_z','孫悟空・Z',2000,110,13,15,'#ef7626','goku',
+ ['龜派氣功'],['瞬間移動攻擊','rush'],['元氣彈','orb'],
+ ['s1','s2','s3'],'Z');
+
+add('goku_gt','孫悟空・GT',2500,105,13,16,'#316bbf','goku',
+ ['龜派氣功'],['龍拳突擊','rush'],['十倍龜派氣功'],
+ ['s1','s3','ss4'],'GT',{child:true,tail:true});
+
+add('goku_daima','孫悟空・大魔',2500,102,13,15,'#ef7826','goku',
+ ['龜派氣功'],['如意棒亂舞','staff'],['龍拳','rush'],
+ ['s1','s2','s3','ss4'],'大魔',{child:true});
+
+add('vegeta_z','貝吉達・Z',2100,108,14,15,'#2852aa','vegeta',
+ ['加力砲'],['連續氣彈','volley'],['終極閃光'],['s1','s2'],'Z');
+
+add('vegeta_gt','貝吉達・GT',2600,115,15,16,'#c02e37','vegeta',
+ ['加力砲'],['爆裂連擊','combo'],['終極閃光'],
+ ['s1','s2','ss4'],'GT');
+
+// 每個時期使用獨立資料。
+// stats：生命、格鬥、氣功、速度、價格。
+function revise(id,props){
+  Object.assign(chars.find(c=>c.id===id),props);
+}
+
+function variant(base,id,name,era,age,stats,look,fs,skills){
+  const b=chars.find(c=>c.id===base);
+  chars.push({
+    ...b,id,name,era,age,
+    hp:stats[0],atk:stats[1],kiAtk:stats[2],
+    speed:stats[3],price:stats[4],
+    ...look,
+    forms:fs.map(f=>typeof f==='string'?forms[f]:f),
+    ...(skills ? {
+      s1:skill(...skills[0]),
+      s2:skill(...skills[1]),
+      ult:skill(...skills[2])
+    } : {})
+  });
+}
+
+for(const c of chars){
+  Object.assign(c,{
+    age:c.child?'兒童':'成年',
+    speed:410,
+    height:c.child?.72:c.big?1.13:1
+  });
+}
+
+revise('goku',{age:'成年・超',outfit:'gi'});
+revise('vegeta',{name:'貝吉達・超',age:'成年・超',outfit:'armor'});
+revise('gohan',{
+  name:'孫悟飯・超 HERO',age:'成年・父親',outfit:'gi',
+  glasses:true,ult:skill('魔貫光殺砲','laser')
+});
+revise('goten',{
+  name:'孫悟天・Z 兒童',age:'兒童・普烏篇',height:.69,speed:435
+});
+revise('trunks',{
+  name:'未來特南克斯・超',age:'成年・未來線',
+  hairBase:'#779ed2',scarf:true,sword:true,outfit:'jacket',
+  s2:skill('劍擊連斬','sword'),ult:skill('希望之劍','sword'),
+  forms:[forms.s1,forms.s2,['超級賽亞人怒',65,1.7]]
+});
+revise('piccolo',{
+  name:'比克・超 HERO',age:'成熟・導師',
+  cape:true,hp:130,atk:14,kiAtk:18
+});
+revise('goku_z',{age:'成年・普烏篇'});
+revise('goku_kid',{age:'兒童・少年篇'});
+revise('goku_gt',{age:'成年心智・兒童身體',outfit:'gi'});
+revise('goku_daima',{age:'成年心智・迷你身體',outfit:'gi'});
+revise('vegeta_z',{
+  name:'貝吉達・Z 普烏篇',age:'成年・普烏篇',
+  outfit:'suit',hp:116,atk:15,kiAtk:16
+});
+revise('vegeta_gt',{
+  name:'貝吉達・GT',age:'中年・GT',outfit:'vest',
+  hairCut:'short',pants:'#35588b',height:.98
+});
+
+variant('vegeta','vegeta_saiyan','貝吉達・Z 賽亞人篇','Z','成年・初登場',
+ [102,12,14,390,2100],
+ {outfit:'armor',scouter:true,tail:true,height:.93},
+ [],
+ [['加力砲'],['連續氣彈','volley'],['全力加力砲']]);
+
+variant('vegeta','vegeta_cell','貝吉達・Z 賽魯篇','Z','成年・修行後',
+ [112,15,16,405,2300],{outfit:'armor',height:.98},
+ ['s1'],
+ [['大爆炸攻擊','orb'],['爆裂連擊','combo'],['終極閃光']]);
+
+variant('vegeta','vegeta_daima','貝吉達・大魔','大魔','成年心智・迷你身體',
+ [103,14,15,430,2400],{child:true,height:.71,outfit:'suit'},
+ ['s1','s2','s3']);
+
+variant('gohan','gohan_kid','孫悟飯・Z 幼年','Z','幼年・賽亞人篇',
+ [86,10,13,425,1800],
+ {child:true,height:.62,hairCut:'bowl',cape:false,glasses:false,color:'#85549d'},
+ [],
+ [['魔閃光'],['憤怒突擊','rush'],['憤怒魔閃光']]);
+
+variant('gohan','gohan_cell','孫悟飯・Z 賽魯篇','Z','少年・修行後',
+ [105,13,16,435,2400],
+ {child:true,height:.83,hairCut:'gohan',glasses:false,color:'#7949a2',cape:true},
+ ['s1','s2'],
+ [['魔閃光'],['爆裂亂舞','combo'],['親子龜派氣功']]);
+
+variant('gohan','gohan_buu','孫悟飯・Z 普烏篇','Z','高中生・青年',
+ [118,15,17,420,2600],
+ {child:false,height:1,hairCut:'short',glasses:false,color:'#ee792c',cape:false},
+ ['s1','s2',['究極悟飯',62,1.58]],
+ [['龜派氣功'],['爆裂亂舞','combo'],['究極連擊','combo']]);
+
+variant('gohan','gohan_gt','孫悟飯・GT','GT','成年・學者',
+ [114,14,16,395,2500],
+ {height:1,child:false,hairCut:'short',glasses:true,color:'#536b94',outfit:'shirt',cape:false},
+ ['s1'],
+ [['龜派氣功'],['高速連擊','combo'],['全力龜派氣功']]);
+
+variant('goten','goten_super','孫悟天・超 前期','超','兒童・超前期',
+ [100,12,14,440,2200],{child:true,height:.74,color:'#e78829'},['s1']);
+
+variant('goten','goten_hero','孫悟天・超 HERO','超','高中生・青年',
+ [111,14,15,450,2500],
+ {child:false,height:.95,hairCut:'swept',color:'#ec862c'},
+ ['s1'],
+ [['龜派氣功'],['高速突擊','rush'],['全力龜派氣功']]);
+
+variant('goten','goten_gt','孫悟天・GT','GT','青年・GT',
+ [110,13,15,420,2500],
+ {child:false,height:1,hairCut:'swept',color:'#6cac52',outfit:'shirt',pants:'#414868'},
+ ['s1']);
+
+variant('trunks','trunks_kid','特南克斯・Z 兒童','Z','兒童・普烏篇',
+ [99,12,14,440,2000],
+ {child:true,height:.71,hairBase:'#b79cce',scarf:false,sword:false,color:'#3c9279',outfit:'gi'},
+ ['s1'],
+ [['氣功波'],['高速連擊','combo'],['全力氣功波']]);
+
+variant('trunks','trunks_future_z','未來特南克斯・Z','Z','少年・未來線',
+ [112,14,16,420,2400],
+ {child:false,height:.98,hairBase:'#b79cce',scarf:false,sword:true,color:'#6976b6',outfit:'jacket'},
+ ['s1'],
+ [['燃燒攻擊','orb'],['劍擊連斬','sword'],['終極爆發','orb']]);
+
+variant('trunks','trunks_super_kid','特南克斯・超 前期','超','兒童・現代線',
+ [104,13,14,440,2200],
+ {child:true,height:.76,hairBase:'#b79cce',scarf:false,sword:false,color:'#4d947d',outfit:'gi'},
+ ['s1'],
+ [['氣功波'],['高速連擊','combo'],['全力氣功波']]);
+
+variant('trunks','trunks_hero','特南克斯・超 HERO','超','高中生・現代線',
+ [114,14,16,440,2600],
+ {child:false,height:.98,hairBase:'#779ed2',scarf:false,sword:false,color:'#466dbc',outfit:'jacket'},
+ ['s1'],
+ [['氣功波'],['高速連擊','combo'],['燃燒攻擊','orb']]);
+
+variant('trunks','trunks_gt','特南克斯・GT','GT','青年・現代線',
+ [118,15,16,420,2700],
+ {child:false,height:1,hairBase:'#b79cce',scarf:false,sword:false,color:'#5679a9',outfit:'jacket',pants:'#cbaa73'},
+ ['s1'],
+ [['燃燒攻擊','orb'],['高速連擊','combo'],['終極爆發','orb']]);
+
+variant('piccolo','piccolo_young','比克・天下第一武道會','Z 前','青年・新生比克',
+ [105,12,14,400,2000],{height:1,cape:true,color:'#734d8d'},
+ [],
+ [['魔光砲'],['伸長手臂','stretch'],['超爆力魔波','orb']]);
+
+variant('piccolo','piccolo_saiyan','比克・Z 賽亞人篇','Z','青年・悟飯的師父',
+ [112,13,16,400,2200],{height:1.02,cape:true,color:'#794996'},
+ [],
+ [['魔貫光殺砲','laser'],['伸長手臂','stretch'],['全力魔貫光殺砲','laser']]);
+
+variant('piccolo','piccolo_namek','比克・Z 那美克星篇','Z','青年・與尼爾同化後',
+ [120,14,17,410,2400],{height:1.05,cape:false,color:'#69438a'},
+ [],
+ [['魔閃光'],['那美克連擊','combo'],['魔貫光殺砲','laser']]);
+
+variant('piccolo','piccolo_cell','比克・Z 賽魯篇','Z','與神同化後',
+ [128,15,18,410,2700],{height:1.07,cape:false,color:'#69418b'},
+ [],
+ [['激烈光彈','volley'],['伸長手臂','stretch'],['魔空包圍彈','volley']]);
+
+variant('piccolo','piccolo_gt','比克・GT','GT','成熟・守護者',
+ [130,15,18,395,2800],{height:1.07,cape:true,color:'#73538f'},
+ [],
+ [['魔貫光殺砲','laser'],['伸長手臂','stretch'],['激烈光彈','volley']]);
+
+variant('piccolo','piccolo_daima','比克・大魔','大魔','成年心智・迷你身體',
+ [103,12,15,425,2200],{child:true,height:.7,cape:true,color:'#795198'},
+ [],
+ [['魔貫光殺砲','laser'],['伸長手臂','stretch'],['魔光砲']]);
+
+const byId = id => chars.find(c=>c.id===id);
+const starters = [
+ 'goku','vegeta','gohan','piccolo','krillin','tien',
+ 'goku_kid','goku_z','goku_gt','goku_daima'
 ];
-
-
-/* ======================================================
-   道具 / 難度 / 存檔
-====================================================== */
 
 const itemDefs = {
+ senzu:['🫘 仙豆',1200,'回復 55% 最大生命'],
+ potara:['🟢 波特拉',4500,'與下一位存活隊友合體（每人一次）'],
+ zsword:['🗡️ Z 神劍',3000,'此角色本場所有攻擊 +35%'],
+ capsule:['💊 膠囊',900,'隨機回血、補氣或攻擊提升'],
+ staff:['🪄 天使手杖',3800,'補滿氣並回復 20 HP']
+};
 
-senzu:{
-name:"仙豆",
-price:1200,
-desc:"回復 55% 最大生命",
-icon:"🫘"
-},
+const KEY='db_ultimate_real_combat_v3';
+const OLD='db_ultimate_real_combat_v2';
 
-potara:{
-name:"波特拉耳環",
-price:4500,
-desc:"與下一位隊友合體",
-icon:"🟢"
-},
-
-zsword:{
-name:"Z 神劍",
-price:3000,
-desc:"本場攻擊力 +35%",
-icon:"🗡️"
-},
-
-capsule:{
-name:"萬能膠囊",
-price:900,
-desc:"隨機戰鬥效果",
-icon:"💊"
-},
-
-staff:{
-name:"天使的手杖",
-price:3800,
-desc:"補滿氣力並少量回血",
-icon:"🪄"
+function baseSave(){
+ return {
+  version:3,coins:12000,balls:0,wins:0,
+  unlocked:[...starters],
+  items:{senzu:2,potara:0,zsword:1,capsule:1,staff:0}
+ };
 }
 
-};
-
-
-const diff = {
-
-easy:{
-interval:1100,
-dmg:.80,
-reward:500,
-defense:.12
-},
-
-normal:{
-interval:820,
-dmg:1,
-reward:900,
-defense:.22
-},
-
-hard:{
-interval:620,
-dmg:1.12,
-reward:1400,
-defense:.34
-},
-
-difficult:{
-interval:470,
-dmg:1.24,
-reward:2100,
-defense:.46
-},
-
-boss:{
-interval:350,
-dmg:1.38,
-reward:3200,
-defense:.58
+function validate(x){
+ if(!x||!Number.isFinite(x.coins)||!Array.isArray(x.unlocked)){
+  throw Error('存檔格式錯誤');
+ }
+ let b=baseSave();
+ for(const k of ['coins','balls','wins']){
+  b[k]=clamp(Math.floor(Number(x[k])||0),0,k==='balls'?7:1e9);
+ }
+ b.unlocked=[...new Set([...starters,...x.unlocked.filter(id=>byId(id))])];
+ for(const k in b.items){
+  b.items[k]=clamp(Math.floor(Number(x.items?.[k])||0),0,99999);
+ }
+ return b;
 }
 
-};
-
-
-const saveKey =
-"db_ultimate_real_combat_v2";
-
-
-const starters = [
-"goku",
-"vegeta",
-"gohan",
-"piccolo",
-"krillin",
-"tien"
-];
-
-
-function loadSave(){
-
-const base = {
-
-coins:12000,
-
-balls:0,
-
-unlocked:
-starters.slice(),
-
-items:{
-senzu:2,
-potara:0,
-zsword:1,
-capsule:1,
-staff:0
-},
-
-wins:0
-
-};
-
-
+let save;
 try{
-
-const x =
-JSON.parse(
-localStorage.getItem(saveKey)
-||
-"null"
-);
-
-
-if(!x){
-return base;
+ save=validate(JSON.parse(localStorage.getItem(KEY)||localStorage.getItem(OLD)||'null'));
+}catch{
+ save=baseSave();
 }
 
+let toastTimer;
+function toast(s){
+ $('#toast').textContent=s;
+ $('#toast').hidden=false;
+ clearTimeout(toastTimer);
+ toastTimer=setTimeout(()=>$('#toast').hidden=true,3200);
+}
 
-return {
+function persist(){
+ try{
+  localStorage.setItem(KEY,JSON.stringify(save));
+ }catch{
+  toast('本機儲存失敗，請匯出備份');
+ }
+ $('#wallet').textContent=`🪙 ${save.coins.toLocaleString()}　🐲 ${save.balls}/7`;
+}
 
-...base,
-
-...x,
-
-items:{
-...base.items,
-...(x.items||{})
-},
-
-unlocked:
-Array.isArray(x.unlocked)
-?
-x.unlocked
-:
-base.unlocked
-
+const S={
+ run:false,paused:false,teams:[[],[]],indices:[0,0],
+ shots:[],fx:[],keys:new Set(),holds:[new Set(),new Set()],
+ clock:0,ai:0,last:0,mode:'cpu',arena:'earth',difficulty:'normal',
+ edit:0,picks:[['goku'],['vegeta']],selected:'goku',messageUntil:0
 };
 
-}
-catch(e){
+const active=i=>S.teams[i][S.indices[i]];
+const enemy=i=>active(1-i);
+const GROUND=457;
 
-return base;
-
-}
-
-}
-
-
-let save =
-loadSave();
-
-
-const S = {
-
-battleType:"cpu",
-
-teamSize:1,
-
-arena:"earth",
-
-difficulty:"normal",
-
-edit:"p1",
-
-preview:"goku",
-
-pick1:["goku"],
-
-pick2:["vegeta"],
-
-pTeam:[],
-
-eTeam:[],
-
-pi:0,
-
-ei:0,
-
-px:190,
-
-ex:910,
-
-py:0,
-
-ey:0,
-
-pvy:0,
-
-evy:0,
-
-shots:[],
-
-fx:[],
-
-run:false,
-
-last:0,
-
-ai:0,
-
-keys:{},
-
-msgTimer:0
-
+const difficulty={
+ easy:[1.1,.8,500,.12],
+ normal:[.82,1,900,.22],
+ hard:[.62,1.12,1400,.34],
+ difficult:[.47,1.24,2100,.46],
+ boss:[.35,1.38,3200,.58]
 };
 
-
-function saveNow(){
-
-localStorage.setItem(
-saveKey,
-JSON.stringify(save)
-);
-
-renderMeta();
-
-}
-
-
-function byId(id){
-
-return chars.find(
-c=>c.id===id
-);
-
-}
-
-
-function cloneChar(c){
-
-return {
-
-...c,
-
-maxHp:c.hp,
-
-hp:c.hp,
-
-ki:55,
-
-formIndex:-1,
-
-formName:"普通形態",
-
-mult:1,
-
-atkBuff:1,
-
-fused:false,
-
-koHandled:false,
-
-blocking:false,
-
-blockTimer:0,
-
-defenseCooldown:0,
-
-anim:"idle",
-
-animTime:0,
-
-animDur:.2
-
+const arenas={
+ earth:['地球荒野','#28477e','#b98b4f'],
+ time:['精神時光屋','#c4def3','#eeeeec'],
+ gravity:['重力室','#1d1931','#6d3344'],
+ kingkai:['界王星','#1a4663','#548b54'],
+ supreme:['界王神界','#493567','#738c65'],
+ beerus:['比魯斯星球','#78b5d8','#8f78a7'],
+ zeno:['全王神殿','#302957','#c3ad70']
 };
 
+$('#arena').innerHTML=Object.entries(arenas)
+ .map(([k,v])=>`<option value="${k}">${v[0]}</option>`).join('');
+
+function make(c,side){
+ return {
+  ...c,maxHp:c.hp,ki:55,form:-1,mult:1,buff:1,fused:false,
+  x:side?890:210,y:0,vy:0,face:side?-1:1,
+  blocking:false,blockT:0,defCD:0,blinkCD:0,
+  action:null,hitT:0,walk:0,side,koT:0
+ };
 }
 
-
-function P(){
-return S.pTeam[S.pi];
+function formName(c){
+ return c.form>=0?c.forms[c.form][0]:'';
 }
 
-
-function E(){
-return S.eTeam[S.ei];
+function say(t,seconds=.9){
+ $('#message').textContent=t;
+ S.messageUntil=S.clock+seconds;
 }
 
+function render(){
+ persist();
 
-function anyAlive(team){
+ $('#picked').textContent=S.picks.map((ids,i)=>
+  `P${i+1}：${ids.map(id=>byId(id).name).join('、')||'未選（開戰自動補齊）'}`
+ ).join('　｜　');
 
-return team.some(
-c=>c.hp>0
-);
+ const c=byId(S.selected);
+ renderFormPreview(c);
 
+ $('#detail').textContent=
+ `${c.name}〔${c.era}／${c.age}〕 HP ${c.hp}・格鬥 ${c.atk}・氣功 ${c.kiAtk}・速度 ${c.speed}｜${c.s1.name} · ${c.s2.name} · ${c.ult.name}｜變身：${c.forms.map(f=>f[0]).join(' → ')||'無'}`;
+
+ const grid=$('#roster');
+ grid.replaceChildren();
+
+ for(const c of chars){
+  if($('#eraFilter').value!=='all'&&c.era!==$('#eraFilter').value)continue;
+
+  let b=document.createElement('button');
+  b.className='card'+
+   (S.picks[S.edit].includes(c.id)?' selected':'')+
+   (!save.unlocked.includes(c.id)?' locked':'');
+
+  b.innerHTML=`
+   <canvas width="190" height="180"></canvas>
+   <b>${c.name}</b>
+   <div class="chip">${c.era}・${c.age}｜${save.unlocked.includes(c.id)?'已解鎖':'🔒 '+c.price}</div>
+  `;
+
+  thumbnail(b.querySelector('canvas'),c);
+
+  b.onclick=()=>{
+   S.selected=c.id;
+   previewForm=-1;
+
+   if(save.unlocked.includes(c.id)){
+    let a=S.picks[S.edit],j=a.indexOf(c.id);
+    if(j>=0)a.splice(j,1);
+    else{
+     if(a.length>=+$('#size').value)a.shift();
+     a.push(c.id);
+    }
+   }else toast('可在角色商店解鎖');
+
+   render();
+  };
+
+  grid.append(b);
+ }
+
+ renderShop();
+ renderItems();
 }
-
-
-/* ======================================================
-   角色頭像
-====================================================== */
-
-function styleData(c){
-
-const map = {
-
-goku:{
-skin:"#efbd96",
-hair:"#161616",
-hairStyle:"goku"
-},
-
-vegeta:{
-skin:"#efbd96",
-hair:"#161616",
-hairStyle:"vegeta",
-armor:true
-},
-
-gohan:{
-skin:"#efbd96",
-hair:"#161616",
-hairStyle:"gohan"
-},
-
-goten:{
-skin:"#efbd96",
-hair:"#161616",
-hairStyle:"goku"
-},
-
-trunks:{
-skin:"#efbd96",
-hair:"#a996dc",
-hairStyle:"trunks"
-},
-
-piccolo:{
-skin:"#62a34f",
-hair:"#62a34f",
-hairStyle:"none",
-namek:true,
-cape:true
-},
-
-krillin:{
-skin:"#efbd96",
-hair:"#161616",
-hairStyle:"bald"
-},
-
-yamcha:{
-skin:"#efbd96",
-hair:"#161616",
-hairStyle:"yamcha"
-},
-
-tien:{
-skin:"#efbd96",
-hair:"#161616",
-hairStyle:"bald",
-thirdEye:true
-},
-
-yajirobe:{
-skin:"#efbd96",
-hair:"#161616",
-hairStyle:"yamcha"
-},
-
-roshi:{
-skin:"#efbd96",
-hair:"#fff",
-hairStyle:"bald",
-roshi:true
-},
-
-a17:{
-skin:"#efbd96",
-hair:"#161616",
-hairStyle:"a17"
-},
-
-a18:{
-skin:"#efbd96",
-hair:"#f1df76",
-hairStyle:"a18"
-},
-
-buu:{
-skin:"#ef8db7",
-hair:"#ef8db7",
-hairStyle:"buu"
-},
-
-frieza:{
-skin:"#f2f2f3",
-hair:"#9256b2",
-hairStyle:"frieza"
-},
-
-cell:{
-skin:"#6ea557",
-hair:"#5c9d5b",
-hairStyle:"cell"
-},
-
-broly:{
-skin:"#efbd96",
-hair:"#161616",
-hairStyle:"broly",
-big:true
-},
-
-jiren:{
-skin:"#cfcfd1",
-hair:"#111",
-hairStyle:"bald",
-big:true
-},
-
-beerus:{
-skin:"#8d6fb1",
-hair:"#8d6fb1",
-hairStyle:"cat"
-},
-
-whis:{
-skin:"#d9eff5",
-hair:"#e7f6ff",
-hairStyle:"whis",
-angel:true
-},
-
-champa:{
-skin:"#946caf",
-hair:"#946caf",
-hairStyle:"cat",
-big:true
-},
-
-grand:{
-skin:"#e7f3f8",
-hair:"#f3f9ff",
-hairStyle:"whis",
-angel:true
-},
-
-zeno:{
-skin:"#72a8ff",
-hair:"#e74b86",
-hairStyle:"zeno"
-}
-
-};
-
-
-return {
-
-skin:"#efbd96",
-
-hair:"#161616",
-
-hairStyle:"goku",
-
-armor:false,
-
-namek:false,
-
-cape:false,
-
-thirdEye:false,
-
-roshi:false,
-
-big:false,
-
-angel:false,
-
-...(map[c.id]||{})
-
-};
-
-}
-
-
-function hairColor(c,s){
-
-if(c.formIndex<0){
-return s.hair;
-}
-
-
-const f =
-c.formName || "";
-
-
-if(f.includes("藍")){
-return "#45d8ff";
-}
-
-if(f.includes("自在")){
-return "#e9edf2";
-}
-
-if(f.includes("自我")){
-return "#a66cec";
-}
-
-if(f.includes("野獸")){
-return "#f1f2f5";
-}
-
-if(f.includes("黃金")){
-return "#f3c43d";
-}
-
-if(f.includes("黑金")){
-return "#25252a";
-}
-
-if(
-f.includes("超級")
-||
-f.includes("全力")
-){
-return "#ffe14a";
-}
-
-
-return s.hair;
-
-}
-
-
-function portraitSVG(c){
-
-const s =
-styleData(c);
-
-
-const hair =
-hairColor(
-{
-...c,
-formIndex:-1,
-formName:""
-},
-s
-);
-
-
-let hairSvg = "";
-
-
-if(
-["goku","gohan","broly"]
-.includes(s.hairStyle)
-){
-
-hairSvg = `
-<path
-d="M46 59 55 21 68 43 79 8 89 43 104 17 114 59Q81 43 46 59Z"
-fill="${hair}"
-/>
-`;
-
-}
-
-else if(
-s.hairStyle==="vegeta"
-){
-
-hairSvg = `
-<path
-d="M48 58 57 15 70 44 80 7 90 44 105 13 112 58Q82 44 48 58Z"
-fill="${hair}"
-/>
-`;
-
-}
-
-else if(
-s.hairStyle==="trunks"
-||
-s.hairStyle==="a18"
-){
-
-hairSvg = `
-<path
-d="M48 59Q52 25 79 22Q107 24 112 59Q94 43 80 49Q64 42 48 59Z"
-fill="${hair}"
-/>
-`;
-
-}
-
-else if(
-s.hairStyle==="yamcha"
-||
-s.hairStyle==="a17"
-){
-
-hairSvg = `
-<path
-d="M44 61Q45 23 79 19Q114 22 117 62Q100 39 81 45Q61 36 44 61Z"
-fill="${hair}"
-/>
-`;
-
-}
-
-else if(
-s.hairStyle==="whis"
-){
-
-hairSvg = `
-<path
-d="M48 58Q80 13 112 58Q103 29 80 22Q57 29 48 58Z"
-fill="${hair}"
-/>
-`;
-
-}
-
-else if(
-s.hairStyle==="cat"
-){
-
-hairSvg = `
-<path
-d="M51 53 56 13 72 46ZM89 46 104 13 109 53Z"
-fill="${s.skin}"
-stroke="#111"
-stroke-width="3"
-/>
-`;
-
-}
-
-else if(
-s.hairStyle==="buu"
-){
-
-hairSvg = `
-<path
-d="M72 35C70 12 87 10 89 30C91 42 87 48 81 51Z"
-fill="${s.skin}"
-/>
-`;
-
-}
-
-else if(
-s.hairStyle==="frieza"
-){
-
-hairSvg = `
-<ellipse
-cx="80"
-cy="47"
-rx="22"
-ry="13"
-fill="${s.hair}"
-/>
-`;
-
-}
-
-else if(
-s.hairStyle==="cell"
-){
-
-hairSvg = `
-<path
-d="M48 56 58 14 73 46 87 18 104 56Z"
-fill="${s.hair}"
-stroke="#111"
-stroke-width="3"
-/>
-`;
-
-}
-
-else if(
-s.hairStyle==="zeno"
-){
-
-hairSvg = `
-<path
-d="M45 50Q80 10 115 50L108 68H52Z"
-fill="${s.hair}"
-/>
-`;
-
-}
-
-
-const cape =
-s.cape
-?
-`
-<path
-d="M38 126Q80 107 122 126L137 190Q80 210 23 190Z"
-fill="#f4f2eb"
-stroke="#111"
-stroke-width="3"
-/>
-`
-:
-"";
-
-
-const body =
-s.armor
-?
-`
-<path
-d="M42 128Q80 112 118 128L110 184H50Z"
-fill="#f2f2f5"
-stroke="#111"
-stroke-width="3"
-/>
-
-<path
-d="M61 134H99L94 181H66Z"
-fill="#254696"
-/>
-`
-:
-`
-<path
-d="M42 128Q80 112 118 128L111 190H49Z"
-fill="${c.colors[0]}"
-stroke="#111"
-stroke-width="3"
-/>
-
-<path
-d="M68 129H92V190H68Z"
-fill="${c.colors[1]}"
-opacity=".8"
-/>
-`;
-
-
-const thirdEye =
-s.thirdEye
-?
-`
-<ellipse
-cx="80"
-cy="68"
-rx="4"
-ry="3"
-fill="#111"
-/>
-`
-:
-"";
-
-
-const namek =
-s.namek
-?
-`
-<path
-d="M54 54Q43 47 49 38M106 54Q117 47 111 38"
-stroke="${s.skin}"
-stroke-width="4"
-fill="none"
-/>
-
-<path
-d="M48 65 35 70 49 75ZM112 65 125 70 111 75Z"
-fill="${s.skin}"
-/>
-`
-:
-"";
-
-
-const roshi =
-s.roshi
-?
-`
-<circle cx="62" cy="68" r="9" fill="#111"/>
-<circle cx="98" cy="68" r="9" fill="#111"/>
-
-<path
-d="M57 82Q80 103 103 82Q97 112 80 116Q63 112 57 82Z"
-fill="#f2f2f2"
-/>
-`
-:
-"";
-
-
-const halo =
-s.angel
-?
-`
-<ellipse
-cx="80"
-cy="31"
-rx="28"
-ry="8"
-fill="none"
-stroke="#70d9ef"
-stroke-width="5"
-/>
-`
-:
-"";
-
-
-return `
-
-<svg
-viewBox="0 0 160 200"
-xmlns="http://www.w3.org/2000/svg"
->
-
-<rect
-width="160"
-height="200"
-rx="14"
-fill="#11182a"
-/>
-
-${cape}
-
-${body}
-
-<rect
-x="48"
-y="113"
-width="64"
-height="22"
-rx="10"
-fill="${s.skin}"
-/>
-
-<ellipse
-cx="80"
-cy="76"
-rx="33"
-ry="38"
-fill="${s.skin}"
-stroke="#111"
-stroke-width="3"
-/>
-
-${namek}
-
-${halo}
-
-${hairSvg}
-
-<path
-d="M60 69Q68 63 75 68M85 68Q94 63 101 68"
-stroke="#222"
-stroke-width="3"
-fill="none"
-/>
-
-<ellipse
-cx="68"
-cy="73"
-rx="3"
-ry="4"
-fill="#111"
-/>
-
-<ellipse
-cx="93"
-cy="73"
-rx="3"
-ry="4"
-fill="#111"
-/>
-
-${thirdEye}
-
-<path
-d="M75 89Q80 92 85 89"
-stroke="#9c5d50"
-stroke-width="2"
-fill="none"
-/>
-
-<path
-d="M69 99Q80 105 92 99"
-stroke="#6a3232"
-stroke-width="2.5"
-fill="none"
-/>
-
-${roshi}
-
-<circle
-cx="80"
-cy="145"
-r="11"
-fill="#ffd84d"
-/>
-
-<text
-x="80"
-y="149"
-text-anchor="middle"
-font-size="10"
-font-weight="900"
-fill="#111"
->
-
-${
-c.id==="goku"
-?
-"悟"
-:
-c.id==="vegeta"
-?
-"V"
-:
-"✦"
-}
-
-</text>
-
-</svg>
-
-`;
-
-}
-
-
-/* ======================================================
-   選單
-====================================================== */
-
-function renderMeta(){
-
-$("#coins").textContent =
-save.coins.toLocaleString();
-
-$("#balls").textContent =
-save.balls;
-
-$("#balls2").textContent =
-save.balls;
-
-$("#summon").disabled =
-save.balls < 7;
-
-}
-
-
-function renderPreview(){
-
-const c =
-byId(S.preview)
-||
-byId(S.pick1[0])
-||
-chars[0];
-
-
-const forms =
-c.forms.length
-?
-c.forms.map(f=>f[0]).join(" → ")
-:
-"無變身";
-
-
-$("#preview").innerHTML = `
-
-<div class="previewArt">
-${portraitSVG(c)}
-</div>
-
-<div class="previewInfo">
-
-<h3>
-${save.unlocked.includes(c.id)?"":"🔒 "}
-${c.name}
-</h3>
-
-<span class="badge ${c.rarity}">
-${c.rarity}
-</span>
-
-<span class="price">
-🪙 ${c.price.toLocaleString()}
-</span>
-
-<div class="stats">
-
-<div class="chip">
-HP<br>
-<b>${c.hp}</b>
-</div>
-
-<div class="chip">
-格鬥<br>
-<b>${c.atk}</b>
-</div>
-
-<div class="chip">
-氣功<br>
-<b>${c.kiAtk}</b>
-</div>
-
-</div>
-
-<div class="small">
-
-特別技1：
-${c.s1}
-
-<br>
-
-特別技2：
-${c.s2}
-
-<br>
-
-終極技：
-${c.ult}
-
-<br>
-
-變身：
-${forms}
-
-</div>
-
-</div>
-
-`;
-
-}
-
-
-function pickedText(){
-
-const a =
-S.pick1
-.map(id=>byId(id)?.name)
-.filter(Boolean)
-.join("、")
-||
-"未選";
-
-
-const b =
-S.pick2
-.map(id=>byId(id)?.name)
-.filter(Boolean)
-.join("、")
-||
-"未選";
-
-
-$("#pickedText").textContent =
-S.battleType==="cpu"
-?
-`P1：${a}`
-:
-`P1：${a}｜P2：${b}`;
-
-}
-
-
-function renderRoster(){
-
-const box =
-$("#roster");
-
-
-const picks =
-S.edit==="p1"
-?
-S.pick1
-:
-S.pick2;
-
-
-box.innerHTML = "";
-
-
-chars.forEach(c=>{
-
-const unlocked =
-save.unlocked.includes(c.id);
-
-
-const selected =
-picks.includes(c.id);
-
-
-const b =
-document.createElement("button");
-
-
-b.className =
-"btn charCard"
-+
-(!unlocked?" locked":"")
-+
-(selected?" selected":"");
-
-
-b.innerHTML = `
-
-<div class="portrait">
-${portraitSVG(c)}
-</div>
-
-<div class="charName">
-${unlocked?"":"🔒 "}
-${c.name}
-</div>
-
-<span class="badge ${c.rarity}">
-${c.rarity}
-</span>
-
-<div class="price">
-🪙 ${c.price.toLocaleString()}
-</div>
-
-<div class="small">
-
-${c.s1}
-/
-${c.s2}
-
-<br>
-
-終極：
-${c.ult}
-
-</div>
-
-`;
-
-
-const show =
-()=>{
-
-S.preview =
-c.id;
-
-renderPreview();
-
-};
-
-
-b.addEventListener(
-"mouseenter",
-show
-);
-
-
-b.addEventListener(
-"focus",
-show
-);
-
-
-b.addEventListener(
-"click",
-()=>{
-
-show();
-
-
-if(!unlocked){
-
-alert(
-`${c.name} 尚未解鎖`
-);
-
-return;
-
-}
-
-
-const arr =
-S.edit==="p1"
-?
-S.pick1
-:
-S.pick2;
-
-
-const ix =
-arr.indexOf(c.id);
-
-
-if(ix>=0){
-
-arr.splice(ix,1);
-
-}
-else{
-
-if(
-arr.length>=S.teamSize
-){
-
-arr.shift();
-
-}
-
-
-arr.push(c.id);
-
-}
-
-
-renderRoster();
-
-}
-);
-
-
-box.appendChild(b);
-
-});
-
-
-pickedText();
-
-renderPreview();
-
-}
-
 
 function renderShop(){
+ const box=$('#shop');
+ box.replaceChildren();
 
-const box =
-$("#shopGrid");
+ for(const c of chars){
+  let b=document.createElement('button');
+  let owned=save.unlocked.includes(c.id);
 
+  b.className='card';
+  b.innerHTML=`
+   <canvas width="190" height="180"></canvas>
+   <b>${c.name}</b>
+   <div>${owned?'已解鎖':'🪙 '+c.price}</div>
+  `;
 
-box.innerHTML = "";
-
-
-chars.forEach(c=>{
-
-const owned =
-save.unlocked.includes(c.id);
-
-
-const d =
-document.createElement("div");
-
-
-d.className =
-"shopCard";
-
-
-d.innerHTML = `
-
-<div class="shopPortrait">
-${portraitSVG(c)}
-</div>
-
-<b>
-${c.name}
-</b>
-
-<span class="badge ${c.rarity}">
-${c.rarity}
-</span>
-
-<div class="small">
-
-HP ${c.hp}
-｜
-格鬥 ${c.atk}
-｜
-氣功 ${c.kiAtk}
-
-</div>
-
-<div class="price">
-🪙 ${c.price.toLocaleString()}
-</div>
-
-<button
-class="shopBtn ${owned?"good":""}"
-${owned?"disabled":""}
->
-
-${owned?"已解鎖":"購買"}
-
-</button>
-
-`;
-
-
-d.querySelector("button")
-.addEventListener(
-"click",
-()=>{
-
-if(owned){
-return;
+  thumbnail(b.querySelector('canvas'),c);
+  b.disabled=owned;
+  b.onclick=()=>{
+   if(save.coins<c.price)return toast('金幣不足');
+   save.coins-=c.price;
+   save.unlocked.push(c.id);
+   render();
+  };
+  box.append(b);
+ }
 }
-
-
-if(
-save.coins < c.price
-){
-
-alert(
-"金幣不足"
-);
-
-return;
-
-}
-
-
-save.coins -= c.price;
-
-save.unlocked.push(c.id);
-
-saveNow();
-
-renderShop();
-
-renderRoster();
-
-}
-);
-
-
-box.appendChild(d);
-
-});
-
-}
-
 
 function renderItems(){
-
-const box =
-$("#itemShop");
-
-
-box.innerHTML = "";
-
-
-Object.entries(itemDefs)
-.forEach(([id,it])=>{
-
-const d =
-document.createElement("div");
-
-
-d.className =
-"notice";
-
-
-d.innerHTML = `
-
-<b>
-${it.icon}
-${it.name}
-</b>
-
-　持有：
-${save.items[id]||0}
-
-<div class="small">
-${it.desc}
-</div>
-
-<div class="price">
-🪙 ${it.price.toLocaleString()}
-</div>
-
-<button class="shopBtn">
-購買
-</button>
-
-`;
-
-
-d.querySelector("button")
-.addEventListener(
-"click",
-()=>{
-
-if(
-save.coins < it.price
-){
-
-alert(
-"金幣不足"
-);
-
-return;
-
-}
-
-
-save.coins -= it.price;
-
-save.items[id] =
-(save.items[id]||0)+1;
-
-saveNow();
-
-renderItems();
-
-}
-);
-
-
-box.appendChild(d);
-
-});
-
-}
-
-
-document.querySelectorAll(".tab")
-.forEach(b=>
-b.addEventListener(
-"click",
-()=>{
-
-document.querySelectorAll(".tab")
-.forEach(x=>
-x.classList.remove("active")
-);
-
-
-b.classList.add("active");
-
-
-document.querySelectorAll(".page")
-.forEach(x=>
-x.classList.remove("active")
-);
-
-
-$("#"+b.dataset.page)
-.classList.add("active");
-
-
-if(
-b.dataset.page==="shopPage"
-){
-renderShop();
-}
-
-
-if(
-b.dataset.page==="itemPage"
-){
-renderItems();
-}
-
-}
-)
-);
-
-
-function bindGroup(root,fn){
-
-document.querySelectorAll(
-root+" .btn"
-)
-.forEach(b=>
-b.addEventListener(
-"click",
-()=>{
-
-document.querySelectorAll(
-root+" .btn"
-)
-.forEach(x=>
-x.classList.remove("active")
-);
-
-
-b.classList.add("active");
-
-fn(b);
-
-}
-)
-);
-
-}
-
-
-bindGroup(
-"#battleType",
-b=>{
-
-S.battleType =
-b.dataset.type;
-
-
-$("#difficulty").disabled =
-S.battleType==="local";
-
-
-$("#editP2").style.display =
-S.battleType==="local"
-?
-"inline-block"
-:
-"none";
-
-
-pickedText();
-
-}
-);
-
-
-bindGroup(
-"#teamSize",
-b=>{
-
-S.teamSize =
-Number(
-b.dataset.size
-);
-
-
-S.pick1 =
-S.pick1.slice(
-0,
-S.teamSize
-);
-
-
-S.pick2 =
-S.pick2.slice(
-0,
-S.teamSize
-);
-
-
-renderRoster();
-
-}
-);
-
-
-bindGroup(
-"#arenas",
-b=>{
-
-S.arena =
-b.dataset.arena;
-
-}
-);
-
-
-$("#editP1")
-.addEventListener(
-"click",
-()=>{
-
-S.edit =
-"p1";
-
-
-$("#editP1")
-.classList.add("active");
-
-
-$("#editP2")
-.classList.remove("active");
-
-
-renderRoster();
-
-}
-);
-
-
-$("#editP2")
-.addEventListener(
-"click",
-()=>{
-
-S.edit =
-"p2";
-
-
-$("#editP2")
-.classList.add("active");
-
-
-$("#editP1")
-.classList.remove("active");
-
-
-renderRoster();
-
-}
-);
-
-
-$("#editP2").style.display =
-"none";
-
-
-/* ======================================================
-   建立隊伍
-====================================================== */
-
-function fillTeam(
-picks,
-n,
-exclude=[]
-){
-
-const ids =
-picks.filter(
-id=>
-save.unlocked.includes(id)
-);
-
-
-const pool =
-save.unlocked.filter(
-id=>
-!ids.includes(id)
-&&
-!exclude.includes(id)
-&&
-byId(id)
-);
-
-
-while(
-ids.length<n
-&&
-pool.length
-){
-
-ids.push(
-pool.splice(
-Math.floor(
-Math.random()*pool.length
-),
-1
-)[0]
-);
-
-}
-
-
-while(
-ids.length<n
-){
-
-ids.push(
-starters[
-Math.floor(
-Math.random()*starters.length
-)
-]
-);
-
-}
-
-
-return ids
-.slice(0,n)
-.map(
-id=>
-cloneChar(
-byId(id)
-)
-);
-
-}
-
-
-function cpuTeam(n){
-
-let pool =
-chars.filter(
-c=>
-c.id!==S.pick1[0]
-);
-
-
-const rank =
-{
-easy:0,
-normal:1,
-hard:2,
-difficult:3,
-boss:4
-}
-[S.difficulty];
-
-
-if(rank>=3){
-
-pool =
-pool.filter(
-c=>
-[
-"rare",
-"epic",
-"mega"
-]
-.includes(c.rarity)
-);
-
-}
-
-
-if(rank===4){
-
-pool =
-pool.filter(
-c=>
-[
-"epic",
-"mega"
-]
-.includes(c.rarity)
-);
-
-}
-
-
-const out = [];
-
-
-while(
-out.length<n
-){
-
-out.push(
-cloneChar(
-pool[
-Math.floor(
-Math.random()*pool.length
-)
-]
-)
-);
-
-}
-
-
-return out;
-
-}
-
-
-/* ======================================================
-   開始 / HUD
-====================================================== */
-
-function startGame(){
-
-S.difficulty =
-$("#difficulty").value;
-
-
-S.pTeam =
-fillTeam(
-S.pick1,
-S.teamSize
-);
-
-
-S.eTeam =
-S.battleType==="cpu"
-?
-cpuTeam(
-S.teamSize
-)
-:
-fillTeam(
-S.pick2,
-S.teamSize,
-S.pick1
-);
-
-
-S.pi = 0;
-
-S.ei = 0;
-
-S.px = 190;
-
-S.ex = 910;
-
-S.py = 0;
-
-S.ey = 0;
-
-S.pvy = 0;
-
-S.evy = 0;
-
-S.shots = [];
-
-S.fx = [];
-
-S.keys = {};
-
-S.run = true;
-
-S.ai = 0;
-
-
-$("#menu")
-.classList.remove("active");
-
-
-$("#game")
-.style.display =
-"block";
-
-
-$("#result")
-.style.display =
-"none";
-
-
-$("#p2Help")
-.style.display =
-S.battleType==="local"
-?
-"block"
-:
-"none";
-
-
-renderItemBar();
-
-updateHud();
-
-say(
-"FIGHT!",
-700
-);
-
-}
-
-
-$("#start")
-.addEventListener(
-"click",
-startGame
-);
-
-
-$("#again")
-.addEventListener(
-"click",
-startGame
-);
-
-
-function backMenu(){
-
-S.run =
-false;
-
-
-$("#game")
-.style.display =
-"none";
-
-
-$("#menu")
-.classList.add("active");
-
-
-renderMeta();
-
-renderRoster();
-
-}
-
-
-$("#backMenu")
-.addEventListener(
-"click",
-backMenu
-);
-
-
-$("#quit")
-.addEventListener(
-"click",
-backMenu
-);
-
-
-function updateHud(){
-
-const p = P();
-
-const e = E();
-
-
-if(
-!p
-||
-!e
-){
-return;
-}
-
-
-$("#pName").textContent =
-p.name
-+
-(
-p.formIndex>=0
-?
-"・"+p.formName
-:
-""
-)
-+
-(
-p.blocking
-?
-" 🛡️"
-:
-""
-);
-
-
-$("#eName").textContent =
-e.name
-+
-(
-e.formIndex>=0
-?
-"・"+e.formName
-:
-""
-)
-+
-(
-e.blocking
-?
-" 🛡️"
-:
-""
-);
-
-
-$("#pHp").style.width =
-clamp(
-p.hp/p.maxHp*100,
-0,
-100
-)
-+
-"%";
-
-
-$("#eHp").style.width =
-clamp(
-e.hp/e.maxHp*100,
-0,
-100
-)
-+
-"%";
-
-
-$("#pKi").style.width =
-clamp(
-p.ki,
-0,
-100
-)
-+
-"%";
-
-
-$("#eKi").style.width =
-clamp(
-e.ki,
-0,
-100
-)
-+
-"%";
-
-
-$("#pMeta").textContent =
-`${S.pi+1}/${S.pTeam.length}｜HP ${Math.ceil(p.hp)}｜氣 ${Math.floor(p.ki)}`;
-
-
-$("#eMeta").textContent =
-`HP ${Math.ceil(e.hp)}｜氣 ${Math.floor(e.ki)}｜${S.ei+1}/${S.eTeam.length}`;
-
-}
-
-
-function say(
-text,
-ms=520
-){
-
-$("#msg").textContent =
-text;
-
-
-clearTimeout(
-S.msgTimer
-);
-
-
-S.msgTimer =
-setTimeout(
-()=>{
-
-$("#msg").textContent =
-"";
-
-},
-ms
-);
-
-}
-
-
-function dist(){
-
-return Math.abs(
-S.ex-S.px
-);
-
-}
-
-
-function actor(player){
-
-return player
-?
-P()
-:
-E();
-
-}
-
-
-function target(player){
-
-return player
-?
-E()
-:
-P();
-
-}
-
-
-function actorX(player){
-
-return player
-?
-S.px
-:
-S.ex;
-
-}
-
-
-function jumpHeight(player){
-
-return player
-?
-S.py
-:
-S.ey;
-
-}
-
-
-/* ======================================================
-   動作動畫
-====================================================== */
-
-function setAnim(
-c,
-type,
-duration
-){
-
-if(!c){
-return;
-}
-
-
-c.anim =
-type;
-
-c.animTime =
-duration;
-
-c.animDur =
-duration;
-
-}
-
-
-function canAct(c){
-
-return (
-c
-&&
-c.hp>0
-&&
-!c.blocking
-&&
-![
-"punch",
-"kick",
-"special",
-"ultimate",
-"hit"
-]
-.includes(c.anim)
-);
-
-}
-
-
-/* ======================================================
-   傷害 / 格擋
-====================================================== */
-
-function damage(
-targetChar,
-amount,
-targetIsEnemy,
-force=18
-){
-
-if(
-!S.run
-||
-!targetChar
-||
-targetChar.hp<=0
-){
-return;
-}
-
-
-const blocked =
-targetChar.blocking;
-
-
-/* 格擋固定減半 */
-const realDamage =
-blocked
-?
-amount*0.5
-:
-amount;
-
-
-targetChar.hp =
-clamp(
-targetChar.hp-realDamage,
-0,
-targetChar.maxHp
-);
-
-
-if(blocked){
-
-S.fx.push({
-
-type:"block",
-
-x:
-targetIsEnemy
-?
-S.ex
-:
-S.px,
-
-y:
-GROUND
--
-(
-targetIsEnemy
-?
-S.ey
-:
-S.py
-)
--
-110,
-
-life:.28
-
-});
-
-
-setAnim(
-targetChar,
-"block",
-.18
-);
-
-}
-
-else{
-
-S.fx.push({
-
-type:"hit",
-
-x:
-targetIsEnemy
-?
-S.ex
-:
-S.px,
-
-y:
-GROUND
--
-(
-targetIsEnemy
-?
-S.ey
-:
-S.py
-)
--
-115,
-
-life:.25
-
-});
-
-
-setAnim(
-targetChar,
-"hit",
-.20
-);
-
-
-if(targetIsEnemy){
-
-S.ex =
-clamp(
-S.ex+force,
-70,
-1030
-);
-
-}
-else{
-
-S.px =
-clamp(
-S.px-force,
-70,
-1030
-);
-
-}
-
-}
-
-
-if(
-targetChar.hp<=0
-&&
-!targetChar.koHandled
-){
-
-targetChar.koHandled =
-true;
-
-
-setTimeout(
-()=>handleKO(
-targetIsEnemy
-),
-240
-);
-
-}
-
-
-updateHud();
-
-}
-
-
-function handleKO(enemyKO){
-
-if(!S.run){
-return;
-}
-
-
-const team =
-enemyKO
-?
-S.eTeam
-:
-S.pTeam;
-
-
-if(
-anyAlive(team)
-){
-
-if(enemyKO){
-
-do{
-
-S.ei =
-(S.ei+1)
-%
-team.length;
-
-}
-while(
-E().hp<=0
-);
-
-
-S.ex =
-910;
-
-
-E().koHandled =
-false;
-
-
-say(
-"敵方換上 "
-+
-E().name,
-700
-);
-
-}
-
-else{
-
-do{
-
-S.pi =
-(S.pi+1)
-%
-team.length;
-
-}
-while(
-P().hp<=0
-);
-
-
-S.px =
-190;
-
-
-P().koHandled =
-false;
-
-
-say(
-"我方換上 "
-+
-P().name,
-700
-);
-
-}
-
-
-updateHud();
-
-return;
-
-}
-
-
-finish(
-enemyKO
-);
-
-}
-
-
-function finish(win){
-
-S.run =
-false;
-
-
-const msg =
-win
-?
-"🏆 YOU WIN!"
-:
-"💥 YOU LOSE";
-
-
-say(
-msg,
-2500
-);
-
-
-if(win){
-
-const reward =
-diff[S.difficulty]
-.reward
-*
-S.teamSize;
-
-
-save.coins +=
-reward;
-
-
-save.wins++;
-
-
-let ball =
-false;
-
-
-if(
-Math.random()
-<
-Math.min(
-.55,
-.18+.06*S.teamSize
-)
-){
-
-save.balls =
-Math.min(
-7,
-save.balls+1
-);
-
-
-ball =
-true;
-
-}
-
-
-$("#resultText").textContent =
-`${msg}　獎勵 ${reward.toLocaleString()} 金幣${ball?"，並找到 1 顆龍珠！":""}`;
-
-
-saveNow();
-
-}
-else{
-
-$("#resultText").textContent =
-msg;
-
-}
-
-
-$("#result")
-.style.display =
-"block";
-
-}
-
-
-/* ======================================================
-   拳腳 — 沒打中也會完整做動作
-====================================================== */
-
-function meleeCanHit(
-player,
-range
-){
-
-/*
-角色如果跳得比另一人高很多，
-拳腳就會揮空。
-*/
-
-return (
-dist()<range
-&&
-Math.abs(
-S.py-S.ey
-)
-<
-72
-);
-
-}
-
-
-function punch(player=true){
-
-if(!S.run){
-return;
-}
-
-
-const a =
-actor(player);
-
-
-const t =
-target(player);
-
-
-if(
-!canAct(a)
-){
-return;
-}
-
-
-setAnim(
-a,
-"punch",
-.30
-);
-
-
-a.ki =
-clamp(
-a.ki+4,
-0,
-100
-);
-
-
-/*
-真正命中的時間放在揮拳中段，
-不是一按就直接扣血。
-*/
-setTimeout(
-()=>{
-
-if(
-!S.run
-||
-a.hp<=0
-){
-return;
-}
-
-
-if(
-meleeCanHit(
-player,
-158
-)
-){
-
-damage(
-t,
-a.atk
-*
-a.mult
-*
-a.atkBuff
-*
-rnd(
-.86,
-1.08
-),
-player,
-18
-);
-
-}
-else{
-
-/* 揮空也有風壓動畫 */
-
-S.fx.push({
-
-type:"whiff",
-
-x:
-actorX(player)
-+
-(
-player
-?
-65
-:
--65
-),
-
-y:
-GROUND
--
-jumpHeight(player)
--
-120,
-
-life:.18
-
-});
-
-}
-
-},
-105
-);
-
-
-updateHud();
-
-}
-
-
-function kick(player=true){
-
-if(!S.run){
-return;
-}
-
-
-const a =
-actor(player);
-
-
-const t =
-target(player);
-
-
-if(
-!canAct(a)
-){
-return;
-}
-
-
-setAnim(
-a,
-"kick",
-.38
-);
-
-
-a.ki =
-clamp(
-a.ki+4,
-0,
-100
-);
-
-
-setTimeout(
-()=>{
-
-if(
-!S.run
-||
-a.hp<=0
-){
-return;
-}
-
-
-if(
-meleeCanHit(
-player,
-178
-)
-){
-
-damage(
-t,
-a.atk
-*
-1.20
-*
-a.mult
-*
-a.atkBuff
-*
-rnd(
-.88,
-1.10
-),
-player,
-28
-);
-
-}
-else{
-
-S.fx.push({
-
-type:"whiff",
-
-x:
-actorX(player)
-+
-(
-player
-?
-78
-:
--78
-),
-
-y:
-GROUND
--
-jumpHeight(player)
--
-72,
-
-life:.20
-
-});
-
-}
-
-},
-145
-);
-
-
-updateHud();
-
-}
-
-
-/* ======================================================
-   真正跳躍
-====================================================== */
-
-function jump(player=true){
-
-if(!S.run){
-return;
-}
-
-
-if(player){
-
-if(
-S.py===0
-&&
-!P().blocking
-){
-
-S.pvy =
--735;
-
-
-setAnim(
-P(),
-"jump",
-.25
-);
-
-
-S.fx.push({
-
-type:"dust",
-
-x:S.px,
-
-y:GROUND-5,
-
-life:.25
-
-});
-
-}
-
-}
-else{
-
-if(
-S.ey===0
-&&
-!E().blocking
-){
-
-S.evy =
--735;
-
-
-setAnim(
-E(),
-"jump",
-.25
-);
-
-
-S.fx.push({
-
-type:"dust",
-
-x:S.ex,
-
-y:GROUND-5,
-
-life:.25
-
-});
-
-}
-
-}
-
-}
-
-
-function move(
-player,
-dir,
-dt
-){
-
-const c =
-actor(player);
-
-
-if(
-!c
-||
-c.blocking
-){
-return;
-}
-
-
-const speed =
-470
-*
-(
-c.anim==="hit"
-?
-.55
-:
-1
-);
-
-
-if(player){
-
-S.px =
-clamp(
-S.px
-+
-dir*speed*dt,
-65,
-1030
-);
-
-}
-else{
-
-S.ex =
-clamp(
-S.ex
-+
-dir*speed*dt,
-65,
-1030
-);
-
-}
-
-}
-
-
-/* ======================================================
-   飛行技能
-====================================================== */
-
-function projectileKind(
-name,
-ultimate=false
-){
-
-if(ultimate){
-
-if(
-name.includes("元氣")
-||
-name.includes("死亡球")
-||
-name.includes("爆炎")
-||
-name.includes("宇宙")
-){
-
-return "orb";
-
-}
-
-
-return "ultimate";
-
-}
-
-
-if(
-name.includes("圓斬")
-){
-
-return "disc";
-
-}
-
-
-if(
-name.includes("光束")
-||
-name.includes("魔貫")
-){
-
-return "laser";
-
-}
-
-
-if(
-name.includes("龜派")
-||
-name.includes("閃光")
-||
-name.includes("魔閃")
-||
-name.includes("氣功砲")
-){
-
-return "beam";
-
-}
-
-
-if(
-name.includes("破壞")
-){
-
-return "destruction";
-
-}
-
-
-if(
-name.includes("巧克力")
-){
-
-return "pink";
-
-}
-
-
-return "energy";
-
-}
-
-
-function shotColor(kind){
-
-return {
-
-disc:"#ffe95d",
-
-laser:"#ff6b80",
-
-beam:"#73eaff",
-
-destruction:"#c078ff",
-
-pink:"#ff8ed8",
-
-orb:"#a7d8ff",
-
-ultimate:"#ffd56a",
-
-energy:"#8fe7ff"
-
-}
-[kind]
-||
-"#8fe7ff";
-
-}
-
-
-function spawnShot(
-player,
-name,
-damageValue,
-ultimate=false
-){
-
-const a =
-actor(player);
-
-
-const kind =
-projectileKind(
-name,
-ultimate
-);
-
-
-const big =
-ultimate
-||
-kind==="orb";
-
-
-/*
-技能從角色目前真正的高度發射，
-所以在空中也可以放招。
-*/
-const y =
-GROUND
--
-jumpHeight(player)
--
-125;
-
-
-S.shots.push({
-
-x:
-actorX(player)
-+
-(
-player
-?
-58
-:
--58
-),
-
-y:y,
-
-vx:
-(
-player
-?
-1
-:
--1
-)
-*
-(
-big
-?
-690
-:
-kind==="laser"
-?
-900
-:
-610
-),
-
-r:
-big
-?
-42
-:
-kind==="beam"
-?
-22
-:
-kind==="disc"
-?
-19
-:
-14,
-
-player:player,
-
-damage:
-damageValue,
-
-kind:kind,
-
-color:
-shotColor(kind),
-
-life:2.4,
-
-trail:[]
-
-});
-
-
-/* 發射瞬間閃光 */
-
-S.fx.push({
-
-type:"muzzle",
-
-x:
-actorX(player)
-+
-(
-player
-?
-56
-:
--56
-),
-
-y:y,
-
-life:.22,
-
-color:
-shotColor(kind),
-
-r:
-big
-?
-44
-:
-26
-
-});
-
-}
-
-
-function kiShot(player=true){
-
-if(!S.run){
-return;
-}
-
-
-const a =
-actor(player);
-
-
-if(
-!canAct(a)
-){
-return;
-}
-
-
-if(
-a.ki<12
-){
-
-if(player){
-say(
-"氣力不足"
-);
-}
-
-return;
-
-}
-
-
-a.ki -=
-12;
-
-
-setAnim(
-a,
-"special",
-.28
-);
-
-
-spawnShot(
-player,
-"氣彈",
-(
-a.kiAtk*.82
-+
-a.atk*.15
-)
-*
-a.mult,
-false
-);
-
-
-updateHud();
-
-}
-
-
-function isRangedSkill(name){
-
-return /龜派|砲|彈|光|氣|破壞|爆|魔貫|閃光|圓斬|操氣|抹除|巧克力|審判/
-.test(name);
-
-}
-
-
-/* ======================================================
-   特別技
-====================================================== */
-
-function special(
-player=true,
-which=1
-){
-
-if(!S.run){
-return;
-}
-
-
-const a =
-actor(player);
-
-
-const t =
-target(player);
-
-
-if(
-!canAct(a)
-){
-return;
-}
-
-
-const cost =
-which===1
-?
-30
-:
-38;
-
-
-if(
-a.ki<cost
-){
-
-if(player){
-
-say(
-`特別技 ${which} 需要 ${cost} 氣`
-);
-
-}
-
-return;
-
-}
-
-
-a.ki -=
-cost;
-
-
-const name =
-which===1
-?
-a.s1
-:
-a.s2;
-
-
-setAnim(
-a,
-"special",
-.48
-);
-
-
-say(
-name,
-520
-);
-
-
-const power =
-(
-a.kiAtk
-*
-(
-which===1
-?
-1.35
-:
-1.58
-)
-+
-a.atk*.42
-)
-*
-a.mult
-*
-a.atkBuff
-*
-(
-player
-||
-S.battleType!=="cpu"
-?
-1
-:
-diff[S.difficulty].dmg
-);
-
-
-/*
-遠距技能：真的建立投射物。
-沒有隨機 MISS。
-*/
-if(
-isRangedSkill(name)
-){
-
-setTimeout(
-()=>{
-
-if(
-S.run
-&&
-a.hp>0
-){
-
-spawnShot(
-player,
-name,
-power,
-false
-);
-
-}
-
-},
-120
-);
-
-}
-
-/*
-近戰特別技：
-角色先向前突進，再於動畫中段判定。
-*/
-else{
-
-const dash =
-player
-?
-1
-:
--1;
-
-
-if(player){
-
-S.px =
-clamp(
-S.px
-+
-dash*55,
-65,
-1030
-);
-
-}
-else{
-
-S.ex =
-clamp(
-S.ex
-+
-dash*55,
-65,
-1030
-);
-
+ const box=$('#items');
+ box.replaceChildren();
+
+ for(const [id,v] of Object.entries(itemDefs)){
+  let d=document.createElement('div');
+  d.className='notice';
+  d.innerHTML=`
+   <b>${v[0]} ×${save.items[id]}</b>
+   <p>${v[2]}</p>
+   <button>購買 🪙 ${v[1]}</button>
+  `;
+
+  d.querySelector('button').onclick=()=>{
+   if(save.coins<v[1])return toast('金幣不足');
+   save.coins-=v[1];
+   save.items[id]++;
+   render();
+  };
+  box.append(d);
+ }
+
+ const bar=$('#itemBar');
+ bar.replaceChildren();
+
+ for(const [id,v] of Object.entries(itemDefs)){
+  let b=document.createElement('button');
+  b.textContent=`${v[0]} ×${save.items[id]}`;
+  b.onclick=()=>useItem(id);
+  bar.append(b);
+ }
+}
+
+for(const b of document.querySelectorAll('[data-tab]')){
+ b.onclick=()=>{
+  document.querySelectorAll('.page').forEach(p=>p.hidden=p.id!==b.dataset.tab);
+  document.querySelectorAll('[data-tab]').forEach(t=>t.classList.toggle('active',t===b));
+ };
+}
+
+$('#mode').onchange=()=>{
+ $('#edit2').hidden=$('#mode').value!=='local';
+ $('#difficulty').disabled=$('#mode').value==='local';
+ S.edit=0;
+ editTeam(0);
+};
+
+function editTeam(i){
+ S.edit=i;
+ $('#edit1').classList.toggle('selected',i===0);
+ $('#edit2').classList.toggle('selected',i===1);
+ render();
+}
+
+$('#edit1').onclick=()=>editTeam(0);
+$('#edit2').onclick=()=>editTeam(1);
+$('#eraFilter').onchange=render;
+$('#size').onchange=()=>{
+ S.picks=S.picks.map(a=>a.slice(0,+$('#size').value));
+ render();
+};
+
+function start(){
+ clearInput();
+ S.mode=$('#mode').value;
+ S.arena=$('#arena').value;
+ S.difficulty=$('#difficulty').value;
+
+ const n=+$('#size').value;
+
+ S.teams=[0,1].map(i=>{
+  let ids=[...S.picks[i]];
+
+  if(i&&S.mode==='cpu'){
+   let pool=chars.filter(c=>
+    S.difficulty==='boss'?c.price>=12500:
+    ['difficult'].includes(S.difficulty)?c.price>=3000:true
+   );
+   ids=Array.from({length:n},()=>pool[Math.floor(Math.random()*pool.length)].id);
+  }
+
+  while(ids.length<n){
+   ids.push(save.unlocked.find(id=>!ids.includes(id))||'goku');
+  }
+
+  return ids.slice(0,n).map(id=>make(byId(id),i));
+ });
+
+ S.indices=[0,0];
+ S.shots=[];
+ S.fx=[];
+ S.clock=0;
+ S.ai=0;
+ S.paused=false;
+ S.run=true;
+
+ $('#menu').hidden=true;
+ $('#game').hidden=false;
+ $('#result').hidden=true;
+ $('#pause').textContent='暫停';
+
+ say('FIGHT!',1.2);
+ renderItems();
+ hud();
+}
+
+$('#start').onclick=$('#again').onclick=start;
+
+$('#quit').onclick=()=>{
+ S.run=false;
+ clearInput();
+ S.shots=[];
+ $('#game').hidden=true;
+ $('#menu').hidden=false;
+ render();
+};
+
+function pause(){
+ if(!S.run)return;
+ S.paused=!S.paused;
+ clearInput();
+ $('#pause').textContent=S.paused?'繼續':'暫停';
+ say(S.paused?'已暫停':'FIGHT!');
+}
+$('#pause').onclick=pause;
+
+function canAct(a){
+ return S.run&&!S.paused&&a&&a.hp>0&&!a.blocking&&!a.action&&a.hitT<=0;
+}
+
+function effect(type,x,y,color='#ffdf70',r=35){
+ S.fx.push({type,x,y,color,r,life:.4,max:.4});
+}
+
+function act(i,key){
+ let a=active(i),b=enemy(i);
+ if(!canAct(a))return;
+
+ const face=Math.sign(b.x-a.x)||a.face;
+ a.face=face;
+
+ if(key==='jump'){
+  if(a.y<=0){
+   a.vy=735;
+   effect('dust',a.x,GROUND,'#e0c09a');
+  }
+  return;
+ }
+
+ if(key==='blink'){
+  if(a.blinkCD>0)return;
+  if(a.ki<15)return say('閃現需要 15 氣');
+
+  let x=b.x-b.face*105;
+  if(x<55||x>1045)return say('對手背後空間不足');
+
+  a.ki-=15;
+  a.blinkCD=.85;
+  effect('blink',a.x,GROUND-a.y-95,'#b0edff');
+
+  a.x=x;
+  a.y=b.y;
+  a.vy=b.vy;
+  a.face=Math.sign(b.x-a.x)||face;
+
+  effect('blink',a.x,GROUND-a.y-95,'#b0edff');
+  return;
+ }
+
+ if(key==='swap'){
+  const next=S.teams[i].findIndex((c,j)=>j!==S.indices[i]&&c.hp>0);
+  if(next>=0){
+   a.action=null;
+   a.blocking=false;
+   S.indices[i]=next;
+
+   const c=active(i);
+   c.x=i?890:210;
+   c.y=c.vy=0;
+   c.action=null;
+   c.blocking=false;
+   say('換上 '+c.name);
+  }
+  return;
+ }
+
+ if(key==='transform'){
+  const f=a.forms[a.form+1];
+  if(!f)return say('沒有下一階段變身');
+  if(a.ki<f[1])return say('變身需要 '+f[1]+' 氣');
+
+  a.ki-=f[1];
+  a.form++;
+  a.mult=f[2];
+  a.maxHp+=12;
+  a.hp=Math.min(a.maxHp,a.hp+12);
+  a.action={type:'transform',t:0,dur:.8,events:[]};
+
+  effect('aura',a.x,GROUND-a.y-100,'#fbe26a',100);
+  say(f[0]);
+  return;
+ }
+
+ const defs={
+  punch:{name:'拳',type:'punch',cost:0,power:a.atk,dur:.3,events:[.12]},
+  kick:{name:'踢',type:'kick',cost:0,power:a.atk*1.2,dur:.4,events:[.17]},
+  kiShot:{name:'氣彈',type:'energy',cost:12,power:a.kiAtk*.82,dur:.3,events:[.1]},
+  special1:{...a.s1,cost:30,power:a.kiAtk*1.35+a.atk*.42,dur:.62,events:[.2]},
+  special2:{...a.s2,cost:38,power:a.kiAtk*1.58+a.atk*.42,dur:.68,events:[.22]},
+  ultimate:{...a.ult,cost:65,power:a.kiAtk*2.75+a.atk*.55,dur:1,events:[.38],ultimate:true}
+ };
+
+ let d=defs[key];
+ if(!d)return;
+ if(a.ki<d.cost)return say('氣力不足，需要 '+d.cost+' 氣');
+
+ a.ki-=d.cost;
+ if(!d.cost)a.ki=Math.min(100,a.ki+4);
+
+ if(['combo','sword','staff','volley'].includes(d.type)){
+  d.events=[.17,.32,.47];
+  d.dur=.72;
+  d.power/=3;
+ }
+
+ a.action={...d,t:0,done:0,face};
+ if(d.cost>=30)say(d.name);
+}
+
+const meleeTypes=['punch','kick','combo','rush','sword','staff','stretch'];
+
+function strike(a,d){
+ const b=enemy(a.side);
+ if(!b||b.hp<=0)return;
+
+ const power=d.power*a.mult*a.buff*
+  (a.side===1&&S.mode==='cpu'?difficulty[S.difficulty][1]:1);
+
+ if(meleeTypes.includes(d.type)){
+  const range=d.type==='stretch'?255:
+   ['sword','staff'].includes(d.type)?230:
+   d.type==='kick'?175:160;
+
+  effect('slash',a.x+a.face*80,GROUND-a.y-100,'#e9faff',range*.45);
+
+  if(
+   Math.abs(b.x-a.x)<range&&
+   (b.x-a.x)*a.face>=-15&&
+   Math.abs((a.y+110*bodyScale(a))-(b.y+110*bodyScale(b)))<85
+  ){
+   hurt(b,power,a.face,d.type==='kick'?30:18);
+  }
+ }else{
+  const kind=d.type;
+  const r=d.ultimate?40:kind==='orb'?27:kind==='beam'?22:kind==='laser'?8:14;
+
+  S.shots.push({
+   x:a.x+a.face*55,
+   y:GROUND-a.y-118*bodyScale(a),
+   vx:a.face*(kind==='laser'?950:660),
+   side:a.side,power,r,type:kind,life:2.2,
+   color:kind==='destruction'?'#bf6fff':
+    kind==='pink'?'#ff85c7':
+    kind==='disc'?'#ffe95e':'#83e9ff'
+  });
+
+  effect('flash',a.x+a.face*55,GROUND-a.y-118*bodyScale(a),'#b5f8ff',r*1.3);
+ }
+}
+
+function hurt(b,power,dir,force){
+ if(b.hp<=0)return;
+
+ const blocked=b.blocking;
+ b.hp=Math.max(0,b.hp-power*(blocked?.5:1));
+
+ if(!blocked){
+  b.hitT=.18;
+  // 保留已承諾的攻擊，受擊不會吞掉技能。
+  b.x=clamp(b.x+dir*force,55,1045);
+ }
+
+ effect(blocked?'block':'burst',b.x,GROUND-b.y-105,blocked?'#ffe56b':'#fff1b0',40);
+
+ if(!b.hp){
+  b.action=null;
+  b.blocking=false;
+  b.koT=.3;
+ }
 }
-
-
-setTimeout(
-()=>{
-
-if(
-!S.run
-||
-a.hp<=0
-){
-return;
-}
-
-
-if(
-meleeCanHit(
-player,
-225
-)
-){
-
-damage(
-t,
-power,
-player,
-34
-);
-
-}
-else{
-
-S.fx.push({
-
-type:"whiff",
-
-x:
-actorX(player)
-+
-(
-player
-?
-90
-:
--90
-),
-
-y:
-GROUND
--
-jumpHeight(player)
--
-110,
-
-life:.22
-
-});
-
-}
-
-},
-160
-);
-
-}
-
-
-updateHud();
-
-}
-
-
-/* ======================================================
-   終極技
-====================================================== */
-
-function ultimate(player=true){
-
-if(!S.run){
-return;
-}
-
-
-const a =
-actor(player);
-
-
-if(
-!canAct(a)
-){
-return;
-}
-
-
-if(
-a.ki<65
-){
-
-if(player){
-
-say(
-"終極技需要 65 氣"
-);
-
-}
-
-return;
-
-}
-
-
-a.ki -=
-65;
-
-
-setAnim(
-a,
-"ultimate",
-.75
-);
-
-
-say(
-"⚡ "
-+
-a.ult
-+
-"！",
-700
-);
-
-
-const d =
-(
-a.kiAtk*2.75
-+
-a.atk*.55
-)
-*
-a.mult
-*
-(
-player
-||
-S.battleType!=="cpu"
-?
-1
-:
-diff[S.difficulty].dmg
-);
-
-
-/*
-終極技也一定發射。
-能不能命中由位置、
-跳躍和格擋決定。
-*/
-setTimeout(
-()=>{
-
-if(
-S.run
-&&
-a.hp>0
-){
-
-spawnShot(
-player,
-a.ult,
-d,
-true
-);
-
-}
-
-},
-240
-);
-
-
-updateHud();
-
-}
-
-
-/* ======================================================
-   變身 / 換人
-====================================================== */
-
-function transform(player=true){
-
-if(!S.run){
-return;
-}
-
-
-const a =
-actor(player);
-
-
-if(
-!a
-||
-a.blocking
-){
-return;
-}
-
-
-if(
-!a.forms.length
-){
-
-if(player){
-
-say(
-"這個角色沒有變身階段"
-);
-
-}
-
-return;
-
-}
-
-
-const next =
-a.formIndex+1;
-
-
-if(
-next>=a.forms.length
-){
-
-if(player){
-
-say(
-"已經是最高形態"
-);
-
-}
-
-return;
-
-}
-
-
-const f =
-a.forms[next];
-
-
-if(
-a.ki<f[1]
-){
-
-if(player){
-
-say(
-`${f[0]} 需要 ${f[1]} 氣`
-);
-
-}
-
-return;
-
-}
-
-
-a.ki -=
-f[1];
-
-
-a.formIndex =
-next;
-
-
-a.formName =
-f[0];
-
-
-a.mult =
-f[2];
-
-
-a.maxHp +=
-12;
-
-
-a.hp =
-clamp(
-a.hp+12,
-0,
-a.maxHp
-);
-
-
-setAnim(
-a,
-"transform",
-.85
-);
-
-
-S.fx.push({
-
-type:"transform",
-
-x:
-actorX(player),
-
-y:
-GROUND
--
-jumpHeight(player)
--
-110,
-
-life:.9
-
-});
-
-
-say(
-`${a.name} → ${a.formName}！`,
-800
-);
-
-
-updateHud();
-
-}
-
-
-function swap(player=true){
-
-if(!S.run){
-return;
-}
-
-
-const team =
-player
-?
-S.pTeam
-:
-S.eTeam;
-
-
-if(
-team.length<=1
-){
-return;
-}
-
-
-if(player){
-
-const start =
-S.pi;
-
-
-do{
-
-S.pi =
-(S.pi+1)
-%
-team.length;
-
-}
-while(
-P().hp<=0
-&&
-S.pi!==start
-);
-
-
-S.px =
-190;
-
-
-say(
-"換上 "
-+
-P().name,
-500
-);
-
-}
-
-else{
-
-const start =
-S.ei;
-
-
-do{
-
-S.ei =
-(S.ei+1)
-%
-team.length;
-
-}
-while(
-E().hp<=0
-&&
-S.ei!==start
-);
-
-
-S.ex =
-910;
-
-
-say(
-"P2 換上 "
-+
-E().name,
-500
-);
-
-}
-
-
-updateHud();
-
-}
-
-
-/* ======================================================
-   格擋 + 集氣
-====================================================== */
-
-function updateBlocking(){
-
-if(
-!P()
-||
-!E()
-){
-return;
-}
-
-
-/*
-P1 按住 G 或觸控格擋鍵。
-*/
-P().blocking =
-!!S.keys.g
-&&
-P().hp>0
-&&
-P().anim!=="hit";
-
-
-/*
-P2 按住 7。
-CPU 則由 AI 控制格擋時間。
-*/
-if(
-S.battleType==="local"
-){
-
-E().blocking =
-!!S.keys["7"]
-&&
-E().hp>0
-&&
-E().anim!=="hit";
-
-}
-else{
-
-E().blocking =
-E().blockTimer>0;
-
-}
-
-
-$("#block")
-.classList.toggle(
-"blocking",
-P().blocking
-);
-
-
-updateHud();
-
-}
-
-
-function updateCharge(dt){
-
-const p =
-P();
-
-
-const e =
-E();
-
-
-if(
-p
-&&
-S.keys.i
-&&
-!p.blocking
-&&
-p.hp>0
-){
-
-p.ki =
-clamp(
-p.ki+28*dt,
-0,
-100
-);
-
-
-if(
-![
-"punch",
-"kick",
-"special",
-"ultimate",
-"hit"
-]
-.includes(p.anim)
-){
-
-p.anim =
-"charge";
-
-}
-
-
-if(
-Math.random()<.16
-){
-
-S.fx.push({
-
-type:"spark",
-
-x:
-S.px
-+
-rnd(
--32,
-32
-),
-
-y:
-GROUND
--
-S.py
--
-rnd(
-40,
-180
-),
-
-life:.2,
-
-color:"#71e9ff"
-
-});
-
-}
-
-}
-else if(
-p
-&&
-p.anim==="charge"
-){
-
-p.anim =
-"idle";
-
-}
-
-
-if(
-S.battleType==="local"
-&&
-e
-&&
-S.keys["0"]
-&&
-!e.blocking
-&&
-e.hp>0
-){
-
-e.ki =
-clamp(
-e.ki+28*dt,
-0,
-100
-);
-
-
-if(
-![
-"punch",
-"kick",
-"special",
-"ultimate",
-"hit"
-]
-.includes(e.anim)
-){
-
-e.anim =
-"charge";
-
-}
-
-}
-
-
-$("#charge")
-.classList.toggle(
-"charging",
-!!S.keys.i
-);
-
-
-updateHud();
-
-}
-
-
-/* ======================================================
-   道具
-====================================================== */
-
-function renderItemBar(){
-
-const box =
-$("#itemBar");
-
-
-box.innerHTML =
-"<span class='small'>P1 道具：</span>";
-
-
-Object.entries(itemDefs)
-.forEach(([id,it])=>{
-
-const b =
-document.createElement("button");
-
-
-b.className =
-"itemBtn";
-
-
-b.textContent =
-`${it.icon}${it.name} ×${save.items[id]||0}`;
-
-
-b.addEventListener(
-"click",
-()=>useItem(id)
-);
-
-
-box.appendChild(b);
-
-});
-
-}
-
 
 function useItem(id){
+ if(!S.run||S.paused)return;
+ const p=active(0);
+ if(p.hp<=0)return;
+ if(!save.items[id])return toast('沒有這個道具');
 
-if(!S.run){
-return;
+ if(id==='senzu')p.hp=Math.min(p.maxHp,p.hp+p.maxHp*.55);
+ if(id==='zsword')p.buff=Math.max(p.buff,1.35);
+
+ if(id==='capsule'){
+  const r=Math.random();
+  if(r<.34)p.hp=Math.min(p.maxHp,p.hp+35);
+  else if(r<.67)p.ki=100;
+  else p.buff=Math.max(p.buff,1.25);
+ }
+
+ if(id==='staff'){
+  p.ki=100;
+  p.hp=Math.min(p.maxHp,p.hp+20);
+ }
+
+ if(id==='potara'){
+  if(p.fused)return toast('此角色已合體');
+
+  const team=S.teams[0];
+  let other;
+
+  for(let step=1;step<team.length;step++){
+   const c=team[(S.indices[0]+step)%team.length];
+   if(c.hp>0){other=c;break;}
+  }
+
+  if(!other)return toast('沒有存活隊友可以合體');
+
+  p.name+='×'+other.name;
+  p.maxHp=Math.round((p.maxHp+other.maxHp)*.72);
+  p.hp=Math.min(p.maxHp,p.hp+other.hp*.55);
+  p.atk=Math.round((p.atk+other.atk)*.72);
+  p.kiAtk=Math.round((p.kiAtk+other.kiAtk)*.72);
+  p.mult*=1.28;
+  p.fused=true;
+  other.hp=0;
+  other.action=null;
+ }
+
+ save.items[id]--;
+ persist();
+ renderItems();
+ say(itemDefs[id][0]);
 }
 
+function finish(winner){
+ S.run=false;
+ clearInput();
 
-if(
-(save.items[id]||0)<=0
-){
+ let text=winner<0?'平手！':
+  S.mode==='local'?`P${winner+1} 獲勝！`:
+  winner===0?'🏆 YOU WIN!':'💥 YOU LOSE';
 
-say(
-"沒有這個道具"
-);
+ if(winner===0){
+  let reward=difficulty[S.mode==='local'?'normal':S.difficulty][2]*S.teams[0].length;
+  save.coins+=reward;
+  save.wins++;
 
-return;
+  if(Math.random()<Math.min(.55,.18+.06*S.teams[0].length)){
+   save.balls=Math.min(7,save.balls+1);
+   text+='　獲得龍珠！';
+  }
 
+  text+=`　+${reward} 金幣`;
+  persist();
+ }
+
+ say(text,10);
+ $('#resultText').textContent=text;
+ $('#result').hidden=false;
 }
 
+function update(dt){
+ S.clock+=dt;
 
-const p =
-P();
+ for(let i=0;i<2;i++){
+  let a=active(i),b=enemy(i);
 
+  a.blinkCD=Math.max(0,a.blinkCD-dt);
+  a.hitT=Math.max(0,a.hitT-dt);
+  a.blockT=Math.max(0,a.blockT-dt);
+  a.defCD=Math.max(0,a.defCD-dt);
 
-if(
-id==="senzu"
-){
+  if(a.hp<=0){
+   a.koT-=dt;
+   continue;
+  }
 
-p.hp =
-clamp(
-p.hp+p.maxHp*.55,
-0,
-p.maxHp
-);
+  if(!a.action)a.face=Math.sign(b.x-a.x)||a.face;
 
+  const h=S.holds[i];
+  a.blocking=!a.action&&a.hitT<=0&&(h.has('block')||a.blockT>0);
 
-say(
-"仙豆！生命回復"
-);
+  if(!a.blocking&&!a.action&&a.hitT<=0){
+   const dx=(h.has('right')?1:0)-(h.has('left')?1:0);
+   a.x=clamp(a.x+dx*(a.speed||410)*dt,55,1045);
+   a.walk=dx?S.clock*11:0;
+   if(h.has('charge'))a.ki=Math.min(100,a.ki+28*dt);
+  }else a.walk=0;
 
+  // 離地高度向上為正，跳躍初速向上，重力向下。
+  if(a.y>0||a.vy>0){
+   a.y+=a.vy*dt;
+   a.vy-=1600*dt;
+   if(a.y<=0){
+    a.y=0;
+    a.vy=0;
+    effect('dust',a.x,GROUND,'#d7c09b');
+   }
+  }
+
+  if(a.action){
+   let d=a.action;
+   d.t+=dt;
+
+   if(d.type==='rush'&&d.t<.19){
+    a.x=clamp(a.x+d.face*700*dt,55,1045);
+   }
+
+   while(d.done<d.events.length&&d.t>=d.events[d.done]){
+    strike(a,d);
+    d.done++;
+   }
+
+   if(d.t>=d.dur)a.action=null;
+  }
+ }
+
+ if(S.mode==='cpu')ai(dt);
+
+ for(let j=S.shots.length-1;j>=0;j--){
+  const s=S.shots[j],old=s.x;
+  s.x+=s.vx*dt;
+  s.life-=dt;
+
+  let b=active(1-s.side);
+  const sc=bodyScale(b);
+  const top=GROUND-b.y-215*sc;
+  const bottom=GROUND-b.y-12*sc;
+
+  const hit=b.hp>0&&
+   Math.max(old,s.x)+s.r>b.x-36*sc&&
+   Math.min(old,s.x)-s.r<b.x+36*sc&&
+   s.y+s.r>top&&s.y-s.r<bottom;
+
+  if(hit){
+   hurt(b,s.power,Math.sign(s.vx),s.r>30?40:20);
+   effect('burst',s.x,s.y,s.color,s.r*2);
+   S.shots.splice(j,1);
+  }else if(s.life<=0||s.x<-150||s.x>1250){
+   S.shots.splice(j,1);
+  }
+ }
+
+ for(const f of S.fx)f.life-=dt;
+ S.fx=S.fx.filter(f=>f.life>0);
+
+ const alive=S.teams.map(t=>t.some(c=>c.hp>0));
+
+ if(!alive[0]||!alive[1]){
+  if([0,1].some(i=>active(i).hp<=0&&active(i).koT>0))return;
+  finish(!alive[0]&&!alive[1]?-1:alive[0]?0:1);
+  return;
+ }
+
+ for(let i=0;i<2;i++){
+  const a=active(i);
+  if(a.hp<=0&&a.koT<=0){
+   S.indices[i]=S.teams[i].findIndex(c=>c.hp>0);
+   let n=active(i);
+   n.x=i?890:210;
+   n.y=n.vy=0;
+   n.action=null;
+   n.blocking=false;
+   say('換上 '+n.name);
+  }
+ }
+
+ if(S.clock>S.messageUntil)$('#message').textContent='';
 }
 
-else if(
-id==="zsword"
-){
+function ai(dt){
+ const a=active(1),b=active(0);
+ if(a.hp<=0||b.hp<=0)return;
 
-p.atkBuff =
-Math.max(
-p.atkBuff,
-1.35
-);
+ const settings=difficulty[S.difficulty];
 
+ if(a.defCD===0&&!a.action&&!a.blocking&&a.hitT<=0){
+  const danger=S.shots.some(s=>
+   s.side===0&&(a.x-s.x)*s.vx>0&&Math.abs(a.x-s.x)<260
+  )||Math.abs(a.x-b.x)<190&&b.action&&meleeTypes.includes(b.action.type);
 
-say(
-"Z 神劍！攻擊力提升"
-);
+  if(danger){
+   a.defCD=.45;
+   if(Math.random()<settings[3]){
+    if(Math.random()<.5)act(1,'jump');
+    else a.blockT=.5;
+   }
+  }
+ }
 
+ S.ai+=dt;
+ if(S.ai<settings[0])return;
+ S.ai=0;
+ if(!canAct(a))return;
+
+ let r=Math.random(),d=Math.abs(a.x-b.x);
+
+ if(a.ki<25){
+  a.ki=Math.min(100,a.ki+20);
+  effect('aura',a.x,GROUND-a.y-100,'#76dfff',55);
+ }else if(r<.08){
+  act(1,'transform');
+ }else if(r<.16){
+  act(1,'blink');
+ }else if(d>235){
+  if(r<.5){
+   a.x=clamp(a.x+Math.sign(b.x-a.x)*95*(a.speed||410)/410,55,1045);
+  }else act(1,r<.8?'kiShot':'special1');
+ }else{
+  act(1,r<.3?'punch':r<.5?'kick':r<.7?'special2':r<.85?'special1':'ultimate');
+ }
 }
 
-else if(
-id==="capsule"
-){
+function hud(){
+ for(const [i,p] of [[0,'p'],[1,'e']]){
+  const a=active(i);
+  if(!a)continue;
 
-const r =
-Math.random();
+  $('#'+p+'n').textContent=
+   a.name+(formName(a)?'・'+formName(a):'')+(a.blocking?' 🛡':'');
 
-
-if(r<.34){
-
-p.hp =
-clamp(
-p.hp+35,
-0,
-p.maxHp
-);
-
-
-say(
-"膠囊：恢復藥"
-);
-
+  $('#'+p+'h').style.width=100*a.hp/a.maxHp+'%';
+  $('#'+p+'k').style.width=a.ki+'%';
+  $('#'+p+'m').textContent=
+   `HP ${Math.ceil(a.hp)}｜氣 ${Math.floor(a.ki)}｜${S.indices[i]+1}/${S.teams[i].length}`;
+ }
 }
 
-else if(r<.67){
+// Canvas 角色繪製
+const canvas=$('#fight');
+const ctx=canvas.getContext('2d');
 
-p.ki =
-100;
-
-
-say(
-"膠囊：氣力全滿"
-);
-
+function bodyScale(c){
+ const f=formName(c);
+ return f.includes('橙色')?1.2:
+  f.includes('4')?1.06:
+  c.style==='zeno'?.76:
+  c.height||(c.child?.72:c.big?1.13:1);
 }
 
-else{
-
-p.atkBuff =
-Math.max(
-p.atkBuff,
-1.25
-);
-
-
-say(
-"膠囊：攻擊強化"
-);
-
+function poly(g,pts,fill,stroke='#182135',width=2){
+ g.beginPath();
+ pts.forEach(([x,y],i)=>i?g.lineTo(x,y):g.moveTo(x,y));
+ g.closePath();
+ g.fillStyle=fill;
+ g.fill();
+ if(stroke){
+  g.strokeStyle=stroke;
+  g.lineWidth=width;
+  g.stroke();
+ }
 }
 
+function ellipse(g,x,y,rx,ry,fill,stroke){
+ g.beginPath();
+ g.ellipse(x,y,rx,ry,0,0,Math.PI*2);
+ g.fillStyle=fill;
+ g.fill();
+ if(stroke){
+  g.strokeStyle=stroke;
+  g.lineWidth=2;
+  g.stroke();
+ }
 }
 
-else if(
-id==="staff"
-){
-
-p.ki =
-100;
-
-
-p.hp =
-clamp(
-p.hp+20,
-0,
-p.maxHp
-);
-
-
-say(
-"天使的手杖！"
-);
-
+function line(g,pts,color,width){
+ g.beginPath();
+ pts.forEach(([x,y],i)=>i?g.lineTo(x,y):g.moveTo(x,y));
+ g.strokeStyle=color;
+ g.lineWidth=width;
+ g.lineCap='round';
+ g.lineJoin='round';
+ g.stroke();
 }
 
-else if(
-id==="potara"
-){
-
-if(
-S.pTeam.length<2
-){
-
-say(
-"沒有隊友可以合體"
-);
-
-return;
-
+function limb(g,pts,color,width){
+ line(g,pts,'#162035',width+4);
+ line(g,pts,color,width);
+ line(g,pts.map(([x,y])=>[x-2,y-2]),'#ffffff22',width*.25);
 }
 
+function appearance(c){
+ let f=formName(c);
 
-const other =
-S.pTeam[
-(S.pi+1)
-%
-S.pTeam.length
+ let skin=
+  c.style==='piccolo'?(f.includes('橙')?'#d58c30':'#6baa54'):
+  c.style==='cat'?'#a084b7':
+  c.style==='buu'?'#ef91b5':
+  c.style==='frieza'?(f.includes('黃金')?'#e4b748':f.includes('黑金')?'#555168':'#eeeaf6'):
+  c.style==='cell'?'#74ac57':
+  c.style==='angel'?'#c0e9ee':
+  c.style==='zeno'?'#75b8ef':
+  c.id==='jiren'?'#b7bcc6':'#efb78d';
+
+ let hair=c.hairBase||(
+  c.style==='trunks'?'#bba0d2':
+  c.style==='bob'?'#efd374':
+  c.style==='angel'?'#f1faff':'#151b28'
+ );
+
+ if(f.includes('超級賽亞人')&&!f.includes('4')){
+  hair=f.includes('藍')?'#46d8ef':
+   f.includes('之神')?'#d83450':'#ffe468';
+ }
+
+ if(f.includes('自在')||f.includes('野獸'))hair='#e5f1ff';
+ if(f.includes('自我'))hair='#a377db';
+ if(c.id==='broly'&&f.includes('全力'))hair='#b5e762';
+
+ // 超紅：紅髮、紅眼。紅色氣焰使用同一個 hair 顏色。
+ const god=f==='超級賽亞人之神';
+
+ const eye=
+  god?'#e5293f':
+  f.includes('野獸')?'#df2549':
+  f.includes('自我')?'#bb73e8':
+  f.includes('自在')?'#bbcddd':
+  f.includes('4')?'#e9b849':
+  f==='究極悟飯'?'#142035':
+  f?'#338580':'#142035';
+
+ return {f,skin,hair,eye,god};
+}
+
+function fighter(g,c,x,y,time=0,preview=false){
+ const {f,skin,hair,eye,god}=appearance(c);
+ const scale=bodyScale(c);
+
+ let d=c.action;
+ let p=d?clamp(d.t/d.dur,0,1):0;
+ let w=Math.sin(p*Math.PI);
+ let type=d?.type||'';
+ let swing=Math.sin(time*28);
+
+ let punch=type==='punch'||['combo','rush','stretch','sword','staff'].includes(type);
+ let kick=type==='kick'||type==='combo'&&swing<0;
+
+ let foot1=[24,-10],foot2=[-24,-10];
+ let hand1=[36,-117],hand2=[-38,-125];
+
+ if(c.y>0){
+  foot1=[34,-35];
+  foot2=[-26,-45];
+ }else if(c.walk){
+  foot1=[22+Math.sin(c.walk)*22,-10];
+  foot2=[-22-Math.sin(c.walk)*22,-10];
+ }
+
+ if(punch)hand1=[40+(type==='stretch'?155:70)*w,-137];
+ if(kick)foot1=[25+95*w,-14-77*w];
+
+ if(d&&!meleeTypes.includes(type)&&type!=='transform'){
+  hand1=[65,-130];
+  hand2=[50,-136];
+ }
+
+ if(type==='transform'){
+  hand1=[48,-87];
+  hand2=[-48,-87];
+ }
+
+ if(c.blocking){
+  hand1=[30,-163];
+  hand2=[10,-152];
+ }
+
+ g.save();
+ g.translate(x,y);
+ g.scale((c.face||1)*scale*(god?.94:1),scale);
+
+ const aura=f||c.fused||type==='transform'||
+  (!preview&&S.holds[c.side]?.has('charge'));
+
+ if(aura){
+  g.save();
+  g.globalAlpha=.2+.05*Math.sin(time*16);
+  poly(g,[
+   [-57,0],[-74,-105],[-52,-185],[-33,-166],[0,-255],
+   [24,-180],[45,-207],[70,-110],[53,0]
+  ],hair);
+  g.restore();
+ }
+
+ if(c.tail||f.includes('4')||c.style==='frieza'){
+  line(g,[[-17,-66],[-61,-44],[-79,-74],[-63,-105]],
+   c.style==='frieza'?skin:'#8a5438',10);
+ }
+
+ if(c.cape||c.style==='piccolo'&&c.cape!==false){
+  poly(g,[[-34,-157],[-66,-50],[-5,-23],[58,-52],[28,-155]],'#ede9e3');
+ }
+
+ // 超三的長髮。
+ if(f.includes('3')){
+  poly(g,[
+   [-19,-204],[-56,-207],[-43,-179],[-65,-173],[-45,-154],
+   [-63,-135],[-40,-116],[-49,-89],[-22,-102],[-19,-64],
+   [2,-98],[23,-78],[29,-109],[40,-97],[34,-154],[22,-209]
+  ],hair);
+ }
+
+ const pants=c.pants||(
+  f.includes('4')?'#e5ce9c':
+  c.style==='buu'?'#efefea':
+  c.style==='frieza'||c.style==='cell'?skin:
+  c.style==='vegeta'?'#2c4f9d':c.color
+ );
+
+ limb(g,[[-16,-81],[-21,-44],foot2],pants,20);
+ limb(g,[[16,-81],[foot1[0]*.56,-48+(foot1[1]+10)*.45],foot1],pants,21);
+
+ for(const q of [foot2,foot1]){
+  poly(g,[
+   [q[0]-10,q[1]-13],[q[0]+9,q[1]-14],
+   [q[0]+17,q[1]+5],[q[0]-12,q[1]+5]
+  ],c.style==='vegeta'?'#eeeeeb':'#253653');
+ }
+
+ limb(g,[[-26,-146],[-37,-125],hand2],skin,15);
+
+ let torso=f.includes('4')?'#bd3845':c.color;
+ const gradient=g.createLinearGradient(-35,0,35,0);
+ gradient.addColorStop(0,torso);
+ gradient.addColorStop(.5,torso);
+ gradient.addColorStop(1,'#25304a');
+
+ poly(g,[
+  [-28,-160],[-40,-143],[-28,-91],[-25,-79],
+  [26,-79],[32,-124],[35,-147],[23,-159]
+ ],gradient);
+
+ if(c.style==='vegeta'&&(!c.outfit||c.outfit==='armor')&&!f.includes('4')){
+  poly(g,[[-31,-151],[-23,-112],[25,-112],[31,-151],[20,-144],[-20,-144]],'#e5e9ef');
+  poly(g,[[-24,-111],[24,-111],[21,-85],[-21,-85]],'#cbb47b');
+  for(let i=0;i<3;i++){
+   line(g,[[-21,-106+i*7],[21,-106+i*7]],'#857953',1.5);
+  }
+ }else if(c.style==='frieza'||c.style==='cell'){
+  ellipse(g,0,-138,18,15,'#965caf');
+ }else{
+  poly(g,[[-16,-158],[0,-127],[17,-158]],f.includes('4')?skin:'#223e79');
+  line(g,[[-25,-90],[26,-90]],'#283d7b',10);
+  line(g,[[-22,-144],[-10,-119],[-19,-101]],'#ffffff33',2);
+
+  if(c.id.startsWith('goku')){
+   ellipse(g,18,-130,10,10,'#f4eada');
+   g.fillStyle='#20222b';
+   g.font='bold 12px serif';
+   g.textAlign='center';
+   g.fillText('悟',18,-126);
+  }
+ }
+
+ if(c.outfit==='jacket'||c.outfit==='vest'){
+  poly(g,[[-30,-153],[-7,-146],[-10,-93],[-28,-94]],c.color);
+  poly(g,[[7,-146],[30,-153],[28,-94],[10,-93]],c.color);
+  line(g,[[0,-140],[0,-96]],'#e0d9bf',2);
+ }
+
+ if(c.outfit==='shirt'){
+  line(g,[[0,-143],[0,-98]],'#c8d4e5',2);
+  for(let j=0;j<4;j++)ellipse(g,3,-135+j*10,1.5,1.5,'#f1eff8');
+ }
+
+ if(c.scarf)poly(g,[[-22,-153],[23,-151],[2,-129]],'#cc454b');
+ if(c.sword&&type!=='sword')line(g,[[-31,-97],[33,-189]],'#626a78',7);
+
+ if(c.style==='angel'){
+  g.strokeStyle='#8bdded';
+  g.lineWidth=5;
+  g.beginPath();
+  g.ellipse(0,-155,45,16,0,0,Math.PI*2);
+  g.stroke();
+ }
+
+ limb(g,[[26,-146],[(hand1[0]+26)/2,-119+(hand1[1]+119)*.5],hand1],skin,17);
+ ellipse(g,...hand1,10,9,skin,'#503e3b');
+ ellipse(g,...hand2,9,8,skin,'#503e3b');
+
+ if(c.style!=='frieza'&&c.style!=='buu'){
+  line(g,[[hand1[0]-8,hand1[1]],[hand1[0]-3,hand1[1]]],'#304b8b',17);
+ }
+
+ if(['sword','staff'].includes(type)){
+  line(g,[
+   [hand1[0]-10,hand1[1]+32],
+   [hand1[0]+40,hand1[1]-68]
+  ],type==='staff'?'#c73b38':'#d5faff',type==='staff'?7:5);
+ }
+
+ poly(g,[[-9,-169],[-10,-151],[11,-151],[10,-169]],skin);
+ poly(g,[
+  [-22,-197],[-20,-172],[-13,-161],[2,-155],
+  [17,-165],[22,-182],[18,-202],[0,-210]
+ ],skin);
+
+ ellipse(g,-22,-181,5,8,skin);
+ ellipse(g,22,-181,5,8,skin);
+
+ if(c.style==='cat'){
+  poly(g,[[-20,-195],[-23,-242],[-4,-207]],skin);
+  poly(g,[[6,-207],[20,-241],[22,-193]],skin);
+ }else if(c.style==='buu'){
+  line(g,[[0,-204],[2,-223],[18,-218],[21,-230]],skin,11);
+ }else if(c.style==='cell'){
+  poly(g,[[-23,-190],[-22,-239],[-3,-214],[18,-238],[24,-188],[12,-202],[-12,-202]],skin);
+  for(let i=0;i<9;i++){
+   ellipse(g,(i%3)*14-14,-222+Math.floor(i/3)*11,2,3,'#264f32');
+  }
+ }else if(c.style==='frieza'){
+  ellipse(g,0,-202,15,10,'#9059b4');
+ }else if(c.style==='zeno'){
+  ellipse(g,0,-185,34,34,skin);
+  poly(g,[[-32,-202],[-19,-209],[-20,-159],[-31,-171]],'#bb4d9e');
+  poly(g,[[20,-209],[31,-202],[31,-171],[20,-159]],'#bb4d9e');
+ }else if(c.hairCut==='bowl'&&!f){
+  poly(g,[[-24,-178],[-26,-205],[-12,-216],[12,-216],[24,-202],[24,-180],[15,-190],[-15,-190]],hair);
+ }else if(c.hairCut==='short'&&!f){
+  poly(g,[[-23,-193],[-18,-215],[-3,-218],[7,-229],[19,-214],[26,-211],[20,-194],[3,-200]],hair);
+ }else if(c.hairCut==='swept'&&!f){
+  poly(g,[[-23,-190],[-30,-212],[-8,-224],[4,-237],[14,-220],[30,-224],[23,-204],[8,-196],[-5,-202]],hair);
+ }else if(['trunks','bob','long'].includes(c.style)&&!f.includes('超級')){
+  poly(g,[
+   [-24,-169],[-29,-203],[-15,-218],[13,-219],[28,-203],
+   [25,-166],[15,-179],[12,-203],[-1,-187],[-12,-204],[-18,-184]
+  ],hair);
+ }else if(c.style==='angel'){
+  poly(g,[[-22,-199],[-16,-226],[-23,-237],[2,-232],[16,-249],[20,-219],[21,-198],[0,-207]],hair);
+ }else if(c.style==='vegeta'&&!f.includes('3')&&!f.includes('4')){
+  poly(g,[
+   [-23,-191],[-26,-219],[-19,-239],[-8,-226],[0,-246],
+   [9,-226],[22,-239],[26,-211],[21,-189],[12,-205],[0,-192],[-12,-206]
+  ],hair);
+ }else if(!['bald','piccolo'].includes(c.style)){
+  let tall=f.includes('野獸')?1.6:1;
+  poly(g,[
+   [-24,-190],[-39,-208],[-23,-210],[-32,-227],[-12,-218],
+   [-14,-211-25*tall],[1,-217],[10,-215-31*tall],
+   [19,-218],[31,-233],[25,-207],[39,-213],
+   [22,-187],[14,-201],[3,-193],[-6,-204]
+  ],hair);
+  line(g,[[-10,-218],[-3,-209],[5,-217]],'#ffffff44',2);
+ }
+
+ if(c.style==='piccolo'){
+  line(g,[[-10,-203],[-18,-217]],skin,3);
+  line(g,[[10,-203],[20,-217]],skin,3);
+  poly(g,[[-20,-187],[-38,-189],[-23,-171]],skin);
+ }
+
+ poly(g,[[-17,-186],[-5,-183],[-15,-179]],'#fff9ef',null);
+ poly(g,[[5,-183],[17,-186],[15,-179]],'#fff9ef',null);
+
+ ellipse(g,-10,-182,3,3.5,eye);
+ ellipse(g,11,-182,3,3.5,eye);
+
+ if(!f.includes('3')&&!f.includes('自我')){
+  line(g,[[-18,-189],[-5,-186]],hair,3);
+  line(g,[[5,-186],[18,-189]],hair,3);
+ }
+
+ line(g,[[2,-180],[-1,-172],[3,-171]],'#9b715c',1.4);
+ line(g,[[-5,-165],[6,-165]],'#714f46',1.5);
+
+ if(c.glasses&&!f){
+  g.strokeStyle='#2c3249';
+  g.lineWidth=2;
+  g.strokeRect(-19,-188,17,12);
+  g.strokeRect(3,-188,17,12);
+  line(g,[[-2,-184],[3,-184]],'#30354a',2);
+ }
+
+ if(c.scouter&&!f){
+  g.globalAlpha=.65;
+  poly(g,[[-24,-193],[-4,-191],[-4,-179],[-24,-178]],'#ec6372');
+  g.globalAlpha=1;
+ }
+
+ if(c.id==='tien')ellipse(g,0,-198,4,6,'#fff');
+
+ if(c.id==='krillin'){
+  for(let i=0;i<6;i++){
+   ellipse(g,(i%2)*8-4,-196-Math.floor(i/2)*5,1.5,1.5,'#825945');
+  }
+ }
+
+ if(c.id==='roshi'){
+  ellipse(g,-11,-183,10,7,'#162332');
+  ellipse(g,11,-183,10,7,'#162332');
+  poly(g,[[-16,-171],[0,-166],[17,-172],[10,-147],[0,-142],[-11,-150]],'#f0ece5');
+ }
+
+ if(c.blocking){
+  g.strokeStyle='#ffe46a';
+  g.lineWidth=4;
+  g.beginPath();
+  g.ellipse(45,-116,24,69,0,-1.6,1.6);
+  g.stroke();
+ }
+
+ g.restore();
+}
+
+let previewForm=-1;
+
+function renderFormPreview(c){
+ const select=$('#formPreview');
+
+ select.innerHTML='<option value="-1">普通形態</option>'+
+  c.forms.map((f,i)=>`<option value="${i}">${f[0]}</option>`).join('');
+
+ previewForm=Math.min(previewForm,c.forms.length-1);
+ select.value=String(previewForm);
+
+ select.onchange=()=>{
+  previewForm=Number(select.value);
+  renderFormPreview(c);
+ };
+
+ const g=$('#characterPreview').getContext('2d');
+ g.clearRect(0,0,420,280);
+ g.fillStyle='#111b30';
+ g.fillRect(0,0,420,280);
+
+ const a=make(c,0);
+ a.form=previewForm;
+
+ g.save();
+ g.translate(210,263);
+ g.scale(.91,.91);
+ fighter(g,a,0,0,0,true);
+ g.restore();
+}
+
+function thumbnail(canvas,c){
+ const g=canvas.getContext('2d');
+ g.clearRect(0,0,190,180);
+
+ const grad=g.createRadialGradient(95,75,4,95,90,100);
+ grad.addColorStop(0,'#38496d');
+ grad.addColorStop(1,'#151e31');
+ g.fillStyle=grad;
+ g.fillRect(0,0,190,180);
+
+ g.save();
+ g.translate(95,173);
+ g.scale(.68,.68);
+ fighter(g,make(c,0),0,0,0,true);
+ g.restore();
+}
+
+function draw(){
+ const [name,sky,floor]=arenas[S.arena];
+
+ const g=ctx.createLinearGradient(0,0,0,560);
+ g.addColorStop(0,sky);
+ g.addColorStop(1,'#10182b');
+
+ ctx.fillStyle=g;
+ ctx.fillRect(0,0,1100,560);
+
+ ctx.fillStyle='#fff5';
+ for(let i=0;i<30;i++){
+  ctx.fillRect((i*173)%1100,(i*61)%280,2,2);
+ }
+
+ if(S.arena==='gravity'||S.arena==='zeno'){
+  for(let i=0;i<8;i++){
+   ctx.fillStyle=i%2?'#ffffff12':'#0002';
+   ctx.fillRect(i*150,0,45,410);
+  }
+ }else{
+  poly(ctx,[
+   [0,390],[100,256],[200,360],[350,210],[510,395],
+   [680,235],[830,360],[990,250],[1100,400]
+  ],'#ffffff12',null);
+ }
+
+ ctx.fillStyle=floor;
+ ctx.fillRect(0,410,1100,150);
+
+ line(ctx,[[0,GROUND],[1100,GROUND]],'#ffffff55',2);
+
+ for(let i=0;i<8;i++){
+  line(ctx,[[550+(i-4)*70,410],[550+(i-4)*230,560]],'#0002',1);
+ }
+
+ for(let i=0;i<2;i++){
+  const a=active(i);
+  if(!a)continue;
+
+  ellipse(ctx,a.x,GROUND+3,Math.max(15,43-a.y*.06),8,'#0005');
+
+  ctx.save();
+  if(a.hp<=0)ctx.globalAlpha=.5;
+  fighter(ctx,a,a.x,GROUND-a.y,S.clock);
+  ctx.restore();
+ }
+
+ for(const s of S.shots){
+  ctx.save();
+  ctx.shadowBlur=20;
+  ctx.shadowColor=s.color;
+
+  line(ctx,[
+   [s.x-Math.sign(s.vx)*(s.type==='beam'?110:45),s.y],
+   [s.x,s.y]
+  ],s.color+'88',s.r);
+
+  ellipse(ctx,s.x,s.y,
+   s.type==='disc'?s.r*1.8:s.type==='beam'?s.r*1.4:s.r,
+   s.type==='disc'?5:s.type==='laser'?5:s.r,
+   s.color);
+
+  ellipse(ctx,s.x,s.y,s.r*.5,Math.max(3,s.r*.5),'#fff');
+  ctx.restore();
+ }
+
+ for(const f of S.fx){
+  ctx.save();
+
+  const a=f.life/f.max;
+  ctx.globalAlpha=a;
+  ctx.strokeStyle=f.color;
+  ctx.lineWidth=3;
+
+  if(f.type==='slash'){
+   ctx.beginPath();
+   ctx.arc(f.x,f.y,f.r,-1.2,1.2);
+   ctx.stroke();
+  }else if(f.type==='blink'){
+   for(let j=0;j<8;j++){
+    line(ctx,[
+     [f.x-22,f.y-75+j*20],[f.x+22,f.y-75+j*20]
+    ],f.color,2);
+   }
+  }else if(f.type==='dust'){
+   ellipse(ctx,f.x,f.y,f.r*(2-a),8,f.color);
+  }else{
+   ctx.beginPath();
+   ctx.ellipse(f.x,f.y,
+    f.r*(2-a),
+    f.type==='aura'?f.r*1.5:f.r*(2-a),
+    0,0,Math.PI*2);
+   ctx.stroke();
+
+   if(f.type==='burst'){
+    for(let j=0;j<8;j++){
+     let ang=j*Math.PI/4;
+     line(ctx,[
+      [f.x+Math.cos(ang)*15,f.y+Math.sin(ang)*15],
+      [f.x+Math.cos(ang)*f.r,f.y+Math.sin(ang)*f.r]
+     ],f.color,4);
+    }
+   }
+
+   if(f.type==='block'){
+    ctx.fillStyle=f.color;
+    ctx.font='bold 15px system-ui';
+    ctx.fillText('BLOCK · 50%',f.x-45,f.y-50);
+   }
+  }
+
+  ctx.restore();
+ }
+}
+
+let acc=0;
+
+function loop(t){
+ const dt=Math.min(.05,(t-S.last)/1000||0);
+ S.last=t;
+
+ if(S.run&&!S.paused){
+  acc+=dt;
+  while(acc>=1/120&&S.run){
+   update(1/120);
+   acc-=1/120;
+  }
+ }else acc=0;
+
+ if(!$('#game').hidden){
+  draw();
+  hud();
+ }
+
+ requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+
+const actions=[
+ ['punch','拳 J'],
+ ['kick','踢 H'],
+ ['kiShot','氣彈 K / 12'],
+ ['special1','特別技1 L / 30'],
+ ['special2','特別技2 ; / 38'],
+ ['ultimate','終極技 U / 65'],
+ ['transform','變身 T'],
+ ['swap','換人 R']
 ];
 
+$('#actions').innerHTML=actions
+ .map(([k,v])=>`<button class="control" data-act="${k}">${v}</button>`).join('');
 
-if(
-other.hp<=0
-){
-
-say(
-"下一位隊友不能戰鬥"
-);
-
-return;
-
+function clearInput(){
+ touchHolds.clear();
+ S.keys.clear();
+ S.holds=[new Set(),new Set()];
+ document.querySelectorAll('.held').forEach(b=>b.classList.remove('held'));
+ for(let i=0;i<2;i++){
+  if(active(i))active(i).blocking=false;
+ }
 }
 
-
-p.name =
-`${p.name}×${other.name} 合體`;
-
-
-p.maxHp =
-Math.round(
-(p.maxHp+other.maxHp)
-*
-.72
-);
-
-
-p.hp =
-clamp(
-p.hp
-+
-other.hp*.55,
-0,
-p.maxHp
-);
-
-
-p.atk =
-Math.round(
-(p.atk+other.atk)
-*
-.72
-);
-
-
-p.kiAtk =
-Math.round(
-(p.kiAtk+other.kiAtk)
-*
-.72
-);
-
-
-p.mult *=
-1.28;
-
-
-p.fused =
-true;
-
-
-other.hp =
-0;
-
-
-other.koHandled =
-true;
-
-
-say(
-"波特拉合體成功！",
-800
-);
-
-}
-
-
-save.items[id]--;
-
-
-saveNow();
-
-renderItemBar();
-
-updateHud();
-
-}
-
-
-/* ======================================================
-   AI：會跳 / 會格擋
-====================================================== */
-
-function aiDefense(){
-
-if(
-!S.run
-||
-S.battleType!=="cpu"
-||
-!E()
-){
-return;
-}
-
-
-const e =
-E();
-
-
-if(
-e.defenseCooldown>0
-||
-e.blockTimer>0
-||
-e.anim==="hit"
-){
-return;
-}
-
-
-/*
-檢查玩家的飛行攻擊是不是正在逼近。
-*/
-const incoming =
-S.shots.find(
-b=>
-b.player
-&&
-b.x<S.ex
-&&
-S.ex-b.x<260
-);
-
-
-if(
-incoming
-&&
-Math.random()
-<
-diff[S.difficulty].defense
-){
-
-e.defenseCooldown =
-.9;
-
-
-/*
-一部分跳起躲，
-一部分格擋。
-*/
-if(
-Math.random()<.48
-&&
-S.ey===0
-){
-
-jump(false);
-
-}
-else{
-
-e.blockTimer =
-.55;
-
-
-setAnim(
-e,
-"block",
-.45
-);
-
-}
-
-
-return;
-
-}
-
-
-/*
-近戰也會防守。
-*/
-if(
-dist()<190
-&&
-P()
-&&
-[
-"punch",
-"kick",
-"special"
-]
-.includes(P().anim)
-&&
-Math.random()
-<
-diff[S.difficulty].defense*.8
-){
-
-e.defenseCooldown =
-.75;
-
-
-if(
-Math.random()<.35
-&&
-S.ey===0
-){
-
-jump(false);
-
-}
-else{
-
-e.blockTimer =
-.45;
-
-}
-
-}
-
-}
-
-
-function aiAct(){
-
-if(
-!S.run
-||
-S.battleType!=="cpu"
-){
-return;
-}
-
-
-const e =
-E();
-
-
-if(
-!e
-||
-e.hp<=0
-||
-e.blocking
-){
-return;
-}
-
-
-const r =
-Math.random();
-
-
-if(
-dist()>220
-){
-
-if(r<.30){
-
-S.ex -=
-Math.min(
-72,
-dist()-185
-);
-
-}
-
-else if(
-r<.46
-&&
-S.ey===0
-){
-
-jump(false);
-
-}
-
-else if(
-r<.65
-){
-
-e.ki =
-clamp(
-e.ki+20,
-0,
-100
-);
-
-}
-
-else if(
-r<.86
-){
-
-kiShot(false);
-
-}
-
-else if(
-e.forms.length
-&&
-e.formIndex+1<e.forms.length
-&&
-e.ki>=e.forms[e.formIndex+1][1]
-){
-
-transform(false);
-
-}
-
-}
-
-else{
-
-if(
-e.ki>=65
-&&
-r<.13
-){
-
-ultimate(false);
-
-}
-
-else if(
-e.ki>=38
-&&
-r<.29
-){
-
-special(
-false,
-2
-);
-
-}
-
-else if(
-e.ki>=30
-&&
-r<.43
-){
-
-special(
-false,
-1
-);
-
-}
-
-else if(
-r<.64
-){
-
-punch(false);
-
-}
-
-else if(
-r<.80
-){
-
-kick(false);
-
-}
-
-else if(
-r<.90
-&&
-S.ey===0
-){
-
-jump(false);
-
-}
-
-else{
-
-e.blockTimer =
-.4;
-
-
-setAnim(
-e,
-"block",
-.35
-);
-
-}
-
-}
-
-
-if(
-S.eTeam.length>1
-&&
-e.hp<e.maxHp*.22
-&&
-Math.random()<.18
-){
-
-swap(false);
-
-}
-
-}
-
-
-/* ======================================================
-   Canvas
-====================================================== */
-
-const canvas =
-$("#fight");
-
-
-const ctx =
-canvas.getContext("2d");
-
-
-function drawBackground(){
-
-const colors = {
-
-earth:[
-"#223a7c",
-"#dba15b",
-"#714a32"
-],
-
-time:[
-"#f3f1df",
-"#dbe9ff",
-"#dedede"
-],
-
-gravity:[
-"#131827",
-"#5a1e29",
-"#232838"
-],
-
-kingkai:[
-"#122c66",
-"#6cc76b",
-"#466f35"
-],
-
-supreme:[
-"#261446",
-"#a171ca",
-"#677c53"
-],
-
-beerus:[
-"#75d0ff",
-"#ddb8ff",
-"#68b864"
-],
-
-zeno:[
-"#1a1643",
-"#6253a5",
-"#e3d47c"
-]
-
-}
-[S.arena]
-||
-[
-"#223a7c",
-"#dba15b",
-"#714a32"
+const heldMaps=[
+ {a:'left',d:'right',g:'block',i:'charge'},
+ {arrowleft:'left',arrowright:'right','7':'block','0':'charge'}
 ];
 
+const actionMaps=[
+ {
+  w:'jump',f:'blink',j:'punch',h:'kick',k:'kiShot',
+  l:'special1',';':'special2',u:'ultimate',t:'transform',r:'swap'
+ },
+ {
+  arrowup:'jump','8':'blink','1':'punch','2':'kick','3':'kiShot',
+  '4':'special1','5':'special2','6':'ultimate',
+  enter:'transform',shift:'swap'
+ }
+];
 
-const g =
-ctx.createLinearGradient(
-0,
-0,
-0,
-canvas.height
-);
+const touchHolds=new Map();
 
+function refreshHolds(){
+ S.holds=[new Set(),new Set()];
 
-g.addColorStop(
-0,
-colors[0]
-);
+ for(let i=0;i<2;i++){
+  if(i&&S.mode!=='local')continue;
+  for(const k of S.keys){
+   if(heldMaps[i][k])S.holds[i].add(heldMaps[i][k]);
+  }
+ }
 
-
-g.addColorStop(
-.62,
-colors[0]
-);
-
-
-g.addColorStop(
-.63,
-colors[1]
-);
-
-
-g.addColorStop(
-1,
-colors[2]
-);
-
-
-ctx.fillStyle =
-g;
-
-
-ctx.fillRect(
-0,
-0,
-canvas.width,
-canvas.height
-);
-
-
-if(
-[
-"supreme",
-"zeno"
-]
-.includes(S.arena)
-){
-
-ctx.fillStyle =
-"#fff";
-
-
-for(
-let i=0;
-i<65;
-i++
-){
-
-ctx.fillRect(
-(i*149)%canvas.width,
-(i*91)%330,
-2,
-2
-);
-
+ for(const v of touchHolds.values())S.holds[0].add(v);
 }
 
+for(const b of document.querySelectorAll('[data-hold]')){
+ b.onpointerdown=e=>{
+  e.preventDefault();
+  if(!S.run||S.paused)return;
+
+  touchHolds.set(e.pointerId,b.dataset.hold);
+  b.setPointerCapture(e.pointerId);
+  b.classList.add('held');
+  refreshHolds();
+ };
+
+ const release=e=>{
+  touchHolds.delete(e.pointerId);
+  b.classList.remove('held');
+  refreshHolds();
+ };
+
+ b.onpointerup=b.onpointercancel=b.onlostpointercapture=release;
 }
 
-
-ctx.fillStyle =
-"#ffffff66";
-
-
-ctx.fillRect(
-0,
-GROUND,
-canvas.width,
-4
-);
-
+for(const b of document.querySelectorAll('[data-act]')){
+ b.onpointerdown=e=>{
+  e.preventDefault();
+  act(0,b.dataset.act);
+ };
+ b.onclick=e=>{
+  if(e.detail===0)act(0,b.dataset.act);
+ };
 }
 
+document.addEventListener('keydown',e=>{
+ if(!S.run||/INPUT|SELECT|TEXTAREA/.test(e.target.tagName))return;
 
-/* ======================================================
-   頭髮
-====================================================== */
+ let k=e.key.toLowerCase();
 
-function drawHair(
-style,
-color,
-skin
-){
+ if(k==='escape'&&!e.repeat){
+  e.preventDefault();
+  pause();
+  return;
+ }
 
-ctx.fillStyle =
-color;
+ if(S.paused)return;
 
+ if(heldMaps.some(m=>m[k])||actionMaps.some(m=>m[k])){
+  e.preventDefault();
+ }
 
-ctx.strokeStyle =
-"#111";
+ S.keys.add(k);
+ refreshHolds();
 
+ if(!e.repeat){
+  for(let i=0;i<(S.mode==='local'?2:1);i++){
+   if(actionMaps[i][k])act(i,actionMaps[i][k]);
+  }
+ }
+});
 
-ctx.lineWidth =
-3;
+document.addEventListener('keyup',e=>{
+ S.keys.delete(e.key.toLowerCase());
+ refreshHolds();
+});
 
-
-ctx.beginPath();
-
-
-if(style==="vegeta"){
-
-ctx.moveTo(-30,-184);
-ctx.lineTo(-22,-225);
-ctx.lineTo(-9,-196);
-ctx.lineTo(0,-238);
-ctx.lineTo(10,-196);
-ctx.lineTo(25,-226);
-ctx.lineTo(31,-183);
-
+function loseFocus(){
+ touchHolds.clear();
+ clearInput();
+ if(S.run&&!S.paused)pause();
 }
 
-else if(
-style==="trunks"
-||
-style==="a18"
-){
+window.addEventListener('blur',loseFocus);
+document.addEventListener('visibilitychange',()=>{
+ if(document.hidden)loseFocus();
+});
 
-ctx.moveTo(-30,-184);
-ctx.quadraticCurveTo(-24,-220,0,-222);
-ctx.quadraticCurveTo(26,-220,31,-183);
-ctx.quadraticCurveTo(12,-199,0,-195);
-ctx.quadraticCurveTo(-14,-201,-30,-184);
+for(const b of document.querySelectorAll('[data-wish]')){
+ b.onclick=()=>{
+  if(save.balls<7)return toast('需要七顆龍珠');
+  save.balls-=7;
 
+  if(b.dataset.wish==='coins'){
+   save.coins+=30000;
+  }else if(b.dataset.wish==='items'){
+   for(const k in save.items)save.items[k]+=3;
+  }else{
+   const pool=chars.filter(c=>!save.unlocked.includes(c.id));
+   if(pool.length){
+    save.unlocked.push(pool[Math.floor(Math.random()*pool.length)].id);
+   }else save.coins+=20000;
+  }
+
+  render();
+  toast('神龍已實現願望！');
+ };
 }
 
-else if(
-style==="yamcha"
-||
-style==="a17"
-){
-
-ctx.moveTo(-32,-183);
-ctx.quadraticCurveTo(-35,-221,0,-225);
-ctx.quadraticCurveTo(36,-222,34,-183);
-ctx.quadraticCurveTo(12,-205,0,-199);
-ctx.quadraticCurveTo(-15,-207,-32,-183);
-
-}
-
-else if(style==="whis"){
-
-ctx.moveTo(-31,-185);
-ctx.quadraticCurveTo(0,-235,31,-185);
-ctx.quadraticCurveTo(12,-207,0,-205);
-ctx.quadraticCurveTo(-15,-208,-31,-185);
-
-}
-
-else if(style==="cat"){
-
-ctx.fillStyle =
-skin;
-
-
-ctx.moveTo(-25,-185);
-ctx.lineTo(-19,-229);
-ctx.lineTo(-4,-190);
-
-ctx.moveTo(25,-185);
-ctx.lineTo(19,-229);
-ctx.lineTo(4,-190);
-
-}
-
-else if(style==="buu"){
-
-ctx.fillStyle =
-skin;
-
-
-ctx.moveTo(-6,-195);
-ctx.quadraticCurveTo(-8,-235,10,-225);
-ctx.quadraticCurveTo(22,-216,8,-193);
-
-}
-
-else if(style==="frieza"){
-
-ctx.ellipse(
-0,
--191,
-18,
-10,
-0,
-0,
-Math.PI*2
-);
-
-}
-
-else if(style==="cell"){
-
-ctx.moveTo(-26,-190);
-ctx.lineTo(-14,-226);
-ctx.lineTo(0,-197);
-ctx.lineTo(15,-225);
-ctx.lineTo(27,-189);
-
-}
-
-else if(style==="zeno"){
-
-ctx.moveTo(-30,-184);
-ctx.quadraticCurveTo(0,-228,30,-184);
-ctx.lineTo(25,-168);
-ctx.lineTo(-25,-168);
-
-}
-
-else if(
-style==="bald"
-||
-style==="none"
-){
-
-return;
-
-}
-
-else{
-
-ctx.moveTo(-31,-184);
-ctx.lineTo(-24,-221);
-ctx.lineTo(-12,-197);
-ctx.lineTo(0,-237);
-ctx.lineTo(10,-198);
-ctx.lineTo(25,-223);
-ctx.lineTo(31,-183);
-
-}
-
-
-ctx.closePath();
-
-ctx.fill();
-
-ctx.stroke();
-
-}
-
-
-/* ======================================================
-   動態姿勢
-====================================================== */
-
-function pose(
-c,
-jumpY
-){
-
-const duration =
-Math.max(
-.001,
-c.animDur
-);
-
-
-const progress =
-1
--
-clamp(
-c.animTime/duration,
-0,
-1
-);
-
-
-const wave =
-Math.sin(
-progress*Math.PI
-);
-
-
-let q = {
-
-lean:0,
-
-frontArmX:46,
-
-frontArmY:-86,
-
-rearArmX:-45,
-
-rearArmY:-82,
-
-frontLegX:20,
-
-frontLegY:-15,
-
-rearLegX:-20,
-
-rearLegY:-15
-
+$('#reset').onclick=()=>{
+ if(confirm('重設此裝置進度？雲端不會自動刪除。')){
+  save=baseSave();
+  S.picks=[['goku'],['vegeta']];
+  render();
+ }
 };
 
-
-if(
-c.blocking
-||
-c.anim==="block"
-){
-
-/* 兩手交叉防禦 */
-
-q.frontArmX =
-18;
-
-q.frontArmY =
--145;
-
-q.rearArmX =
--16;
-
-q.rearArmY =
--132;
-
-q.lean =
--.05;
-
-}
-
-else if(
-c.anim==="punch"
-){
-
-/* 出拳手往前伸 */
-
-q.frontArmX =
-48
-+
-70*wave;
-
-q.frontArmY =
--118
--
-6*wave;
-
-q.rearArmX =
--38;
-
-q.rearArmY =
--135;
-
-q.lean =
-.12*wave;
-
-}
-
-else if(
-c.anim==="kick"
-){
-
-/* 腿真正往前踢 */
-
-q.frontArmX =
-36;
-
-q.frontArmY =
--135;
-
-q.rearArmX =
--35;
-
-q.rearArmY =
--130;
-
-q.frontLegX =
-22
-+
-88*wave;
-
-q.frontLegY =
--58*wave;
-
-q.rearLegX =
--22;
-
-q.rearLegY =
--10;
-
-q.lean =
--.12*wave;
-
-}
-
-else if(
-c.anim==="special"
-){
-
-/* 手掌向前放技能 */
-
-q.frontArmX =
-55
-+
-48*wave;
-
-q.frontArmY =
--112;
-
-q.rearArmX =
--18;
-
-q.rearArmY =
--115;
-
-q.lean =
-.09*wave;
-
-}
-
-else if(
-c.anim==="ultimate"
-){
-
-/* 雙手集氣 */
-
-q.frontArmX =
-48
-+
-34*wave;
-
-q.frontArmY =
--112;
-
-q.rearArmX =
-28
-+
-24*wave;
-
-q.rearArmY =
--122;
-
-q.lean =
-.05;
-
-}
-
-else if(
-c.anim==="hit"
-){
-
-q.lean =
--.18*wave;
-
-q.frontArmX =
-25;
-
-q.frontArmY =
--75;
-
-q.rearArmX =
--35;
-
-q.rearArmY =
--70;
-
-}
-
-else if(
-c.anim==="charge"
-||
-c.anim==="transform"
-){
-
-q.frontArmX =
-48;
-
-q.frontArmY =
--60;
-
-q.rearArmX =
--48;
-
-q.rearArmY =
--60;
-
-q.frontLegX =
-28;
-
-q.rearLegX =
--28;
-
-}
-
-else if(
-jumpY>10
-){
-
-/* 空中姿勢 */
-
-q.frontLegX =
-30;
-
-q.frontLegY =
--38;
-
-q.rearLegX =
--28;
-
-q.rearLegY =
--30;
-
-q.frontArmY =
--105;
-
-q.rearArmY =
--100;
-
-}
-
-
-return q;
-
-}
-
-
-/* 畫有關節感的手腳 */
-function limb(
-x1,
-y1,
-x2,
-y2,
-width,
-color,
-outline="#111"
-){
-
-ctx.strokeStyle =
-outline;
-
-
-ctx.lineWidth =
-width+5;
-
-
-ctx.lineCap =
-"round";
-
-
-ctx.beginPath();
-
-ctx.moveTo(
-x1,
-y1
-);
-
-ctx.lineTo(
-x2,
-y2
-);
-
-ctx.stroke();
-
-
-ctx.strokeStyle =
-color;
-
-
-ctx.lineWidth =
-width;
-
-
-ctx.beginPath();
-
-ctx.moveTo(
-x1,
-y1
-);
-
-ctx.lineTo(
-x2,
-y2
-);
-
-ctx.stroke();
-
-}
-
-
-/* ======================================================
-   戰鬥角色
-====================================================== */
-
-function drawFighter(
-x,
-y,
-c,
-enemy=false
-){
-
-const s =
-styleData(c);
-
-
-const hair =
-hairColor(
-c,
-s
-);
-
-
-const scale =
-s.big
-?
-1.12
-:
-1;
-
-
-const q =
-pose(
-c,
-y
-);
-
-
-const bob =
-c.anim==="idle"
-?
-Math.sin(
-performance.now()/180+x
-)
-*
-2
-:
-0;
-
-
-ctx.save();
-
-
-ctx.translate(
-x,
-GROUND-y+bob
-);
-
-
-if(enemy){
-
-ctx.scale(
--1,
-1
-);
-
-}
-
-
-ctx.scale(
-scale,
-scale
-);
-
-
-ctx.rotate(
-q.lean
-);
-
-
-/* 氣焰 */
-
-if(
-c.formIndex>=0
-||
-c.fused
-||
-c.anim==="charge"
-||
-c.anim==="transform"
-){
-
-let aura =
-"#ffe76644";
-
-
-if(
-c.formName.includes("藍")
-){
-
-aura =
-"#4fdfff55";
-
-}
-
-
-if(
-c.formName.includes("自在")
-){
-
-aura =
-"#f4f7ff66";
-
-}
-
-
-if(
-c.formName.includes("自我")
-){
-
-aura =
-"#ad72ff66";
-
-}
-
-
-if(
-c.anim==="charge"
-){
-
-aura =
-"#58dfff42";
-
-}
-
-
-ctx.fillStyle =
-aura;
-
-
-ctx.beginPath();
-
-
-ctx.ellipse(
-0,
--112,
-67,
-145,
-0,
-0,
-Math.PI*2
-);
-
-
-ctx.fill();
-
-}
-
-
-/* 影子 */
-
-ctx.fillStyle =
-"#0005";
-
-
-ctx.beginPath();
-
-
-ctx.ellipse(
-0,
-2,
-45,
-10,
-0,
-0,
-Math.PI*2
-);
-
-
-ctx.fill();
-
-
-/* 披風 */
-
-if(s.cape){
-
-ctx.fillStyle =
-"#f3f1ea";
-
-
-ctx.strokeStyle =
-"#111";
-
-
-ctx.lineWidth =
-3;
-
-
-ctx.beginPath();
-
-
-ctx.moveTo(
--38,
--135
-);
-
-
-ctx.quadraticCurveTo(
--72,
--77,
--54,
--25
-);
-
-
-ctx.quadraticCurveTo(
-0,
--3,
-54,
--25
-);
-
-
-ctx.quadraticCurveTo(
-72,
--77,
-38,
--135
-);
-
-
-ctx.closePath();
-
-ctx.fill();
-
-ctx.stroke();
-
-}
-
-
-/* 腿 */
-
-limb(
--16,
--68,
-q.rearLegX,
-q.rearLegY,
-15,
-c.colors[1]
-);
-
-
-limb(
-16,
--68,
-q.frontLegX,
-q.frontLegY,
-15,
-c.colors[1]
-);
-
-
-/* 身體 */
-
-ctx.fillStyle =
-s.armor
-?
-"#f2f2f5"
-:
-c.colors[0];
-
-
-ctx.strokeStyle =
-"#111";
-
-
-ctx.lineWidth =
-4;
-
-
-ctx.beginPath();
-
-
-ctx.moveTo(
--39,
--141
-);
-
-
-ctx.lineTo(
-39,
--141
-);
-
-
-ctx.lineTo(
-33,
--67
-);
-
-
-ctx.lineTo(
--33,
--67
-);
-
-
-ctx.closePath();
-
-ctx.fill();
-
-ctx.stroke();
-
-
-if(s.armor){
-
-ctx.fillStyle =
-c.colors[0];
-
-
-ctx.fillRect(
--23,
--136,
-46,
-66
-);
-
-
-ctx.fillStyle =
-"#d5c86f";
-
-
-ctx.fillRect(
--39,
--113,
-15,
-18
-);
-
-
-ctx.fillRect(
-24,
--113,
-15,
-18
-);
-
-}
-else{
-
-ctx.fillStyle =
-c.colors[1];
-
-
-ctx.fillRect(
--8,
--139,
-16,
-71
-);
-
-}
-
-
-/* 天使環 */
-
-if(s.angel){
-
-ctx.strokeStyle =
-"#76d7eb";
-
-
-ctx.lineWidth =
-7;
-
-
-ctx.beginPath();
-
-
-ctx.arc(
-0,
--112,
-49,
-0,
-Math.PI*2
-);
-
-
-ctx.stroke();
-
-}
-
-
-/* 手臂 */
-
-limb(
--28,
--124,
-q.rearArmX,
-q.rearArmY,
-13,
-s.skin
-);
-
-
-limb(
-28,
--124,
-q.frontArmX,
-q.frontArmY,
-13,
-s.skin
-);
-
-
-/* 頭 */
-
-ctx.fillStyle =
-s.skin;
-
-
-ctx.strokeStyle =
-"#111";
-
-
-ctx.lineWidth =
-4;
-
-
-ctx.beginPath();
-
-
-ctx.ellipse(
-0,
--167,
-27,
-31,
-0,
-0,
-Math.PI*2
-);
-
-
-ctx.fill();
-
-ctx.stroke();
-
-
-/* 比克觸角和耳朵 */
-
-if(s.namek){
-
-ctx.strokeStyle =
-s.skin;
-
-
-ctx.lineWidth =
-4;
-
-
-ctx.beginPath();
-
-
-ctx.moveTo(
--20,
--184
-);
-
-
-ctx.lineTo(
--35,
--198
-);
-
-
-ctx.moveTo(
-20,
--184
-);
-
-
-ctx.lineTo(
-35,
--198
-);
-
-
-ctx.stroke();
-
-
-ctx.fillStyle =
-s.skin;
-
-
-ctx.beginPath();
-
-
-ctx.moveTo(
--25,
--170
-);
-
-
-ctx.lineTo(
--43,
--164
-);
-
-
-ctx.lineTo(
--25,
--157
-);
-
-
-ctx.fill();
-
-
-ctx.beginPath();
-
-
-ctx.moveTo(
-25,
--170
-);
-
-
-ctx.lineTo(
-43,
--164
-);
-
-
-ctx.lineTo(
-25,
--157
-);
-
-
-ctx.fill();
-
-}
-
-
-drawHair(
-s.hairStyle,
-hair,
-s.skin
-);
-
-
-/* 眉毛 */
-
-ctx.strokeStyle =
-"#2a2020";
-
-
-ctx.lineWidth =
-3;
-
-
-ctx.beginPath();
-
-
-ctx.moveTo(
--16,
--169
-);
-
-
-ctx.lineTo(
--7,
--171
-);
-
-
-ctx.moveTo(
-8,
--171
-);
-
-
-ctx.lineTo(
-17,
--169
-);
-
-
-ctx.stroke();
-
-
-/* 眼睛 */
-
-ctx.fillStyle =
-"#111";
-
-
-ctx.beginPath();
-
-
-ctx.ellipse(
--10,
--165,
-3.5,
-4,
-0,
-0,
-Math.PI*2
-);
-
-
-ctx.fill();
-
-
-ctx.beginPath();
-
-
-ctx.ellipse(
-11,
--165,
-3.5,
-4,
-0,
-0,
-Math.PI*2
-);
-
-
-ctx.fill();
-
-
-/* 天津飯第三眼 */
-
-if(s.thirdEye){
-
-ctx.beginPath();
-
-
-ctx.ellipse(
-0,
--180,
-3.8,
-4.5,
-0,
-0,
-Math.PI*2
-);
-
-
-ctx.fill();
-
-}
-
-
-/* 龜仙人 */
-
-if(s.roshi){
-
-ctx.beginPath();
-
-
-ctx.arc(
--11,
--166,
-10,
-0,
-Math.PI*2
-);
-
-
-ctx.fill();
-
-
-ctx.beginPath();
-
-
-ctx.arc(
-11,
--166,
-10,
-0,
-Math.PI*2
-);
-
-
-ctx.fill();
-
-
-ctx.fillStyle =
-"#eee";
-
-
-ctx.beginPath();
-
-
-ctx.moveTo(
--22,
--149
-);
-
-
-ctx.quadraticCurveTo(
-0,
--124,
-22,
--149
-);
-
-
-ctx.quadraticCurveTo(
-15,
--116,
-0,
--116
-);
-
-
-ctx.quadraticCurveTo(
--15,
--116,
--22,
--149
-);
-
-
-ctx.fill();
-
-}
-
-
-/* 格擋護盾 */
-
-if(c.blocking){
-
-ctx.strokeStyle =
-"#ffe36a";
-
-
-ctx.globalAlpha =
-.45;
-
-
-ctx.lineWidth =
-7;
-
-
-ctx.beginPath();
-
-
-ctx.arc(
-40,
--112,
-46,
--1.25,
-1.25
-);
-
-
-ctx.stroke();
-
-
-ctx.globalAlpha =
-1;
-
-}
-
-
-ctx.restore();
-
-
-ctx.fillStyle =
-"#fff";
-
-
-ctx.font =
-"bold 17px system-ui";
-
-
-ctx.textAlign =
-"center";
-
-
-ctx.fillText(
-c.name,
-x,
-498-y
-);
-
-}
-
-
-/* ======================================================
-   投射物碰撞
-====================================================== */
-
-function targetBox(enemyTarget){
-
-const x =
-enemyTarget
-?
-S.ex
-:
-S.px;
-
-
-const y =
-enemyTarget
-?
-S.ey
-:
-S.py;
-
-
-const base =
-GROUND-y;
-
-
-return {
-
-x:x,
-
-top:
-base-210,
-
-bottom:
-base-20,
-
-half:42
-
+$('#exportSave').onclick=()=>{
+ const url=URL.createObjectURL(
+  new Blob([JSON.stringify(save,null,2)],{type:'application/json'})
+ );
+ const a=document.createElement('a');
+ a.href=url;
+ a.download='dragon-ball-save.json';
+ a.click();
+ setTimeout(()=>URL.revokeObjectURL(url),1000);
 };
 
-}
-
-
-function shotHits(
-shot,
-enemyTarget
-){
-
-const hb =
-targetBox(
-enemyTarget
-);
-
-
-return (
-
-Math.abs(
-shot.x-hb.x
-)
-<
-hb.half+shot.r
-
-&&
-
-shot.y
->
-hb.top-shot.r
-
-&&
-
-shot.y
-<
-hb.bottom+shot.r
-
-);
-
-}
-
-
-/* ======================================================
-   技能飛行動畫
-====================================================== */
-
-function drawShots(dt){
-
-for(
-let i=S.shots.length-1;
-i>=0;
-i--
-){
-
-const b =
-S.shots[i];
-
-
-b.life -=
-dt;
-
-
-/* 拖尾 */
-
-b.trail.push({
-
-x:b.x,
-
-y:b.y,
-
-life:.20
-
-});
-
-
-if(
-b.trail.length>9
-){
-
-b.trail.shift();
-
-}
-
-
-b.x +=
-b.vx*dt;
-
-
-ctx.save();
-
-
-for(
-const trail of b.trail
-){
-
-ctx.globalAlpha =
-clamp(
-trail.life/.2,
-0,
-.35
-);
-
-
-ctx.fillStyle =
-b.color;
-
-
-ctx.beginPath();
-
-
-ctx.arc(
-trail.x,
-trail.y,
-Math.max(
-3,
-b.r*.55
-),
-0,
-Math.PI*2
-);
-
-
-ctx.fill();
-
-
-trail.life -=
-dt;
-
-}
-
-
-ctx.globalAlpha =
-1;
-
-
-ctx.shadowBlur =
-b.r*1.7;
-
-
-ctx.shadowColor =
-b.color;
-
-
-ctx.fillStyle =
-b.color;
-
-
-/* 氣圓斬 */
-
-if(
-b.kind==="disc"
-){
-
-ctx.beginPath();
-
-
-ctx.ellipse(
-b.x,
-b.y,
-b.r*1.5,
-b.r*.38,
-0,
-0,
-Math.PI*2
-);
-
-
-ctx.fill();
-
-
-ctx.strokeStyle =
-"#fff7a8";
-
-
-ctx.lineWidth =
-3;
-
-
-ctx.stroke();
-
-}
-
-/* 死亡光束 / 魔貫 */
-
-else if(
-b.kind==="laser"
-){
-
-ctx.fillRect(
-b.x-b.r*1.8,
-b.y-5,
-b.r*3.6,
-10
-);
-
-}
-
-/* 龜派氣功 */
-
-else if(
-b.kind==="beam"
-){
-
-ctx.beginPath();
-
-
-ctx.ellipse(
-b.x,
-b.y,
-b.r*1.8,
-b.r*.72,
-0,
-0,
-Math.PI*2
-);
-
-
-ctx.fill();
-
-}
-
-/* 一般光球 */
-
-else{
-
-ctx.beginPath();
-
-
-ctx.arc(
-b.x,
-b.y,
-b.r,
-0,
-Math.PI*2
-);
-
-
-ctx.fill();
-
-}
-
-
-ctx.restore();
-
-
-const enemyTarget =
-b.player;
-
-
-/*
-真正碰撞：
-角色跳高時 hit box 也一起往上，
-所以低空技能會從腳下飛過。
-*/
-
-if(
-shotHits(
-b,
-enemyTarget
-)
-){
-
-damage(
-b.player
-?
-E()
-:
-P(),
-b.damage,
-enemyTarget,
-b.r>30
-?
-45
-:
-22
-);
-
-
-S.fx.push({
-
-type:"explosion",
-
-x:b.x,
-
-y:b.y,
-
-life:.42,
-
-color:b.color,
-
-r:b.r*2
-
-});
-
-
-S.shots.splice(
-i,
-1
-);
-
-
-continue;
-
-}
-
-
-if(
-b.life<=0
-||
-b.x<-120
-||
-b.x>1220
-){
-
-S.shots.splice(
-i,
-1
-);
-
-}
-
-}
-
-}
-
-
-/* ======================================================
-   特效
-====================================================== */
-
-function drawEffects(dt){
-
-for(
-let i=S.fx.length-1;
-i>=0;
-i--
-){
-
-const f =
-S.fx[i];
-
-
-f.life -=
-dt;
-
-
-ctx.save();
-
-
-const alpha =
-clamp(
-f.life/.4,
-0,
-1
-);
-
-
-if(
-f.type==="hit"
-){
-
-ctx.fillStyle =
-"#fff";
-
-
-ctx.font =
-"bold 48px system-ui";
-
-
-ctx.textAlign =
-"center";
-
-
-ctx.fillText(
-"✦",
-f.x,
-f.y
-);
-
-}
-
-else if(
-f.type==="block"
-){
-
-ctx.strokeStyle =
-"#ffe36a";
-
-
-ctx.lineWidth =
-8;
-
-
-ctx.globalAlpha =
-alpha;
-
-
-ctx.beginPath();
-
-
-ctx.arc(
-f.x,
-f.y,
-30,
-0,
-Math.PI*2
-);
-
-
-ctx.stroke();
-
-
-ctx.fillStyle =
-"#fff1a3";
-
-
-ctx.font =
-"bold 18px system-ui";
-
-
-ctx.textAlign =
-"center";
-
-
-ctx.fillText(
-"BLOCK",
-f.x,
-f.y-40
-);
-
-}
-
-else if(
-f.type==="whiff"
-){
-
-ctx.strokeStyle =
-"#ffffff88";
-
-
-ctx.lineWidth =
-4;
-
-
-ctx.globalAlpha =
-alpha;
-
-
-ctx.beginPath();
-
-
-ctx.arc(
-f.x,
-f.y,
-22,
--1.2,
-1.2
-);
-
-
-ctx.stroke();
-
-}
-
-else if(
-f.type==="muzzle"
-){
-
-ctx.fillStyle =
-f.color||"#fff";
-
-
-ctx.globalAlpha =
-alpha;
-
-
-ctx.beginPath();
-
-
-ctx.arc(
-f.x,
-f.y,
-(f.r||25)
-*
-(
-1-alpha*.35
-),
-0,
-Math.PI*2
-);
-
-
-ctx.fill();
-
-}
-
-else if(
-f.type==="explosion"
-){
-
-ctx.globalAlpha =
-alpha;
-
-
-ctx.fillStyle =
-f.color||"#ffd56a";
-
-
-ctx.beginPath();
-
-
-ctx.arc(
-f.x,
-f.y,
-(f.r||45)
-*
-(
-1.2-alpha*.2
-),
-0,
-Math.PI*2
-);
-
-
-ctx.fill();
-
-
-ctx.strokeStyle =
-"#fff";
-
-
-ctx.lineWidth =
-3;
-
-
-ctx.stroke();
-
-}
-
-else if(
-f.type==="dust"
-){
-
-ctx.globalAlpha =
-alpha*.5;
-
-
-ctx.fillStyle =
-"#d8c59a";
-
-
-ctx.beginPath();
-
-
-ctx.ellipse(
-f.x,
-f.y,
-35*(1-alpha+.3),
-10,
-0,
-0,
-Math.PI*2
-);
-
-
-ctx.fill();
-
-}
-
-else if(
-f.type==="transform"
-){
-
-ctx.globalAlpha =
-clamp(
-f.life/.9,
-0,
-1
-);
-
-
-ctx.strokeStyle =
-"#ffe75c";
-
-
-ctx.lineWidth =
-10;
-
-
-ctx.beginPath();
-
-
-ctx.ellipse(
-f.x,
-f.y,
-65,
-135,
-0,
-0,
-Math.PI*2
-);
-
-
-ctx.stroke();
-
-}
-
-else if(
-f.type==="spark"
-){
-
-ctx.globalAlpha =
-alpha;
-
-
-ctx.fillStyle =
-f.color||"#fff";
-
-
-ctx.fillRect(
-f.x-2,
-f.y-8,
-4,
-16
-);
-
-
-ctx.fillRect(
-f.x-8,
-f.y-2,
-16,
-4
-);
-
-}
-
-
-ctx.restore();
-
-
-if(
-f.life<=0
-){
-
-S.fx.splice(
-i,
-1
-);
-
-}
-
-}
-
-}
-
-
-/* ======================================================
-   物理
-====================================================== */
-
-function updatePhysics(dt){
-
-const oldPlayerY =
-S.py;
-
-
-const oldEnemyY =
-S.ey;
-
-
-/* 玩家 */
-
-S.py =
-Math.max(
-0,
-S.py+S.pvy*dt
-);
-
-
-S.pvy +=
-1600*dt;
-
-
-if(
-S.py===0
-&&
-S.pvy>0
-){
-
-S.pvy =
-0;
-
-
-if(
-oldPlayerY>5
-){
-
-S.fx.push({
-
-type:"dust",
-
-x:S.px,
-
-y:GROUND-5,
-
-life:.28
-
-});
-
-}
-
-}
-
-
-/* 對手 */
-
-S.ey =
-Math.max(
-0,
-S.ey+S.evy*dt
-);
-
-
-S.evy +=
-1600*dt;
-
-
-if(
-S.ey===0
-&&
-S.evy>0
-){
-
-S.evy =
-0;
-
-
-if(
-oldEnemyY>5
-){
-
-S.fx.push({
-
-type:"dust",
-
-x:S.ex,
-
-y:GROUND-5,
-
-life:.28
-
-});
-
-}
-
-}
-
-}
-
-
-function updateTimers(dt){
-
-for(
-const c
-of
-[
-...S.pTeam,
-...S.eTeam
-]
-){
-
-if(
-c.animTime>0
-){
-
-c.animTime -=
-dt;
-
-
-if(
-c.animTime<=0
-&&
-!c.blocking
-){
-
-c.anim =
-"idle";
-
-}
-
-}
-
-
-c.blockTimer =
-Math.max(
-0,
-c.blockTimer-dt
-);
-
-
-c.defenseCooldown =
-Math.max(
-0,
-c.defenseCooldown-dt
-);
-
-}
-
-}
-
-
-/* ======================================================
-   主遊戲循環
-====================================================== */
-
-function loop(time){
-
-const dt =
-Math.min(
-.033,
-(time-S.last)/1000
-||
-0
-);
-
-
-S.last =
-time;
-
-
-if(S.run){
-
-updateBlocking();
-
-updateCharge(dt);
-
-
-/* 移動 */
-
-if(S.keys.a){
-
-move(
-true,
--1,
-dt
-);
-
-}
-
-
-if(S.keys.d){
-
-move(
-true,
-1,
-dt
-);
-
-}
-
-
-if(
-S.battleType==="local"
-){
-
-if(
-S.keys.arrowleft
-){
-
-move(
-false,
--1,
-dt
-);
-
-}
-
-
-if(
-S.keys.arrowright
-){
-
-move(
-false,
-1,
-dt
-);
-
-}
-
-}
-
-
-updatePhysics(dt);
-
-updateTimers(dt);
-
-
-/* CPU 會觀察飛來的技能 */
-aiDefense();
-
-
-if(
-S.battleType==="cpu"
-){
-
-S.ai +=
-dt*1000;
-
-
-if(
-S.ai
->=
-diff[S.difficulty].interval
-){
-
-S.ai =
-0;
-
-
-aiAct();
-
-}
-
-}
-
-}
-
-
-/* 畫面 */
-
-drawBackground();
-
-
-if(P()){
-
-drawFighter(
-S.px,
-S.py,
-P(),
-false
-);
-
-}
-
-
-if(E()){
-
-drawFighter(
-S.ex,
-S.ey,
-E(),
-true
-);
-
-}
-
-
-drawShots(dt);
-
-drawEffects(dt);
-
-
-requestAnimationFrame(
-loop
-);
-
-}
-
-
-requestAnimationFrame(
-loop
-);
-
-
-/* ======================================================
-   手機按住按鈕
-====================================================== */
-
-function holdKey(
-selector,
-key
-){
-
-const el =
-$(selector);
-
-
-const release =
-()=>{
-
-S.keys[key] =
-false;
-
-
-el.classList.remove(
-"holding"
-);
-
+$('#importSave').onchange=async e=>{
+ try{
+  const f=e.target.files[0];
+  if(!f)return;
+  if(f.size>1e6)throw Error('檔案過大');
+
+  const next=validate(JSON.parse(await f.text()));
+
+  if(confirm('以此備份取代本機進度？')){
+   save=next;
+   render();
+   toast('已匯入備份');
+  }
+ }catch(err){
+  toast(err.message);
+ }
+
+ e.target.value='';
 };
 
+let musicURL;
 
-el.addEventListener(
-"pointerdown",
-e=>{
+$('#musicFile').onchange=e=>{
+ if(!e.target.files[0])return;
 
-e.preventDefault();
+ const old=musicURL;
+ musicURL=URL.createObjectURL(e.target.files[0]);
+ $('#bgm').src=musicURL;
+ if(old)URL.revokeObjectURL(old);
 
+ $('#bgm').play().catch(()=>toast('請按音樂播放鍵'));
+};
 
-S.keys[key] =
-true;
+// Google 登入與 Firestore，設定後才載入。
+let cloud=null,cloudBusy=false;
 
-
-el.classList.add(
-"holding"
-);
-
-
-if(
-el.setPointerCapture
-){
-
-el.setPointerCapture(
-e.pointerId
-);
-
+function cloudStatus(s){
+ $('#cloudStatus').textContent=s;
 }
 
-}
-);
+async function initCloud(){
+ let conf=FIREBASE_CONFIG;
 
+ try{
+  conf=conf||JSON.parse(localStorage.getItem('db_firebase_config')||'null');
+  if(!conf)return;
 
-el.addEventListener(
-"pointerup",
-release
-);
+  $('#config').value=JSON.stringify(conf,null,2);
 
+  const [app,auth,db]=await Promise.all([
+   import('https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js'),
+   import('https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js'),
+   import('https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js')
+  ]);
 
-el.addEventListener(
-"pointercancel",
-release
-);
+  const instance=app.initializeApp(conf);
+  cloud={auth,db,a:auth.getAuth(instance),d:db.getFirestore(instance)};
 
-
-el.addEventListener(
-"lostpointercapture",
-release
-);
-
-}
-
-
-holdKey(
-"#left",
-"a"
-);
-
-
-holdKey(
-"#right",
-"d"
-);
-
-
-holdKey(
-"#block",
-"g"
-);
-
-
-holdKey(
-"#charge",
-"i"
-);
-
-
-/* ======================================================
-   觸控攻擊
-====================================================== */
-
-$("#jump")
-.addEventListener(
-"click",
-()=>jump(true)
-);
-
-
-$("#punch")
-.addEventListener(
-"click",
-()=>punch(true)
-);
-
-
-$("#kick")
-.addEventListener(
-"click",
-()=>kick(true)
-);
-
-
-$("#kiShot")
-.addEventListener(
-"click",
-()=>kiShot(true)
-);
-
-
-$("#special1")
-.addEventListener(
-"click",
-()=>special(
-true,
-1
-)
-);
-
-
-$("#special2")
-.addEventListener(
-"click",
-()=>special(
-true,
-2
-)
-);
-
-
-$("#ultimate")
-.addEventListener(
-"click",
-()=>ultimate(true)
-);
-
-
-$("#transform")
-.addEventListener(
-"click",
-()=>transform(true)
-);
-
-
-$("#swap")
-.addEventListener(
-"click",
-()=>swap(true)
-);
-
-
-/* ======================================================
-   鍵盤
-====================================================== */
-
-document.addEventListener(
-"keydown",
-e=>{
-
-const key =
-e.key.toLowerCase();
-
-
-if(
-S.run
-&&
-[
-"arrowleft",
-"arrowright",
-"arrowup",
-" "
-]
-.includes(key)
-){
-
-e.preventDefault();
-
+  auth.onAuthStateChanged(cloud.a,u=>cloudStatus(
+   u?'已登入：'+(u.email||u.displayName)+'。請選擇儲存到雲端或讀取雲端。':
+   'Google 已就緒，請按登入。'
+  ));
+ }catch(e){
+  cloudStatus('雲端初始化失敗：'+e.message+'。本機遊戲仍可使用。');
+ }
 }
 
+$('#applyConfig').onclick=()=>{
+ try{
+  const c=JSON.parse($('#config').value);
+  if(!c.apiKey||!c.authDomain||!c.projectId||!c.appId){
+   throw Error('請填入完整 Web 設定');
+  }
+  localStorage.setItem('db_firebase_config',JSON.stringify(c));
+  location.reload();
+ }catch(e){
+  toast(e.message);
+ }
+};
 
-S.keys[key] =
-true;
+$('#login').onclick=async()=>{
+ if(location.protocol==='file:'){
+  return toast('Google 登入需要 HTTPS 網站或 localhost');
+ }
+ if(!cloud)return toast('請先展開設定步驟，設定 Firebase');
 
+ try{
+  await cloud.auth.signInWithPopup(cloud.a,new cloud.auth.GoogleAuthProvider());
+ }catch(e){
+  cloudStatus('登入失敗：'+e.message);
+ }
+};
 
-/*
-移動、格擋和集氣可以保持按住。
-攻擊則避免 key repeat 連續觸發。
-*/
-if(e.repeat){
-return;
+$('#logout').onclick=async()=>{
+ if(cloud){
+  try{
+   await cloud.auth.signOut(cloud.a);
+  }catch(e){
+   cloudStatus(e.message);
+  }
+ }
+};
+
+async function syncCloud(write){
+ if(!cloud?.a.currentUser)return toast('請先登入 Google');
+ if(cloudBusy)return;
+
+ cloudBusy=true;
+
+ const user=cloud.a.currentUser;
+ const ref=cloud.db.doc(cloud.d,'saves',user.uid);
+
+ try{
+  if(write){
+   if(!confirm('用目前本機進度覆蓋此帳號的雲端存檔？'))return;
+
+   await cloud.db.setDoc(ref,{
+    data:JSON.stringify(save),
+    updatedAt:cloud.db.serverTimestamp(),
+    version:3
+   });
+
+   cloudStatus('雲端儲存完成');
+  }else{
+   const snap=await cloud.db.getDoc(ref);
+   if(!snap.exists())return toast('此帳號尚無雲端存檔');
+
+   const data=validate(JSON.parse(snap.data().data));
+
+   if(cloud.a.currentUser?.uid!==user.uid){
+    throw Error('帳號已改變，請重新讀取');
+   }
+
+   if(confirm('以雲端進度覆蓋本機存檔？')){
+    save=data;
+    render();
+    cloudStatus('雲端讀取完成');
+   }
+  }
+ }catch(e){
+  cloudStatus('同步失敗：'+e.message+'。本機進度保留。');
+ }finally{
+  cloudBusy=false;
+ }
 }
 
-
-/* P1 */
-
-if(key==="w"){
-jump(true);
-}
-
-if(key==="j"){
-punch(true);
-}
-
-if(key==="h"){
-kick(true);
-}
-
-if(key==="k"){
-kiShot(true);
-}
-
-if(key==="l"){
-special(
-true,
-1
-);
-}
-
-if(key===";"){
-special(
-true,
-2
-);
-}
-
-if(key==="u"){
-ultimate(true);
-}
-
-if(key==="t"){
-transform(true);
-}
-
-if(key==="r"){
-swap(true);
-}
-
-
-/* P2 */
-
-if(
-S.battleType==="local"
-){
-
-if(key==="arrowup"){
-jump(false);
-}
-
-if(key==="1"){
-punch(false);
-}
-
-if(key==="2"){
-kick(false);
-}
-
-if(key==="3"){
-kiShot(false);
-}
-
-if(key==="4"){
-special(
-false,
-1
-);
-}
-
-if(key==="5"){
-special(
-false,
-2
-);
-}
-
-if(key==="6"){
-ultimate(false);
-}
-
-if(key==="enter"){
-transform(false);
-}
-
-if(key==="shift"){
-swap(false);
-}
-
-}
-
-}
-);
-
-
-document.addEventListener(
-"keyup",
-e=>{
-
-S.keys[
-e.key.toLowerCase()
-]
-=
-false;
-
-}
-);
-
-
-/* ======================================================
-   神龍
-====================================================== */
-
-$("#summon")
-.addEventListener(
-"click",
-()=>{
-
-$("#wishBox").style.display =
-save.balls>=7
-?
-"block"
-:
-"none";
-
-}
-);
-
-
-document.querySelectorAll(
-".wish"
-)
-.forEach(b=>
-b.addEventListener(
-"click",
-()=>{
-
-if(
-save.balls<7
-){
-return;
-}
-
-
-save.balls -=
-7;
-
-
-if(
-b.dataset.wish==="coins"
-){
-
-save.coins +=
-30000;
-
-}
-
-else if(
-b.dataset.wish==="items"
-){
-
-Object.keys(itemDefs)
-.forEach(id=>{
-
-save.items[id] =
-(save.items[id]||0)
-+
-3;
-
-});
-
-}
-
-else{
-
-const locked =
-chars.filter(
-c=>
-!save.unlocked.includes(c.id)
-);
-
-
-if(locked.length){
-
-save.unlocked.push(
-locked[
-Math.floor(
-Math.random()*locked.length
-)
-]
-.id
-);
-
-}
-else{
-
-save.coins +=
-20000;
-
-}
-
-}
-
-
-saveNow();
-
-
-$("#wishBox")
-.style.display =
-"none";
-
-
-renderRoster();
-
-renderShop();
-
-
-alert(
-"神龍已實現你的願望！"
-);
-
-}
-)
-);
-
-
-/* ======================================================
-   重設
-====================================================== */
-
-$("#resetSave")
-.addEventListener(
-"click",
-()=>{
-
-if(
-confirm(
-"確定重設金幣、角色、道具和龍珠嗎？"
-)
-){
-
-localStorage.removeItem(
-saveKey
-);
-
-
-save =
-loadSave();
-
-
-S.pick1 = [
-"goku"
-];
-
-
-S.pick2 = [
-"vegeta"
-];
-
-
-saveNow();
-
-renderRoster();
-
-renderShop();
-
-renderItems();
-
-}
-
-}
-);
-
-
-/* ======================================================
-   音樂
-====================================================== */
-
-const bgm =
-$("#bgm");
-
-
-const musicFile =
-$("#musicFile");
-
-
-musicFile
-.addEventListener(
-"change",
-()=>{
-
-const file =
-musicFile.files
-&&
-musicFile.files[0];
-
-
-if(!file){
-return;
-}
-
-
-bgm.src =
-URL.createObjectURL(file);
-
-
-bgm.play()
-.catch(
-()=>{}
-);
-
-}
-);
-
-
-$("#musicToggle")
-.addEventListener(
-"click",
-()=>{
-
-if(!bgm.src){
-
-alert(
-"請先選擇音樂檔"
-);
-
-return;
-
-}
-
-
-if(bgm.paused){
-
-bgm.play()
-.catch(
-()=>{}
-);
-
-}
-else{
-
-bgm.pause();
-
-}
-
-}
-);
-
-
-$("#musicStop")
-.addEventListener(
-"click",
-()=>{
-
-bgm.pause();
-
-bgm.currentTime =
-0;
-
-}
-);
-
-
-/* ======================================================
-   初始化
-====================================================== */
-
-renderMeta();
-
-renderRoster();
-
-renderShop();
-
-renderItems();
-
+$('#upload').onclick=()=>syncCloud(true);
+$('#download').onclick=()=>syncCloud(false);
+
+render();
+initCloud();
 </script>
-
-</body>
 </html>
