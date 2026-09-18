@@ -2198,5 +2198,528 @@ $('#download').onclick=()=>syncCloud(false);
 
 render();
 initCloud();
+ // Google 登入與雲端存檔：設定引導修正版
+let cloud = null;
+let cloudBusy = false;
+let cloudLoading = false;
+let cloudJob = null;
+
+const CLOUD_CONFIG_KEY = 'db_firebase_config';
+const setupPanel = $('#account details');
+const setupInput = $('#config');
+const siteHost = location.hostname || 'xcr0417-coder.github.io';
+
+function cloudStatus(message) {
+  $('#cloudStatus').textContent = message;
+  $('#cloudStatus').setAttribute('role', 'status');
+}
+
+function cloudButtons() {
+  const signedIn = !!cloud?.a.currentUser;
+
+  $('#login').disabled = cloudLoading || cloudBusy || signedIn;
+  $('#login').textContent = cloudLoading
+    ? '正在連接…'
+    : signedIn
+      ? 'Google 已登入'
+      : 'Google 登入';
+
+  $('#logout').disabled = !signedIn || cloudBusy;
+  $('#upload').disabled = !signedIn || cloudBusy;
+  $('#download').disabled = !signedIn || cloudBusy;
+  $('#applyConfig').disabled = cloudBusy || cloudLoading;
+}
+
+function openCloudSetup(message) {
+  for (const page of document.querySelectorAll('.page')) {
+    page.hidden = page.id !== 'account';
+  }
+
+  for (const tab of document.querySelectorAll('[data-tab]')) {
+    tab.classList.toggle(
+      'active',
+      tab.dataset.tab === 'account'
+    );
+  }
+
+  setupPanel.open = true;
+
+  cloudStatus(
+    message ||
+    '尚未設定 Google 登入。請完成下面三個步驟；本機進度仍會保留。'
+  );
+
+  setupPanel.scrollIntoView({
+    behavior: 'smooth',
+    block: 'start'
+  });
+}
+
+// 接受 JSON，或 Firebase 提供的：
+// const firebaseConfig = {...};
+//
+// 只解析字串設定欄位，不執行貼上的 JavaScript。
+function parseFirebaseConfig(raw) {
+  if (typeof raw === 'object' && raw !== null) {
+    raw = JSON.stringify(raw);
+  }
+
+  if (typeof raw !== 'string' || !raw.trim()) {
+    throw Error('請先貼上 Firebase 的 firebaseConfig 設定。');
+  }
+
+  if (raw.length > 20000) {
+    throw Error('設定內容過長，請只貼 firebaseConfig。');
+  }
+
+  const allowed = [
+    'apiKey',
+    'authDomain',
+    'projectId',
+    'appId',
+    'storageBucket',
+    'messagingSenderId',
+    'measurementId',
+    'databaseURL'
+  ];
+
+  let parsed;
+
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    const match =
+      raw.match(
+        /(?:const|let|var)\s+firebaseConfig\s*=\s*(\{[\s\S]*?\})\s*;?/
+      ) ||
+      raw.trim().match(
+        /^(\{[\s\S]*\})\s*;?$/
+      );
+
+    if (!match) {
+      throw Error(
+        '請貼上完整的 const firebaseConfig = {...}; 或 JSON 物件。'
+      );
+    }
+
+    const body = match[1];
+    parsed = {};
+
+    for (const key of allowed) {
+      const field = new RegExp(
+        '(?:^|[,{\\s])(?:["\x27])?' +
+        key +
+        '(?:["\x27])?\\s*:\\s*(["\x27])([^"\x27\\r\\n]*)\\1'
+      );
+
+      const value = body.match(field);
+
+      if (value) {
+        parsed[key] = value[2];
+      }
+    }
+  }
+
+  if (
+    !parsed ||
+    Array.isArray(parsed) ||
+    typeof parsed !== 'object'
+  ) {
+    throw Error('設定必須是 Firebase Web 設定物件。');
+  }
+
+  const clean = {};
+
+  for (const key of allowed) {
+    if (typeof parsed[key] === 'string') {
+      clean[key] = parsed[key].trim();
+    }
+  }
+
+  for (const key of [
+    'apiKey',
+    'authDomain',
+    'projectId',
+    'appId'
+  ]) {
+    if (
+      !clean[key] ||
+      /[<>…]|請填|你的|YOUR_/i.test(clean[key])
+    ) {
+      throw Error(
+        '缺少有效的 ' + key + '，請使用自己專案的設定值。'
+      );
+    }
+  }
+
+  if (!/^[A-Za-z0-9.-]+$/.test(clean.authDomain)) {
+    throw Error(
+      'authDomain 請保留 Firebase 提供的網域，不要加 https:// 或路徑。'
+    );
+  }
+
+  return clean;
+}
+
+function explainCloudError(error) {
+  const code = error?.code || '';
+
+  const messages = {
+    'auth/unauthorized-domain':
+      '尚未授權此網站。請到 Firebase → Authentication → Settings → Authorized domains，加入：' +
+      siteHost,
+
+    'auth/operation-not-allowed':
+      '尚未開啟 Google 登入。請到 Firebase → Authentication → Sign-in method，啟用 Google 並儲存。',
+
+    'auth/popup-blocked':
+      'Safari 擋住登入視窗。請允許此網站的彈出視窗，再按一次 Google 登入。',
+
+    'auth/popup-closed-by-user':
+      '登入視窗已關閉，尚未登入。可以再按一次 Google 登入。',
+
+    'auth/cancelled-popup-request':
+      '另一個登入視窗已開啟，請先完成該視窗。',
+
+    'auth/network-request-failed':
+      '連線失敗，請確認網路後再試一次。',
+
+    'auth/invalid-api-key':
+      'Firebase apiKey 無效，請重新貼上專案的 Web 設定。',
+
+    'auth/configuration-not-found':
+      '找不到登入設定，請先在 Firebase 啟用 Authentication 與 Google 登入。',
+
+    'permission-denied':
+      '已連接雲端，但無權讀寫。請檢查 Firestore 是否已發布下方的 saves/{uid} 規則。',
+
+    'unavailable':
+      '暫時連不上雲端資料庫，本機進度保留，請稍後重試。'
+  };
+
+  return messages[code] ||
+    ('操作失敗：' + (error?.message || String(error)));
+}
+
+// 將原本收起來的設定區改為明確的三個步驟。
+setupPanel.querySelector('summary').textContent =
+  '設定 Google 登入（第一次需要完成）';
+
+const steps = setupPanel.querySelector('ol');
+
+steps.innerHTML = `
+  <li>
+    開啟
+    <a
+      href="https://console.firebase.google.com/"
+      target="_blank"
+      rel="noopener"
+    >Firebase 控制台</a>，
+    建立專案並新增 Web 應用程式（&lt;/&gt;）。
+    複製它提供的
+    <b>const firebaseConfig = {...};</b>，
+    貼到下面。
+  </li>
+
+  <li>
+    在 Authentication 啟用 Google 登入，設定支援信箱；
+    在 Settings → Authorized domains 加入你的遊戲網站網域：
+    <b id="requiredDomain"></b>。
+  </li>
+
+  <li>
+    若要雲端存檔，建立 Cloud Firestore 預設資料庫，
+    將下方規則貼到 Rules 並發布。
+    按「儲存設定並重新載入」，再按 Google 登入。
+  </li>
+`;
+
+$('#requiredDomain').textContent = siteHost;
+
+setupInput.placeholder =
+  '把 Firebase 給你的 const firebaseConfig = {...}; 整段貼在這裡';
+
+$('#applyConfig').textContent =
+  '儲存設定並重新載入';
+
+const hint = document.createElement('p');
+hint.className = 'small';
+
+hint.textContent =
+  '設定只存在目前瀏覽器。若要讓其他玩家免設定，請把這份 Web 設定填入原始碼的 FIREBASE_CONFIG，再上傳 GitHub。authDomain 保留 Firebase 的原值；不要改成 GitHub 網域。';
+
+setupInput.before(hint);
+
+async function initCloud() {
+  if (cloud) return cloud;
+  if (cloudJob) return cloudJob;
+
+  cloudJob = (async () => {
+    cloudLoading = true;
+    cloudButtons();
+
+    try {
+      let savedConfig = null;
+
+      try {
+        savedConfig =
+          localStorage.getItem(CLOUD_CONFIG_KEY);
+      } catch {}
+
+      const raw = savedConfig || FIREBASE_CONFIG;
+
+      if (!raw) {
+        cloudStatus(
+          '本機存檔已啟用。Google 尚未設定；按登入即可開啟設定引導。'
+        );
+        return null;
+      }
+
+      const config = parseFirebaseConfig(raw);
+
+      setupInput.value =
+        JSON.stringify(config, null, 2);
+
+      if (location.protocol === 'file:') {
+        cloudStatus(
+          '本機遊戲可正常使用；Google 登入請從 GitHub Pages 網站開啟。'
+        );
+        return null;
+      }
+
+      cloudStatus('正在連接 Google 登入服務…');
+
+      const [app, auth, db] = await Promise.all([
+        import(
+          'https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js'
+        ),
+        import(
+          'https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js'
+        ),
+        import(
+          'https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js'
+        )
+      ]);
+
+      const instance = app.initializeApp(
+        config,
+        'dragon-battle-cloud'
+      );
+
+      const connection = {
+        auth,
+        db,
+        a: auth.getAuth(instance),
+        d: db.getFirestore(instance)
+      };
+
+      await connection.a.authStateReady();
+
+      cloud = connection;
+
+      auth.onAuthStateChanged(cloud.a, user => {
+        cloudStatus(
+          user
+            ? '已登入：' +
+              (user.email || user.displayName || 'Google 帳號') +
+              '。本機進度未被覆蓋，可自行選擇雲端儲存或讀取。'
+            : 'Google 已就緒，請按「Google 登入」。'
+        );
+
+        cloudButtons();
+      });
+
+      return cloud;
+    } catch (error) {
+      cloudStatus(explainCloudError(error));
+      return null;
+    } finally {
+      cloudLoading = false;
+      cloudButtons();
+    }
+  })();
+
+  try {
+    return await cloudJob;
+  } finally {
+    cloudJob = null;
+  }
+}
+
+$('#applyConfig').onclick = () => {
+  try {
+    const config =
+      parseFirebaseConfig(setupInput.value);
+
+    localStorage.setItem(
+      CLOUD_CONFIG_KEY,
+      JSON.stringify(config)
+    );
+
+    // 保留既有存檔，不清除金幣、角色、道具或龍珠。
+    persist();
+
+    location.reload();
+  } catch (error) {
+    openCloudSetup(error.message);
+    setupInput.focus();
+  }
+};
+
+$('#login').onclick = async () => {
+  if (cloudBusy || cloudLoading) return;
+
+  if (!cloud) {
+    openCloudSetup(
+      location.protocol === 'file:'
+        ? '請從 GitHub Pages 網站開啟，再設定 Google 登入。'
+        : '尚未連接 Google。請完成下方設定；若已設定，可以按登入重試連線。'
+    );
+
+    const ready = await initCloud();
+
+    if (ready) {
+      cloudStatus(
+        '連線完成，請再按一次 Google 登入以開啟帳號選擇視窗。'
+      );
+    }
+
+    return;
+  }
+
+  cloudBusy = true;
+  cloudButtons();
+
+  try {
+    const provider =
+      new cloud.auth.GoogleAuthProvider();
+
+    provider.setCustomParameters({
+      prompt: 'select_account'
+    });
+
+    // 直接由按鈕觸發視窗，前面不等待網路載入，
+    // 減少 Safari 阻擋彈出視窗的情況。
+    await cloud.auth.signInWithPopup(
+      cloud.a,
+      provider
+    );
+
+    cloudStatus(
+      'Google 登入成功。本機進度保留；請選擇儲存到雲端或讀取雲端。'
+    );
+  } catch (error) {
+    cloudStatus(explainCloudError(error));
+  } finally {
+    cloudBusy = false;
+    cloudButtons();
+  }
+};
+
+$('#logout').onclick = async () => {
+  if (!cloud || cloudBusy) return;
+
+  cloudBusy = true;
+  cloudButtons();
+
+  try {
+    await cloud.auth.signOut(cloud.a);
+
+    cloudStatus(
+      '已登出 Google，本機遊戲進度保留。'
+    );
+  } catch (error) {
+    cloudStatus(explainCloudError(error));
+  } finally {
+    cloudBusy = false;
+    cloudButtons();
+  }
+};
+
+async function syncCloud(write) {
+  if (!cloud?.a.currentUser) {
+    return openCloudSetup(
+      '請先完成設定並登入 Google。'
+    );
+  }
+
+  if (cloudBusy) return;
+
+  cloudBusy = true;
+  cloudButtons();
+
+  const user = cloud.a.currentUser;
+
+  const ref = cloud.db.doc(
+    cloud.d,
+    'saves',
+    user.uid
+  );
+
+  try {
+    if (write) {
+      if (!confirm(
+        '用目前本機進度覆蓋此帳號的雲端存檔？'
+      )) {
+        return;
+      }
+
+      cloudStatus('正在儲存到雲端…');
+
+      await cloud.db.setDoc(ref, {
+        data: JSON.stringify(save),
+        updatedAt: cloud.db.serverTimestamp(),
+        version: 3
+      });
+
+      cloudStatus('雲端儲存完成。');
+    } else {
+      cloudStatus('正在讀取雲端…');
+
+      const snap =
+        await cloud.db.getDocFromServer(ref);
+
+      if (!snap.exists()) {
+        cloudStatus(
+          '這個帳號還沒有雲端存檔。請先按「儲存到雲端」。'
+        );
+        return;
+      }
+
+      const data =
+        validate(JSON.parse(snap.data().data));
+
+      if (cloud.a.currentUser?.uid !== user.uid) {
+        throw Error(
+          '登入帳號已變更，請重新讀取。'
+        );
+      }
+
+      if (confirm(
+        '以雲端進度覆蓋本機存檔？建議先用「匯出備份」保存目前進度。'
+      )) {
+        save = data;
+        render();
+        cloudStatus('已讀取雲端存檔。');
+      } else {
+        cloudStatus(
+          '已取消讀取，本機進度保留。'
+        );
+      }
+    }
+  } catch (error) {
+    cloudStatus(explainCloudError(error));
+  } finally {
+    cloudBusy = false;
+    cloudButtons();
+  }
+}
+
+$('#upload').onclick = () => syncCloud(true);
+$('#download').onclick = () => syncCloud(false);
+
+render();
+cloudButtons();
+initCloud();
 </script>
 </html>
