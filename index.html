@@ -2,189 +2,214 @@
 <html lang="zh-Hant">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>七龍珠 Ultimate Battle · 時期角色版</title>
+<title>七龍珠 Ultimate Battle · 追擊與被動版</title>
 
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#0b1020;color:#f5f5ff;font:15px system-ui,-apple-system,'PingFang TC',sans-serif}
+body{
+  margin:0;background:#0b1020;color:#f5f5ff;
+  font:15px system-ui,-apple-system,'PingFang TC',sans-serif
+}
 main{max-width:1180px;margin:auto;padding:16px}
 h1{color:#ffdb60;font-size:27px;margin:0}
 h2{font-size:19px}
 p{line-height:1.7}
 button,select,input,textarea{font:inherit}
-button,select,.file{border:1px solid #47546b;background:#25324b;color:white;border-radius:10px;padding:10px;cursor:pointer}
+button,select,.file{
+  border:1px solid #47546b;background:#25324b;color:white;
+  border-radius:10px;padding:10px;cursor:pointer
+}
 button:disabled{opacity:.45;cursor:default}
 .primary{background:#ffd75b;color:#161d31;font-weight:900}
-.panel{background:#151e31;border:1px solid #2e3b54;padding:16px;border-radius:16px;margin:12px 0}
+.panel{
+  background:#151e31;border:1px solid #2e3b54;
+  padding:16px;border-radius:16px;margin:12px 0
+}
 .row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
 .between{justify-content:space-between}
 .small{font-size:12px;color:#b4c5dd}
 .tabs button.active,.selected{outline:2px solid #ffd75b}
 .page[hidden],[hidden]{display:none!important}
-#roster,#shop{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:9px}
+#roster,#shop{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:9px
+}
 .card{text-align:center;padding:9px}
 .card canvas{width:100%;height:125px}
 .locked{opacity:.55}
 .chip{color:#80deff;font-size:12px}
 .hud{display:grid;grid-template-columns:1fr 60px 1fr;gap:12px}
-.bar{height:12px;background:#2b3649;border-radius:8px;overflow:hidden;margin:6px 0}
-.bar i{display:block;height:100%;background:linear-gradient(90deg,#ec425d,#ffbe69)}
+.bar{
+  height:12px;background:#2b3649;border-radius:8px;
+  overflow:hidden;margin:6px 0
+}
+.bar i{
+  display:block;height:100%;
+  background:linear-gradient(90deg,#ec425d,#ffbe69)
+}
 .bar.ki i{background:#53c5ff}
 #stage{position:relative}
-#fight{width:100%;display:block;aspect-ratio:1100/560;border-radius:14px;touch-action:none}
-#message{position:absolute;top:10%;width:100%;text-align:center;font-size:24px;font-weight:900;text-shadow:0 2px 5px black;pointer-events:none}
-#pads{display:grid;grid-template-columns:180px 1fr;gap:10px;margin-top:10px}
-#movement,#actions{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+#fight{
+  width:100%;display:block;aspect-ratio:1100/560;
+  border-radius:14px;touch-action:none
+}
+#message{
+  position:absolute;top:10%;width:100%;text-align:center;
+  font-size:24px;font-weight:900;text-shadow:0 2px 5px black;
+  pointer-events:none
+}
+#pads{
+  display:grid;grid-template-columns:180px 1fr;
+  gap:10px;margin-top:10px
+}
+#movement,#actions{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:6px
+}
 #actions{grid-template-columns:repeat(5,1fr)}
-.control{min-height:56px;touch-action:none;user-select:none;-webkit-user-select:none}
+.control{
+  min-height:56px;touch-action:none;
+  user-select:none;-webkit-user-select:none
+}
 .held{background:#856c27}
 .notice{padding:10px;background:#202e45;border-radius:10px;margin:8px 0}
-textarea{width:100%;min-height:155px;background:#0b1527;color:#d7efff;padding:12px}
+textarea{
+  width:100%;min-height:155px;background:#0b1527;
+  color:#d7efff;padding:12px
+}
 pre{white-space:pre-wrap;overflow-wrap:anywhere}
-#toast{position:fixed;bottom:15px;left:50%;transform:translateX(-50%);z-index:10;background:#ffd75b;color:#192031;padding:12px 20px;border-radius:12px;max-width:94%;pointer-events:none}
+#toast{
+  position:fixed;bottom:15px;left:50%;transform:translateX(-50%);
+  z-index:10;background:#ffd75b;color:#192031;
+  padding:12px 20px;border-radius:12px;max-width:94%;pointer-events:none
+}
 label{display:inline-flex;gap:8px;align-items:center}
 a{color:#8ad9ff}
 @media(max-width:700px){
- main{padding:7px}
- h1{font-size:21px}
- .panel{padding:10px}
- #pads{grid-template-columns:120px 1fr}
- #actions{grid-template-columns:repeat(3,1fr)}
- .control{font-size:12px;padding:5px;min-height:49px}
- .hud{font-size:12px}
- #message{font-size:18px}
- #roster,#shop{grid-template-columns:repeat(2,1fr)}
+  main{padding:7px}
+  h1{font-size:21px}
+  .panel{padding:10px}
+  #pads{grid-template-columns:120px 1fr}
+  #actions{grid-template-columns:repeat(3,1fr)}
+  .control{font-size:12px;padding:5px;min-height:49px}
+  .hud{font-size:12px}
+  #message{font-size:18px}
+  #roster,#shop{grid-template-columns:repeat(2,1fr)}
 }
 </style>
 
 <main>
 <header class="panel row between">
   <div>
-    <div class="small">ULTIMATE BATTLE / 時期角色版</div>
+    <div class="small">ULTIMATE BATTLE / 追擊與被動版</div>
     <h1>🐉 七龍珠 Ultimate Battle</h1>
   </div>
   <b id="wallet"></b>
 </header>
 
 <section id="menu">
-  <nav class="row tabs">
-    <button data-tab="setup" class="active">戰鬥設定</button>
-    <button data-tab="shop">角色商店</button>
-    <button data-tab="items">道具</button>
-    <button data-tab="dragon">神龍</button>
-    <button data-tab="account">存檔 / Google</button>
-    <button data-tab="music">音樂</button>
-  </nav>
+<nav class="row tabs">
+  <button data-tab="setup" class="active">戰鬥設定</button>
+  <button data-tab="shop">角色商店</button>
+  <button data-tab="items">道具</button>
+  <button data-tab="dragon">神龍</button>
+  <button data-tab="account">存檔 / Google</button>
+  <button data-tab="music">音樂</button>
+</nav>
 
-  <div id="setup" class="panel page">
-    <div class="row">
-      <label>方式
-        <select id="mode">
-          <option value="cpu">單機 VS 電腦</option>
-          <option value="local">雙人同機（鍵盤）</option>
-        </select>
-      </label>
-      <label>隊伍
-        <select id="size"><option>1</option><option>3</option><option>5</option></select>
-      </label>
-      <label>難度
-        <select id="difficulty">
-          <option>easy</option>
-          <option selected>normal</option>
-          <option>hard</option>
-          <option>difficult</option>
-          <option>boss</option>
-        </select>
-      </label>
-      <label>場地<select id="arena"></select></label>
-    </div>
-
-    <p class="small">
-      各時期分別設定身高、服裝、髮型、招式和變身上限。
-      未登場或無戰鬥表現的時期不硬加版本。
-      真正跳躍、方向自動轉身、空中出招、格擋減傷 50%。
-      近戰技能需靠近，揮空也會播放動作。閃現消耗 15 氣。
-    </p>
-
-    <div class="row">
-      <button id="edit1" class="selected">編輯 P1</button>
-      <button id="edit2" hidden>編輯 P2</button>
-      <label>時期
-        <select id="eraFilter">
-          <option value="all">全部時期</option>
-          <option>Z 前</option>
-          <option>Z</option>
-          <option>超</option>
-          <option>GT</option>
-          <option>大魔</option>
-        </select>
-      </label>
-    </div>
-
-    <p id="picked"></p>
-    <div id="detail" class="notice"></div>
-
-    <div class="row">
-      <label>形態預覽<select id="formPreview"></select></label>
-      <span class="small">
-        預覽不會跳過戰鬥中的變身條件。
-        年齡以劇情階段呈現，能力數字為遊戲平衡值。
-      </span>
-    </div>
-
-    <canvas id="characterPreview" width="420" height="280"
-      style="max-width:100%;height:210px"></canvas>
-
-    <div id="roster"></div>
-    <p><button id="start" class="primary">開始戰鬥！</button></p>
+<div id="setup" class="panel page">
+  <div class="row">
+    <label>方式
+      <select id="mode">
+        <option value="cpu">單機 VS 電腦</option>
+        <option value="local">雙人同機（鍵盤）</option>
+      </select>
+    </label>
+    <label>隊伍
+      <select id="size"><option>1</option><option>3</option><option>5</option></select>
+    </label>
+    <label>難度
+      <select id="difficulty">
+        <option>easy</option><option selected>normal</option>
+        <option>hard</option><option>difficult</option><option>boss</option>
+      </select>
+    </label>
+    <label>場地<select id="arena"></select></label>
   </div>
 
-  <div id="shop" class="panel page" hidden></div>
-  <div id="items" class="panel page" hidden></div>
+  <p class="small">
+    各時期分別設定身高、服裝、髮型、招式和變身上限。
+    未登場或無戰鬥表現的時期不硬加版本。
+    真正跳躍、方向自動轉身、空中出招、格擋減傷 50%。
+    近戰特別技自動追擊；跳躍、閃現與自動閃避可避開，格擋減傷。
+    閃現消耗 15 氣。
+  </p>
 
-  <div id="dragon" class="panel page" hidden>
-    <h2>🐲 七顆龍珠</h2>
-    <p>勝利有機會獲得龍珠。集滿七顆可許一個願望。</p>
-    <button data-wish="coins">30,000 金幣</button>
-    <button data-wish="items">每種道具 +3</button>
-    <button data-wish="unlock">隨機解鎖角色</button>
+  <div class="row">
+    <button id="edit1" class="selected">編輯 P1</button>
+    <button id="edit2" hidden>編輯 P2</button>
+    <label>時期
+      <select id="eraFilter">
+        <option value="all">全部時期</option>
+        <option>Z 前</option><option>Z</option><option>超</option>
+        <option>GT</option><option>大魔</option>
+      </select>
+    </label>
   </div>
 
-  <div id="account" class="panel page" hidden>
-    <h2>本機與 Google 雲端存檔</h2>
-    <p id="cloudStatus">本機自動存檔已啟用。Google 功能需先設定 Firebase。</p>
+  <p id="picked"></p>
+  <div id="detail" class="notice"></div>
+  <div class="row">
+    <label>形態預覽<select id="formPreview"></select></label>
+    <span class="small">
+      預覽不會跳過戰鬥中的變身條件。
+      年齡以劇情階段呈現，能力數字為遊戲平衡值。
+    </span>
+  </div>
+  <canvas id="characterPreview" width="420" height="280"
+          style="max-width:100%;height:210px"></canvas>
+  <div id="roster"></div>
+  <p><button id="start" class="primary">開始戰鬥！</button></p>
+</div>
 
-    <div class="row">
-      <button id="login">Google 登入</button>
-      <button id="logout">登出</button>
-      <button id="upload">儲存到雲端</button>
-      <button id="download">讀取雲端</button>
-      <button id="exportSave">匯出備份</button>
-      <label class="file">
-        匯入備份
-        <input id="importSave" type="file" accept="application/json,.json" hidden>
-      </label>
-      <button id="reset">重設本機存檔</button>
-    </div>
+<div id="shop" class="panel page" hidden></div>
+<div id="items" class="panel page" hidden></div>
 
-    <p class="small">
-      本機會自動存檔；雲端採手動「儲存／讀取」，
-      避免登入時覆蓋另一台裝置的進度。可先匯出 JSON 備份。
-      單人遊戲存檔，不含線上對戰或防作弊。
-    </p>
+<div id="dragon" class="panel page" hidden>
+  <h2>🐲 七顆龍珠</h2>
+  <p>勝利有機會獲得龍珠。集滿七顆可許一個願望。</p>
+  <button data-wish="coins">30,000 金幣</button>
+  <button data-wish="items">每種道具 +3</button>
+  <button data-wish="unlock">隨機解鎖角色</button>
+</div>
 
-    <details>
-      <summary>第一次啟用 Google：設定步驟</summary>
-      <ol>
-        <li>到 Firebase Console 建立自己的專案、新增 Web App，複製 firebaseConfig 物件。</li>
-        <li>Authentication 開啟 Google 登入，設定支援信箱，並在授權網域加入遊戲網域，例如你的 GitHub Pages 網域。</li>
-        <li>建立 Cloud Firestore（預設資料庫），將以下規則發布到 Rules。</li>
-        <li>將 Web 設定以 JSON 格式貼到下方，按「套用設定」。只貼 Web 設定，不要貼服務帳號私鑰。</li>
-        <li>透過 HTTPS 網站或 localhost 開啟本遊戲。直接開 file:// 檔案可玩本機，但不能完成 Google 登入。iPad 請用 Safari 網站頁面並允許登入彈出視窗。</li>
-        <li>若要讓其他裝置免貼設定，可把同一物件填入原始碼的 FIREBASE_CONFIG。</li>
-      </ol>
-
-      <pre>rules_version = '2';
+<div id="account" class="panel page" hidden>
+  <h2>本機與 Google 雲端存檔</h2>
+  <p id="cloudStatus">本機自動存檔已啟用。Google 功能需先設定 Firebase。</p>
+  <div class="row">
+    <button id="login">Google 登入</button>
+    <button id="logout">登出</button>
+    <button id="upload">儲存到雲端</button>
+    <button id="download">讀取雲端</button>
+    <button id="exportSave">匯出備份</button>
+    <label class="file">匯入備份
+      <input id="importSave" type="file" accept="application/json,.json" hidden>
+    </label>
+    <button id="reset">重設本機存檔</button>
+  </div>
+  <p class="small">
+    本機會自動存檔；雲端採手動「儲存／讀取」，避免登入時覆蓋另一台裝置的進度。
+    可先匯出 JSON 備份。單人遊戲存檔，不含線上對戰或防作弊。
+  </p>
+  <details>
+    <summary>第一次啟用 Google：設定步驟</summary>
+    <ol>
+      <li>到 Firebase Console 建立自己的專案、新增 Web App，複製 firebaseConfig 物件。</li>
+      <li>Authentication 開啟 Google 登入，設定支援信箱，並在授權網域加入遊戲網域，例如你的 GitHub Pages 網域。</li>
+      <li>建立 Cloud Firestore（預設資料庫），將以下規則發布到 Rules。</li>
+      <li>將 Web 設定以 JSON 格式貼到下方，按「套用設定」。只貼 Web 設定，不要貼服務帳號私鑰。</li>
+      <li>透過 HTTPS 網站或 localhost 開啟本遊戲。直接開 file:// 檔案可玩本機，但不能完成 Google 登入。iPad 請用 Safari 網站頁面並允許登入彈出視窗。</li>
+      <li>若要讓其他裝置免貼設定，可把同一物件填入原始碼的 FIREBASE_CONFIG。</li>
+    </ol>
+    <pre>rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     match /saves/{uid} {
@@ -192,22 +217,23 @@ service cloud.firestore {
     }
   }
 }</pre>
+    <textarea id="config"
+      placeholder='{"apiKey":"…","authDomain":"專案.firebaseapp.com","projectId":"專案","appId":"…"}'></textarea>
+    <button id="applyConfig">套用設定並重新載入</button>
+    <p>
+      <a href="https://firebase.google.com/docs/auth/web/google-signin"
+         target="_blank" rel="noopener">Google 登入官方說明</a> ·
+      <a href="https://firebase.google.com/docs/firestore/security/rules-conditions"
+         target="_blank" rel="noopener">存檔存取規則</a>
+    </p>
+  </details>
+</div>
 
-      <textarea id="config" placeholder='{"apiKey":"…","authDomain":"專案.firebaseapp.com","projectId":"專案","appId":"…"}'></textarea>
-      <button id="applyConfig">套用設定並重新載入</button>
-      <p>
-        <a href="https://firebase.google.com/docs/auth/web/google-signin" target="_blank" rel="noopener">Google 登入官方說明</a>
-        ·
-        <a href="https://firebase.google.com/docs/firestore/security/rules-conditions" target="_blank" rel="noopener">存檔存取規則</a>
-      </p>
-    </details>
-  </div>
-
-  <div id="music" class="panel page" hidden>
-    <h2>戰鬥音樂</h2>
-    <input id="musicFile" type="file" accept="audio/*">
-    <audio id="bgm" controls loop style="width:100%;margin-top:12px"></audio>
-  </div>
+<div id="music" class="panel page" hidden>
+  <h2>戰鬥音樂</h2>
+  <input id="musicFile" type="file" accept="audio/*">
+  <audio id="bgm" controls loop style="width:100%;margin-top:12px"></audio>
+</div>
 </section>
 
 <section id="game" hidden>
@@ -217,6 +243,7 @@ service cloud.firestore {
       <div class="bar"><i id="ph"></i></div>
       <div class="bar ki"><i id="pk"></i></div>
       <small id="pm"></small>
+      <div id="ppower" class="small"></div>
     </div>
     <b style="text-align:center">VS</b>
     <div style="text-align:right">
@@ -224,12 +251,33 @@ service cloud.firestore {
       <div class="bar"><i id="eh"></i></div>
       <div class="bar ki"><i id="ek"></i></div>
       <small id="em"></small>
+      <div id="epower" class="small"></div>
     </div>
   </div>
 
   <div id="stage">
     <canvas id="fight" width="1100" height="560"></canvas>
     <div id="message" aria-live="polite"></div>
+  </div>
+
+  <div class="notice row" id="transformBar">
+    <label id="formBox0">P1 變身
+      <select id="battleForm0"></select>
+      <button type="button" onclick="act(0,'transform')">確認 T</button>
+    </label>
+    <label id="formBox1">P2 變身
+      <select id="battleForm1"></select>
+      <button type="button" onclick="act(1,'transform')">確認 Enter</button>
+    </label>
+  </div>
+
+  <div class="notice small">
+    被動：自在極意／天使＝自動躲 10 次、接著 5 次不自動躲；
+    自我極意／破壞神＝自動出手 10 次、跳過 5 次自動機會；
+    野獸悟飯／橘色比克／全王＝閃避 5 次後休息 5 次，攻擊 5 次後休息 5 次（獨立循環），
+    每 5 秒 +5 血與氣。
+    連擊每一擊各算一次；自動攻擊揮空也算出手。
+    休息期間仍能手動操作。只計算目前上場角色，暫停時不計時。
   </div>
 
   <div id="pads">
@@ -245,35 +293,28 @@ service cloud.firestore {
   </div>
 
   <div id="itemBar" class="row" style="margin-top:10px"></div>
-
   <p class="small">
-    P1：A/D 移動，W 跳，G 格擋，I 集氣，F 閃現，
-    J 拳，H 踢，K 氣彈，L／; 特別技，U 終極，T 變身，R 換人。
-    <br>
-    P2：←/→ 移動，↑ 跳，7 格擋，0 集氣，8 閃現，
-    1 拳，2 踢，3 氣彈，4／5 特別技，6 終極，Enter 變身，Shift 換人。
-    Esc 暫停。
+    P1：A/D 移動，W 跳，G 格擋，I 集氣，F 閃現，J 拳，H 踢，K 氣彈，
+    L／; 特別技，U 終極，T 變身，R 換人。<br>
+    P2：←/→ 移動，↑ 跳，7 格擋，0 集氣，8 閃現，1 拳，2 踢，3 氣彈，
+    4／5 特別技，6 終極，Enter 變身，Shift 換人。Esc 暫停。
   </p>
-
   <div class="row">
     <button id="pause">暫停</button>
     <button id="quit">回主選單</button>
   </div>
-
   <div id="result" class="notice" hidden>
     <b id="resultText"></b>
     <p><button id="again" class="primary">再打一場</button></p>
   </div>
 </section>
-
 <div id="toast" hidden></div>
 </main>
 
 <script>
 'use strict';
 
-// 可填入自己的 Firebase Web 公開設定。
-// 本機遊戲功能不依賴 Firebase。
+// 可填入自己的 Firebase Web 公開設定；遊戲本機功能不依賴 Firebase。
 const FIREBASE_CONFIG = null;
 
 const $ = s => document.querySelector(s);
@@ -289,128 +330,94 @@ const forms = {
   ss4:['超級賽亞人4',70,1.82]
 };
 
-// 明確指定技能類型，近戰技能不會被誤判成氣彈。
+// 技能以明確類型定義，不以名稱猜測近戰或氣功。
 const skill = (name,type='beam') => ({name,type});
 const chars = [];
 
 function add(id,name,price,hp,atk,ki,color,style,s1,s2,ult,fs=[],era='超',extra={}){
   chars.push({
     id,name,price,hp,atk,kiAtk:ki,color,style,
-    s1:skill(...s1),
-    s2:skill(...s2),
-    ult:skill(...ult),
-    forms:fs.map(f=>typeof f==='string'?forms[f]:f),
-    era,...extra
+    s1:skill(...s1),s2:skill(...s2),ult:skill(...ult),
+    forms:fs.map(f=>typeof f==='string'?forms[f]:f),era,...extra
   });
 }
 
 add('goku','孫悟空',2000,110,13,15,'#f07728','goku',
- ['龜派氣功'],['瞬間移動攻擊','rush'],['元氣彈','orb'],
- ['s1','s2','s3','god','blue','ui']);
-
+    ['龜派氣功'],['瞬間移動攻擊','rush'],['元氣彈','orb'],
+    ['s1','s2','s3','god','blue','ui']);
 add('vegeta','貝吉達',2100,108,14,15,'#2453b0','vegeta',
- ['加力砲'],['大爆炸攻擊','orb'],['終極閃光'],
- ['s1','s2','god','blue',['自我極意',85,2.05]]);
-
+    ['加力砲'],['大爆炸攻擊','orb'],['終極閃光'],
+    ['s1','s2','god','blue',['自我極意',85,2.05]]);
 add('gohan','孫悟飯',2500,112,13,16,'#7848a5','gohan',
- ['魔閃光'],['爆裂亂舞','combo'],['親子龜派氣功'],
- ['s1','s2',['究極悟飯',62,1.58],['野獸悟飯',85,2.05]]);
-
+    ['魔閃光'],['爆裂亂舞','combo'],['親子龜派氣功'],
+    ['s1','s2',['究極悟飯',62,1.58],['野獸悟飯',85,2.05]]);
 add('goten','孫悟天',2000,95,11,13,'#ef852b','goku',
- ['龜派氣功'],['高速突擊','rush'],['超級悟天攻擊','combo'],
- ['s1'],'Z',{child:true});
-
+    ['龜派氣功'],['高速突擊','rush'],['超級悟天攻擊','combo'],
+    ['s1'],'Z',{child:true});
 add('trunks','特南克斯',2000,100,12,14,'#7576b9','trunks',
- ['燃燒攻擊','orb'],['劍擊連斬','sword'],['終極爆發','orb'],
- ['s1','s2']);
-
+    ['燃燒攻擊','orb'],['劍擊連斬','sword'],['終極爆發','orb'],['s1','s2']);
 add('piccolo','比克',2100,120,13,16,'#724394','piccolo',
- ['魔貫光殺砲','laser'],['巨大化衝拳','rush'],['橙色爆裂','orb'],
- [['潛能解放',45,1.3],['橙色比克',70,1.72]]);
-
+    ['魔貫光殺砲','laser'],['巨大化衝拳','rush'],['橙色爆裂','orb'],
+    [['潛能解放',45,1.3],['橙色比克',70,1.72]]);
 add('krillin','克林',2000,92,10,15,'#ed802e','bald',
- ['氣圓斬','disc'],['太陽拳突擊','rush'],['百倍氣圓斬','disc']);
-
+    ['氣圓斬','disc'],['太陽拳突擊','rush'],['百倍氣圓斬','disc']);
 add('yamcha','飲茶',2000,96,11,12,'#ea862e','long',
- ['狼牙風風拳','combo'],['操氣彈','orb'],['真・狼牙風風拳','combo']);
-
+    ['狼牙風風拳','combo'],['操氣彈','orb'],['真・狼牙風風拳','combo']);
 add('tien','天津飯',2000,100,12,15,'#499976','bald',
- ['太陽拳衝擊','rush'],['四身拳','combo'],['新氣功砲']);
-
+    ['太陽拳衝擊','rush'],['四身拳','combo'],['新氣功砲']);
 add('yajirobe','亞奇洛貝',2000,105,12,8,'#827b3e','long',
- ['居合斬','sword'],['仙豆支援斬','sword'],['武士一閃','sword'],[],'Z 前');
-
+    ['居合斬','sword'],['仙豆支援斬','sword'],['武士一閃','sword'],[],'Z 前');
 add('roshi','龜仙人',2000,98,12,15,'#de7850','bald',
- ['萬國驚天掌','laser'],['殘像拳突擊','rush'],['最大威力龜派氣功'],
- [['全力形態',45,1.35]]);
-
+    ['萬國驚天掌','laser'],['殘像拳突擊','rush'],['最大威力龜派氣功'],
+    [['全力形態',45,1.35]]);
 add('a17','人造人17號',2500,115,14,15,'#3b805a','long',
- ['能量屏障衝擊','rush'],['連續氣彈','volley'],['全力能量球','orb']);
-
+    ['能量屏障衝擊','rush'],['連續氣彈','volley'],['全力能量球','orb']);
 add('a18','人造人18號',2500,112,14,15,'#5a87b9','bob',
- ['無限能源連擊','combo'],['高速氣彈','volley'],['雙重能量波']);
-
+    ['無限能源連擊','combo'],['高速氣彈','volley'],['雙重能量波']);
 add('buu','普烏',3000,145,14,16,'#f5eeee','buu',
- ['伸長手臂','stretch'],['巧克力光線','pink'],['毀滅爆破','orb'],
- [['純粹普烏',55,1.48]],'Z');
-
+    ['伸長手臂','stretch'],['巧克力光線','pink'],['毀滅爆破','orb'],
+    [['純粹普烏',55,1.48]],'Z');
 add('frieza','弗利沙',3000,115,15,18,'#edeff8','frieza',
- ['死亡光束','laser'],['超能力衝擊','orb'],['死亡球','orb'],
- [['最終形態',35,1.22],['黃金弗利沙',62,1.65],['黑金弗利沙',85,2.03]]);
-
+    ['死亡光束','laser'],['超能力衝擊','orb'],['死亡球','orb'],
+    [['最終形態',35,1.22],['黃金弗利沙',62,1.65],['黑金弗利沙',85,2.03]]);
 add('cell','賽魯',5000,130,16,17,'#619c4e','cell',
- ['太陽拳衝擊','rush'],['吸收突擊','rush'],['完美龜派氣功'],
- [['完全體',55,1.5]],'Z');
-
+    ['太陽拳衝擊','rush'],['吸收突擊','rush'],['完美龜派氣功'],
+    [['完全體',55,1.5]],'Z');
 add('broly','布羅利',5000,155,18,16,'#72ab48','goku',
- ['狂暴衝擊','rush'],['巨型能量彈','orb'],['全力爆裂','orb'],
- ['s1',['全力超級賽亞人',70,1.82]],'超',{big:true});
-
+    ['狂暴衝擊','rush'],['巨型能量彈','orb'],['全力爆裂','orb'],
+    ['s1',['全力超級賽亞人',70,1.82]],'超',{big:true});
 add('jiren','吉連',12500,165,20,20,'#c9393e','bald',
- ['震空拳','rush'],['力量衝擊','orb'],['全力爆炎','orb'],
- [['全力吉連',70,1.65]],'超',{big:true});
-
+    ['震空拳','rush'],['力量衝擊','orb'],['全力爆炎','orb'],
+    [['全力吉連',70,1.65]],'超',{big:true});
 add('beerus','比魯斯',25000,175,22,24,'#263d70','cat',
- ['破壞','destruction'],['破壞神彈','orb'],['破壞神之怒','orb']);
-
+    ['破壞','destruction'],['破壞神彈','orb'],['破壞神之怒','orb']);
 add('whis','維斯',25000,170,21,25,'#893c61','angel',
- ['天使瞬擊','rush'],['神速手刀','combo'],['天使衝擊']);
-
+    ['天使瞬擊','rush'],['神速手刀','combo'],['天使衝擊']);
 add('champa','象帕',25000,180,23,22,'#394177','cat',
- ['破壞重擊','rush'],['破壞光球','orb'],['第六宇宙爆破','orb'],
- [],'超',{big:true});
-
+    ['破壞重擊','rush'],['破壞光球','orb'],['第六宇宙爆破','orb'],
+    [],'超',{big:true});
 add('grand','大神官',40000,195,25,27,'#677bcc','angel',
- ['神速突擊','rush'],['空間衝擊','orb'],['天界審判']);
-
+    ['神速突擊','rush'],['空間衝擊','orb'],['天界審判']);
 add('zeno','全王',50000,220,26,31,'#ca428c','zeno',
- ['抹除光球','orb'],['王之衝擊','orb'],['全宇宙清除','orb']);
+    ['抹除光球','orb'],['王之衝擊','orb'],['全宇宙清除','orb']);
 
 add('goku_kid','孫悟空・少年',2000,98,12,13,'#e87528','goku',
- ['龜派氣功'],['如意棒連擊','staff'],['少年龍拳','rush'],
- [],'Z 前',{child:true,tail:true});
-
+    ['龜派氣功'],['如意棒連擊','staff'],['少年龍拳','rush'],
+    [],'Z 前',{child:true,tail:true});
 add('goku_z','孫悟空・Z',2000,110,13,15,'#ef7626','goku',
- ['龜派氣功'],['瞬間移動攻擊','rush'],['元氣彈','orb'],
- ['s1','s2','s3'],'Z');
-
+    ['龜派氣功'],['瞬間移動攻擊','rush'],['元氣彈','orb'],
+    ['s1','s2','s3'],'Z');
 add('goku_gt','孫悟空・GT',2500,105,13,16,'#316bbf','goku',
- ['龜派氣功'],['龍拳突擊','rush'],['十倍龜派氣功'],
- ['s1','s3','ss4'],'GT',{child:true,tail:true});
-
+    ['龜派氣功'],['龍拳突擊','rush'],['十倍龜派氣功'],
+    ['s1','s3','ss4'],'GT',{child:true,tail:true});
 add('goku_daima','孫悟空・大魔',2500,102,13,15,'#ef7826','goku',
- ['龜派氣功'],['如意棒亂舞','staff'],['龍拳','rush'],
- ['s1','s2','s3','ss4'],'大魔',{child:true});
-
+    ['龜派氣功'],['如意棒亂舞','staff'],['龍拳','rush'],
+    ['s1','s2','s3','ss4'],'大魔',{child:true});
 add('vegeta_z','貝吉達・Z',2100,108,14,15,'#2852aa','vegeta',
- ['加力砲'],['連續氣彈','volley'],['終極閃光'],['s1','s2'],'Z');
-
+    ['加力砲'],['連續氣彈','volley'],['終極閃光'],['s1','s2'],'Z');
 add('vegeta_gt','貝吉達・GT',2600,115,15,16,'#c02e37','vegeta',
- ['加力砲'],['爆裂連擊','combo'],['終極閃光'],
- ['s1','s2','ss4'],'GT');
+    ['加力砲'],['爆裂連擊','combo'],['終極閃光'],['s1','s2','ss4'],'GT');
 
-// 每個時期使用獨立資料。
-// stats：生命、格鬥、氣功、速度、價格。
 function revise(id,props){
   Object.assign(chars.find(c=>c.id===id),props);
 }
@@ -419,15 +426,12 @@ function variant(base,id,name,era,age,stats,look,fs,skills){
   const b=chars.find(c=>c.id===base);
   chars.push({
     ...b,id,name,era,age,
-    hp:stats[0],atk:stats[1],kiAtk:stats[2],
-    speed:stats[3],price:stats[4],
+    hp:stats[0],atk:stats[1],kiAtk:stats[2],speed:stats[3],price:stats[4],
     ...look,
     forms:fs.map(f=>typeof f==='string'?forms[f]:f),
-    ...(skills ? {
-      s1:skill(...skills[0]),
-      s2:skill(...skills[1]),
-      ult:skill(...skills[2])
-    } : {})
+    ...(skills?{
+      s1:skill(...skills[0]),s2:skill(...skills[1]),ult:skill(...skills[2])
+    }:{})
   });
 }
 
@@ -455,8 +459,7 @@ revise('trunks',{
   forms:[forms.s1,forms.s2,['超級賽亞人怒',65,1.7]]
 });
 revise('piccolo',{
-  name:'比克・超 HERO',age:'成熟・導師',
-  cape:true,hp:130,atk:14,kiAtk:18
+  name:'比克・超 HERO',age:'成熟・導師',cape:true,hp:130,atk:14,kiAtk:18
 });
 revise('goku_z',{age:'成年・普烏篇'});
 revise('goku_kid',{age:'兒童・少年篇'});
@@ -472,187 +475,156 @@ revise('vegeta_gt',{
 });
 
 variant('vegeta','vegeta_saiyan','貝吉達・Z 賽亞人篇','Z','成年・初登場',
- [102,12,14,390,2100],
- {outfit:'armor',scouter:true,tail:true,height:.93},
- [],
- [['加力砲'],['連續氣彈','volley'],['全力加力砲']]);
-
+  [102,12,14,390,2100],
+  {outfit:'armor',scouter:true,tail:true,height:.93},[],
+  [['加力砲'],['連續氣彈','volley'],['全力加力砲']]);
 variant('vegeta','vegeta_cell','貝吉達・Z 賽魯篇','Z','成年・修行後',
- [112,15,16,405,2300],{outfit:'armor',height:.98},
- ['s1'],
- [['大爆炸攻擊','orb'],['爆裂連擊','combo'],['終極閃光']]);
-
+  [112,15,16,405,2300],{outfit:'armor',height:.98},['s1'],
+  [['大爆炸攻擊','orb'],['爆裂連擊','combo'],['終極閃光']]);
 variant('vegeta','vegeta_daima','貝吉達・大魔','大魔','成年心智・迷你身體',
- [103,14,15,430,2400],{child:true,height:.71,outfit:'suit'},
- ['s1','s2','s3']);
+  [103,14,15,430,2400],{child:true,height:.71,outfit:'suit'},
+  ['s1','s2','s3']);
 
 variant('gohan','gohan_kid','孫悟飯・Z 幼年','Z','幼年・賽亞人篇',
- [86,10,13,425,1800],
- {child:true,height:.62,hairCut:'bowl',cape:false,glasses:false,color:'#85549d'},
- [],
- [['魔閃光'],['憤怒突擊','rush'],['憤怒魔閃光']]);
-
+  [86,10,13,425,1800],
+  {child:true,height:.62,hairCut:'bowl',cape:false,glasses:false,color:'#85549d'},
+  [],[['魔閃光'],['憤怒突擊','rush'],['憤怒魔閃光']]);
 variant('gohan','gohan_cell','孫悟飯・Z 賽魯篇','Z','少年・修行後',
- [105,13,16,435,2400],
- {child:true,height:.83,hairCut:'gohan',glasses:false,color:'#7949a2',cape:true},
- ['s1','s2'],
- [['魔閃光'],['爆裂亂舞','combo'],['親子龜派氣功']]);
-
+  [105,13,16,435,2400],
+  {child:true,height:.83,hairCut:'gohan',glasses:false,color:'#7949a2',cape:true},
+  ['s1','s2'],[['魔閃光'],['爆裂亂舞','combo'],['親子龜派氣功']]);
 variant('gohan','gohan_buu','孫悟飯・Z 普烏篇','Z','高中生・青年',
- [118,15,17,420,2600],
- {child:false,height:1,hairCut:'short',glasses:false,color:'#ee792c',cape:false},
- ['s1','s2',['究極悟飯',62,1.58]],
- [['龜派氣功'],['爆裂亂舞','combo'],['究極連擊','combo']]);
-
+  [118,15,17,420,2600],
+  {child:false,height:1,hairCut:'short',glasses:false,color:'#ee792c',cape:false},
+  ['s1','s2',['究極悟飯',62,1.58]],
+  [['龜派氣功'],['爆裂亂舞','combo'],['究極連擊','combo']]);
 variant('gohan','gohan_gt','孫悟飯・GT','GT','成年・學者',
- [114,14,16,395,2500],
- {height:1,child:false,hairCut:'short',glasses:true,color:'#536b94',outfit:'shirt',cape:false},
- ['s1'],
- [['龜派氣功'],['高速連擊','combo'],['全力龜派氣功']]);
+  [114,14,16,395,2500],
+  {height:1,child:false,hairCut:'short',glasses:true,color:'#536b94',outfit:'shirt',cape:false},
+  ['s1'],[['龜派氣功'],['高速連擊','combo'],['全力龜派氣功']]);
 
 variant('goten','goten_super','孫悟天・超 前期','超','兒童・超前期',
- [100,12,14,440,2200],{child:true,height:.74,color:'#e78829'},['s1']);
-
+  [100,12,14,440,2200],{child:true,height:.74,color:'#e78829'},['s1']);
 variant('goten','goten_hero','孫悟天・超 HERO','超','高中生・青年',
- [111,14,15,450,2500],
- {child:false,height:.95,hairCut:'swept',color:'#ec862c'},
- ['s1'],
- [['龜派氣功'],['高速突擊','rush'],['全力龜派氣功']]);
-
+  [111,14,15,450,2500],
+  {child:false,height:.95,hairCut:'swept',color:'#ec862c'},['s1'],
+  [['龜派氣功'],['高速突擊','rush'],['全力龜派氣功']]);
 variant('goten','goten_gt','孫悟天・GT','GT','青年・GT',
- [110,13,15,420,2500],
- {child:false,height:1,hairCut:'swept',color:'#6cac52',outfit:'shirt',pants:'#414868'},
- ['s1']);
+  [110,13,15,420,2500],
+  {child:false,height:1,hairCut:'swept',color:'#6cac52',outfit:'shirt',pants:'#414868'},
+  ['s1']);
 
 variant('trunks','trunks_kid','特南克斯・Z 兒童','Z','兒童・普烏篇',
- [99,12,14,440,2000],
- {child:true,height:.71,hairBase:'#b79cce',scarf:false,sword:false,color:'#3c9279',outfit:'gi'},
- ['s1'],
- [['氣功波'],['高速連擊','combo'],['全力氣功波']]);
-
+  [99,12,14,440,2000],
+  {child:true,height:.71,hairBase:'#b79cce',scarf:false,sword:false,color:'#3c9279',outfit:'gi'},
+  ['s1'],[['氣功波'],['高速連擊','combo'],['全力氣功波']]);
 variant('trunks','trunks_future_z','未來特南克斯・Z','Z','少年・未來線',
- [112,14,16,420,2400],
- {child:false,height:.98,hairBase:'#b79cce',scarf:false,sword:true,color:'#6976b6',outfit:'jacket'},
- ['s1'],
- [['燃燒攻擊','orb'],['劍擊連斬','sword'],['終極爆發','orb']]);
-
+  [112,14,16,420,2400],
+  {child:false,height:.98,hairBase:'#b79cce',scarf:false,sword:true,color:'#6976b6',outfit:'jacket'},
+  ['s1'],[['燃燒攻擊','orb'],['劍擊連斬','sword'],['終極爆發','orb']]);
 variant('trunks','trunks_super_kid','特南克斯・超 前期','超','兒童・現代線',
- [104,13,14,440,2200],
- {child:true,height:.76,hairBase:'#b79cce',scarf:false,sword:false,color:'#4d947d',outfit:'gi'},
- ['s1'],
- [['氣功波'],['高速連擊','combo'],['全力氣功波']]);
-
+  [104,13,14,440,2200],
+  {child:true,height:.76,hairBase:'#b79cce',scarf:false,sword:false,color:'#4d947d',outfit:'gi'},
+  ['s1'],[['氣功波'],['高速連擊','combo'],['全力氣功波']]);
 variant('trunks','trunks_hero','特南克斯・超 HERO','超','高中生・現代線',
- [114,14,16,440,2600],
- {child:false,height:.98,hairBase:'#779ed2',scarf:false,sword:false,color:'#466dbc',outfit:'jacket'},
- ['s1'],
- [['氣功波'],['高速連擊','combo'],['燃燒攻擊','orb']]);
-
+  [114,14,16,440,2600],
+  {child:false,height:.98,hairBase:'#779ed2',scarf:false,sword:false,color:'#466dbc',outfit:'jacket'},
+  ['s1'],[['氣功波'],['高速連擊','combo'],['燃燒攻擊','orb']]);
 variant('trunks','trunks_gt','特南克斯・GT','GT','青年・現代線',
- [118,15,16,420,2700],
- {child:false,height:1,hairBase:'#b79cce',scarf:false,sword:false,color:'#5679a9',outfit:'jacket',pants:'#cbaa73'},
- ['s1'],
- [['燃燒攻擊','orb'],['高速連擊','combo'],['終極爆發','orb']]);
+  [118,15,16,420,2700],
+  {child:false,height:1,hairBase:'#b79cce',scarf:false,sword:false,color:'#5679a9',outfit:'jacket',pants:'#cbaa73'},
+  ['s1'],[['燃燒攻擊','orb'],['高速連擊','combo'],['終極爆發','orb']]);
 
 variant('piccolo','piccolo_young','比克・天下第一武道會','Z 前','青年・新生比克',
- [105,12,14,400,2000],{height:1,cape:true,color:'#734d8d'},
- [],
- [['魔光砲'],['伸長手臂','stretch'],['超爆力魔波','orb']]);
-
+  [105,12,14,400,2000],{height:1,cape:true,color:'#734d8d'},[],
+  [['魔光砲'],['伸長手臂','stretch'],['超爆力魔波','orb']]);
 variant('piccolo','piccolo_saiyan','比克・Z 賽亞人篇','Z','青年・悟飯的師父',
- [112,13,16,400,2200],{height:1.02,cape:true,color:'#794996'},
- [],
- [['魔貫光殺砲','laser'],['伸長手臂','stretch'],['全力魔貫光殺砲','laser']]);
-
+  [112,13,16,400,2200],{height:1.02,cape:true,color:'#794996'},[],
+  [['魔貫光殺砲','laser'],['伸長手臂','stretch'],['全力魔貫光殺砲','laser']]);
 variant('piccolo','piccolo_namek','比克・Z 那美克星篇','Z','青年・與尼爾同化後',
- [120,14,17,410,2400],{height:1.05,cape:false,color:'#69438a'},
- [],
- [['魔閃光'],['那美克連擊','combo'],['魔貫光殺砲','laser']]);
-
+  [120,14,17,410,2400],{height:1.05,cape:false,color:'#69438a'},[],
+  [['魔閃光'],['那美克連擊','combo'],['魔貫光殺砲','laser']]);
 variant('piccolo','piccolo_cell','比克・Z 賽魯篇','Z','與神同化後',
- [128,15,18,410,2700],{height:1.07,cape:false,color:'#69418b'},
- [],
- [['激烈光彈','volley'],['伸長手臂','stretch'],['魔空包圍彈','volley']]);
-
+  [128,15,18,410,2700],{height:1.07,cape:false,color:'#69418b'},[],
+  [['激烈光彈','volley'],['伸長手臂','stretch'],['魔空包圍彈','volley']]);
 variant('piccolo','piccolo_gt','比克・GT','GT','成熟・守護者',
- [130,15,18,395,2800],{height:1.07,cape:true,color:'#73538f'},
- [],
- [['魔貫光殺砲','laser'],['伸長手臂','stretch'],['激烈光彈','volley']]);
-
+  [130,15,18,395,2800],{height:1.07,cape:true,color:'#73538f'},[],
+  [['魔貫光殺砲','laser'],['伸長手臂','stretch'],['激烈光彈','volley']]);
 variant('piccolo','piccolo_daima','比克・大魔','大魔','成年心智・迷你身體',
- [103,12,15,425,2200],{child:true,height:.7,cape:true,color:'#795198'},
- [],
- [['魔貫光殺砲','laser'],['伸長手臂','stretch'],['魔光砲']]);
+  [103,12,15,425,2200],{child:true,height:.7,cape:true,color:'#795198'},[],
+  [['魔貫光殺砲','laser'],['伸長手臂','stretch'],['魔光砲']]);
 
-const byId = id => chars.find(c=>c.id===id);
-const starters = [
- 'goku','vegeta','gohan','piccolo','krillin','tien',
- 'goku_kid','goku_z','goku_gt','goku_daima'
+const byId=id=>chars.find(c=>c.id===id);
+const starters=[
+  'goku','vegeta','gohan','piccolo','krillin','tien',
+  'goku_kid','goku_z','goku_gt','goku_daima'
 ];
 
-const itemDefs = {
- senzu:['🫘 仙豆',1200,'回復 55% 最大生命'],
- potara:['🟢 波特拉',4500,'與下一位存活隊友合體（每人一次）'],
- zsword:['🗡️ Z 神劍',3000,'此角色本場所有攻擊 +35%'],
- capsule:['💊 膠囊',900,'隨機回血、補氣或攻擊提升'],
- staff:['🪄 天使手杖',3800,'補滿氣並回復 20 HP']
+const itemDefs={
+  senzu:['🫘 仙豆',1200,'回復 55% 最大生命'],
+  potara:['🟢 波特拉',4500,'與下一位存活隊友合體（每人一次）'],
+  zsword:['🗡️ Z 神劍',3000,'此角色本場所有攻擊 +35%'],
+  capsule:['💊 膠囊',900,'隨機回血、補氣或攻擊提升'],
+  staff:['🪄 天使手杖',3800,'補滿氣並回復 20 HP']
 };
 
 const KEY='db_ultimate_real_combat_v3';
 const OLD='db_ultimate_real_combat_v2';
 
 function baseSave(){
- return {
-  version:3,coins:12000,balls:0,wins:0,
-  unlocked:[...starters],
-  items:{senzu:2,potara:0,zsword:1,capsule:1,staff:0}
- };
+  return {
+    version:3,coins:12000,balls:0,wins:0,unlocked:[...starters],
+    items:{senzu:2,potara:0,zsword:1,capsule:1,staff:0}
+  };
 }
 
 function validate(x){
- if(!x||!Number.isFinite(x.coins)||!Array.isArray(x.unlocked)){
-  throw Error('存檔格式錯誤');
- }
- let b=baseSave();
- for(const k of ['coins','balls','wins']){
-  b[k]=clamp(Math.floor(Number(x[k])||0),0,k==='balls'?7:1e9);
- }
- b.unlocked=[...new Set([...starters,...x.unlocked.filter(id=>byId(id))])];
- for(const k in b.items){
-  b.items[k]=clamp(Math.floor(Number(x.items?.[k])||0),0,99999);
- }
- return b;
+  if(!x||!Number.isFinite(x.coins)||!Array.isArray(x.unlocked)){
+    throw Error('存檔格式錯誤');
+  }
+  const b=baseSave();
+  for(const k of ['coins','balls','wins']){
+    b[k]=clamp(Math.floor(Number(x[k])||0),0,k==='balls'?7:1e9);
+  }
+  b.unlocked=[...new Set([...starters,...x.unlocked.filter(id=>byId(id))])];
+  for(const k in b.items){
+    b.items[k]=clamp(Math.floor(Number(x.items?.[k])||0),0,99999);
+  }
+  return b;
 }
 
 let save;
 try{
- save=validate(JSON.parse(localStorage.getItem(KEY)||localStorage.getItem(OLD)||'null'));
+  save=validate(JSON.parse(
+    localStorage.getItem(KEY)||localStorage.getItem(OLD)||'null'
+  ));
 }catch{
- save=baseSave();
+  save=baseSave();
 }
 
 let toastTimer;
 function toast(s){
- $('#toast').textContent=s;
- $('#toast').hidden=false;
- clearTimeout(toastTimer);
- toastTimer=setTimeout(()=>$('#toast').hidden=true,3200);
+  $('#toast').textContent=s;
+  $('#toast').hidden=false;
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>$('#toast').hidden=true,3200);
 }
 
 function persist(){
- try{
-  localStorage.setItem(KEY,JSON.stringify(save));
- }catch{
-  toast('本機儲存失敗，請匯出備份');
- }
- $('#wallet').textContent=`🪙 ${save.coins.toLocaleString()}　🐲 ${save.balls}/7`;
+  try{
+    localStorage.setItem(KEY,JSON.stringify(save));
+  }catch{
+    toast('本機儲存失敗，請匯出備份');
+  }
+  $('#wallet').textContent=
+    `🪙 ${save.coins.toLocaleString()}　🐲 ${save.balls}/7`;
 }
 
 const S={
- run:false,paused:false,teams:[[],[]],indices:[0,0],
- shots:[],fx:[],keys:new Set(),holds:[new Set(),new Set()],
- clock:0,ai:0,last:0,mode:'cpu',arena:'earth',difficulty:'normal',
- edit:0,picks:[['goku'],['vegeta']],selected:'goku',messageUntil:0
+  run:false,paused:false,teams:[[],[]],indices:[0,0],shots:[],fx:[],
+  keys:new Set(),holds:[new Set(),new Set()],clock:0,ai:0,last:0,
+  mode:'cpu',arena:'earth',difficulty:'normal',edit:0,
+  picks:[['goku'],['vegeta']],selected:'goku',messageUntil:0
 };
 
 const active=i=>S.teams[i][S.indices[i]];
@@ -660,1543 +632,2189 @@ const enemy=i=>active(1-i);
 const GROUND=457;
 
 const difficulty={
- easy:[1.1,.8,500,.12],
- normal:[.82,1,900,.22],
- hard:[.62,1.12,1400,.34],
- difficult:[.47,1.24,2100,.46],
- boss:[.35,1.38,3200,.58]
+  easy:[1.1,.8,500,.12],
+  normal:[.82,1,900,.22],
+  hard:[.62,1.12,1400,.34],
+  difficult:[.47,1.24,2100,.46],
+  boss:[.35,1.38,3200,.58]
 };
 
 const arenas={
- earth:['地球荒野','#28477e','#b98b4f'],
- time:['精神時光屋','#c4def3','#eeeeec'],
- gravity:['重力室','#1d1931','#6d3344'],
- kingkai:['界王星','#1a4663','#548b54'],
- supreme:['界王神界','#493567','#738c65'],
- beerus:['比魯斯星球','#78b5d8','#8f78a7'],
- zeno:['全王神殿','#302957','#c3ad70']
+  earth:['地球荒野','#28477e','#b98b4f'],
+  time:['精神時光屋','#c4def3','#eeeeec'],
+  gravity:['重力室','#1d1931','#6d3344'],
+  kingkai:['界王星','#1a4663','#548b54'],
+  supreme:['界王神界','#493567','#738c65'],
+  beerus:['比魯斯星球','#78b5d8','#8f78a7'],
+  zeno:['全王神殿','#302957','#c3ad70']
 };
 
 $('#arena').innerHTML=Object.entries(arenas)
- .map(([k,v])=>`<option value="${k}">${v[0]}</option>`).join('');
+  .map(([k,v])=>`<option value="${k}">${v[0]}</option>`).join('');
 
 function make(c,side){
- return {
-  ...c,maxHp:c.hp,ki:55,form:-1,mult:1,buff:1,fused:false,
-  x:side?890:210,y:0,vy:0,face:side?-1:1,
-  blocking:false,blockT:0,defCD:0,blinkCD:0,
-  action:null,hitT:0,walk:0,side,koT:0
- };
+  return {
+    ...c,maxHp:c.hp,ki:55,form:-1,mult:1,buff:1,fused:false,
+    x:side?890:210,y:0,vy:0,face:side?-1:1,
+    blocking:false,blockT:0,defCD:0,blinkCD:0,
+    action:null,hitT:0,walk:0,side,koT:0,
+    escapeSerial:0,evadeT:0,powers:{},formHpBonus:0
+  };
 }
 
 function formName(c){
- return c.form>=0?c.forms[c.form][0]:'';
+  return c.form>=0?c.forms[c.form][0]:'';
 }
 
 function say(t,seconds=.9){
- $('#message').textContent=t;
- S.messageUntil=S.clock+seconds;
+  $('#message').textContent=t;
+  S.messageUntil=S.clock+seconds;
 }
 
 function render(){
- persist();
+  persist();
+  $('#picked').textContent=S.picks.map((ids,i)=>
+    `P${i+1}：${ids.map(id=>byId(id).name).join('、')||'未選（開戰自動補齊）'}`
+  ).join('　｜　');
 
- $('#picked').textContent=S.picks.map((ids,i)=>
-  `P${i+1}：${ids.map(id=>byId(id).name).join('、')||'未選（開戰自動補齊）'}`
- ).join('　｜　');
+  const c=byId(S.selected);
+  renderFormPreview(c);
+  $('#detail').textContent=
+    `${c.name}〔${c.era}／${c.age}〕 HP ${c.hp}・格鬥 ${c.atk}・氣功 ${c.kiAtk}・速度 ${c.speed}`+
+    `｜${c.s1.name} · ${c.s2.name} · ${c.ult.name}`+
+    `｜變身：${c.forms.map(f=>f[0]).join(' → ')||'無'}`;
 
- const c=byId(S.selected);
- renderFormPreview(c);
+  const grid=$('#roster');
+  grid.replaceChildren();
 
- $('#detail').textContent=
- `${c.name}〔${c.era}／${c.age}〕 HP ${c.hp}・格鬥 ${c.atk}・氣功 ${c.kiAtk}・速度 ${c.speed}｜${c.s1.name} · ${c.s2.name} · ${c.ult.name}｜變身：${c.forms.map(f=>f[0]).join(' → ')||'無'}`;
+  for(const c of chars){
+    if($('#eraFilter').value!=='all'&&c.era!==$('#eraFilter').value)continue;
 
- const grid=$('#roster');
- grid.replaceChildren();
+    const b=document.createElement('button');
+    b.className='card'+
+      (S.picks[S.edit].includes(c.id)?' selected':'')+
+      (!save.unlocked.includes(c.id)?' locked':'');
 
- for(const c of chars){
-  if($('#eraFilter').value!=='all'&&c.era!==$('#eraFilter').value)continue;
+    b.innerHTML=`
+      <canvas width="190" height="180"></canvas>
+      <b>${c.name}</b>
+      <div class="chip">${c.era}・${c.age}｜
+      ${save.unlocked.includes(c.id)?'已解鎖':'🔒 '+c.price}</div>`;
 
-  let b=document.createElement('button');
-  b.className='card'+
-   (S.picks[S.edit].includes(c.id)?' selected':'')+
-   (!save.unlocked.includes(c.id)?' locked':'');
+    thumbnail(b.querySelector('canvas'),c);
 
-  b.innerHTML=`
-   <canvas width="190" height="180"></canvas>
-   <b>${c.name}</b>
-   <div class="chip">${c.era}・${c.age}｜${save.unlocked.includes(c.id)?'已解鎖':'🔒 '+c.price}</div>
-  `;
-
-  thumbnail(b.querySelector('canvas'),c);
-
-  b.onclick=()=>{
-   S.selected=c.id;
-   previewForm=-1;
-
-   if(save.unlocked.includes(c.id)){
-    let a=S.picks[S.edit],j=a.indexOf(c.id);
-    if(j>=0)a.splice(j,1);
-    else{
-     if(a.length>=+$('#size').value)a.shift();
-     a.push(c.id);
-    }
-   }else toast('可在角色商店解鎖');
-
-   render();
-  };
-
-  grid.append(b);
- }
-
- renderShop();
- renderItems();
+    b.onclick=()=>{
+      S.selected=c.id;
+      previewForm=-1;
+      if(save.unlocked.includes(c.id)){
+        const a=S.picks[S.edit],j=a.indexOf(c.id);
+        if(j>=0)a.splice(j,1);
+        else{
+          if(a.length>=+$('#size').value)a.shift();
+          a.push(c.id);
+        }
+      }else{
+        toast('可在角色商店解鎖');
+      }
+      render();
+    };
+    grid.append(b);
+  }
+  renderShop();
+  renderItems();
 }
 
 function renderShop(){
- const box=$('#shop');
- box.replaceChildren();
-
- for(const c of chars){
-  let b=document.createElement('button');
-  let owned=save.unlocked.includes(c.id);
-
-  b.className='card';
-  b.innerHTML=`
-   <canvas width="190" height="180"></canvas>
-   <b>${c.name}</b>
-   <div>${owned?'已解鎖':'🪙 '+c.price}</div>
-  `;
-
-  thumbnail(b.querySelector('canvas'),c);
-  b.disabled=owned;
-  b.onclick=()=>{
-   if(save.coins<c.price)return toast('金幣不足');
-   save.coins-=c.price;
-   save.unlocked.push(c.id);
-   render();
-  };
-  box.append(b);
- }
+  const box=$('#shop');
+  box.replaceChildren();
+  for(const c of chars){
+    const b=document.createElement('button');
+    const owned=save.unlocked.includes(c.id);
+    b.className='card';
+    b.innerHTML=`
+      <canvas width="190" height="180"></canvas>
+      <b>${c.name}</b><div>${owned?'已解鎖':'🪙 '+c.price}</div>`;
+    thumbnail(b.querySelector('canvas'),c);
+    b.disabled=owned;
+    b.onclick=()=>{
+      if(save.coins<c.price)return toast('金幣不足');
+      save.coins-=c.price;
+      save.unlocked.push(c.id);
+      render();
+    };
+    box.append(b);
+  }
 }
 
 function renderItems(){
- const box=$('#items');
- box.replaceChildren();
+  const box=$('#items');
+  box.replaceChildren();
 
- for(const [id,v] of Object.entries(itemDefs)){
-  let d=document.createElement('div');
-  d.className='notice';
-  d.innerHTML=`
-   <b>${v[0]} ×${save.items[id]}</b>
-   <p>${v[2]}</p>
-   <button>購買 🪙 ${v[1]}</button>
-  `;
+  for(const [id,v] of Object.entries(itemDefs)){
+    const d=document.createElement('div');
+    d.className='notice';
+    d.innerHTML=`
+      <b>${v[0]} ×${save.items[id]}</b>
+      <p>${v[2]}</p><button>購買 🪙 ${v[1]}</button>`;
+    d.querySelector('button').onclick=()=>{
+      if(save.coins<v[1])return toast('金幣不足');
+      save.coins-=v[1];
+      save.items[id]++;
+      render();
+    };
+    box.append(d);
+  }
 
-  d.querySelector('button').onclick=()=>{
-   if(save.coins<v[1])return toast('金幣不足');
-   save.coins-=v[1];
-   save.items[id]++;
-   render();
-  };
-  box.append(d);
- }
-
- const bar=$('#itemBar');
- bar.replaceChildren();
-
- for(const [id,v] of Object.entries(itemDefs)){
-  let b=document.createElement('button');
-  b.textContent=`${v[0]} ×${save.items[id]}`;
-  b.onclick=()=>useItem(id);
-  bar.append(b);
- }
+  const bar=$('#itemBar');
+  bar.replaceChildren();
+  for(const [id,v] of Object.entries(itemDefs)){
+    const b=document.createElement('button');
+    b.textContent=`${v[0]} ×${save.items[id]}`;
+    b.onclick=()=>useItem(id);
+    bar.append(b);
+  }
 }
 
 for(const b of document.querySelectorAll('[data-tab]')){
- b.onclick=()=>{
-  document.querySelectorAll('.page').forEach(p=>p.hidden=p.id!==b.dataset.tab);
-  document.querySelectorAll('[data-tab]').forEach(t=>t.classList.toggle('active',t===b));
- };
+  b.onclick=()=>{
+    document.querySelectorAll('.page')
+      .forEach(p=>p.hidden=p.id!==b.dataset.tab);
+    document.querySelectorAll('[data-tab]')
+      .forEach(t=>t.classList.toggle('active',t===b));
+  };
 }
 
 $('#mode').onchange=()=>{
- $('#edit2').hidden=$('#mode').value!=='local';
- $('#difficulty').disabled=$('#mode').value==='local';
- S.edit=0;
- editTeam(0);
+  $('#edit2').hidden=$('#mode').value!=='local';
+  $('#difficulty').disabled=$('#mode').value==='local';
+  S.edit=0;
+  editTeam(0);
 };
 
 function editTeam(i){
- S.edit=i;
- $('#edit1').classList.toggle('selected',i===0);
- $('#edit2').classList.toggle('selected',i===1);
- render();
+  S.edit=i;
+  $('#edit1').classList.toggle('selected',i===0);
+  $('#edit2').classList.toggle('selected',i===1);
+  render();
 }
 
 $('#edit1').onclick=()=>editTeam(0);
 $('#edit2').onclick=()=>editTeam(1);
 $('#eraFilter').onchange=render;
 $('#size').onchange=()=>{
- S.picks=S.picks.map(a=>a.slice(0,+$('#size').value));
- render();
+  S.picks=S.picks.map(a=>a.slice(0,+$('#size').value));
+  render();
 };
 
 function start(){
- clearInput();
- S.mode=$('#mode').value;
- S.arena=$('#arena').value;
- S.difficulty=$('#difficulty').value;
+  clearInput();
+  S.mode=$('#mode').value;
+  S.arena=$('#arena').value;
+  S.difficulty=$('#difficulty').value;
+  const n=+$('#size').value;
 
- const n=+$('#size').value;
+  S.teams=[0,1].map(i=>{
+    let ids=[...S.picks[i]];
+    if(i&&S.mode==='cpu'){
+      const pool=chars.filter(c=>
+        S.difficulty==='boss'?c.price>=12500:
+        S.difficulty==='difficult'?c.price>=3000:true
+      );
+      ids=Array.from({length:n},()=>
+        pool[Math.floor(Math.random()*pool.length)].id
+      );
+    }
+    while(ids.length<n){
+      ids.push(save.unlocked.find(id=>!ids.includes(id))||'goku');
+    }
+    return ids.slice(0,n).map(id=>make(byId(id),i));
+  });
 
- S.teams=[0,1].map(i=>{
-  let ids=[...S.picks[i]];
+  S.indices=[0,0];
+  S.shots=[];
+  S.fx=[];
+  S.clock=0;
+  S.ai=0;
+  S.paused=false;
+  S.run=true;
 
-  if(i&&S.mode==='cpu'){
-   let pool=chars.filter(c=>
-    S.difficulty==='boss'?c.price>=12500:
-    ['difficult'].includes(S.difficulty)?c.price>=3000:true
-   );
-   ids=Array.from({length:n},()=>pool[Math.floor(Math.random()*pool.length)].id);
-  }
-
-  while(ids.length<n){
-   ids.push(save.unlocked.find(id=>!ids.includes(id))||'goku');
-  }
-
-  return ids.slice(0,n).map(id=>make(byId(id),i));
- });
-
- S.indices=[0,0];
- S.shots=[];
- S.fx=[];
- S.clock=0;
- S.ai=0;
- S.paused=false;
- S.run=true;
-
- $('#menu').hidden=true;
- $('#game').hidden=false;
- $('#result').hidden=true;
- $('#pause').textContent='暫停';
-
- say('FIGHT!',1.2);
- renderItems();
- hud();
+  $('#menu').hidden=true;
+  $('#game').hidden=false;
+  $('#result').hidden=true;
+  $('#pause').textContent='暫停';
+  say('FIGHT!',1.2);
+  renderItems();
+  hud();
 }
 
 $('#start').onclick=$('#again').onclick=start;
 
 $('#quit').onclick=()=>{
- S.run=false;
- clearInput();
- S.shots=[];
- $('#game').hidden=true;
- $('#menu').hidden=false;
- render();
+  S.run=false;
+  clearInput();
+  S.shots=[];
+  $('#game').hidden=true;
+  $('#menu').hidden=false;
+  render();
 };
 
 function pause(){
- if(!S.run)return;
- S.paused=!S.paused;
- clearInput();
- $('#pause').textContent=S.paused?'繼續':'暫停';
- say(S.paused?'已暫停':'FIGHT!');
+  if(!S.run)return;
+  S.paused=!S.paused;
+  clearInput();
+  $('#pause').textContent=S.paused?'繼續':'暫停';
+  say(S.paused?'已暫停':'FIGHT!');
 }
+
 $('#pause').onclick=pause;
 
 function canAct(a){
- return S.run&&!S.paused&&a&&a.hp>0&&!a.blocking&&!a.action&&a.hitT<=0;
+  return S.run&&!S.paused&&a&&a.hp>0&&
+    !a.blocking&&!a.action&&a.hitT<=0;
 }
 
 function effect(type,x,y,color='#ffdf70',r=35){
- S.fx.push({type,x,y,color,r,life:.4,max:.4});
+  S.fx.push({type,x,y,color,r,life:.4,max:.4});
+}
+
+/*
+  被動能力：
+  dodge：自動躲 10 次，接著 5 次命中判定不自動躲。
+  attack：自動攻 10 次，跳過 5 次自動機會。
+  balanced：閃避 5/休息 5、攻擊 5/休息 5，各自獨立。
+*/
+function powerKind(a){
+  const name=formName(a);
+  if(
+    name.includes('野獸')||
+    name.includes('橙色')||
+    name.includes('橘色')||
+    a.id==='zeno'
+  )return 'balanced';
+
+  if(name.includes('自在')||['whis','grand'].includes(a.id)){
+    return 'dodge';
+  }
+  if(name.includes('自我')||['beerus','champa'].includes(a.id)){
+    return 'attack';
+  }
+  return '';
+}
+
+function powerState(a){
+  const kind=powerKind(a);
+  if(!kind)return null;
+
+  if(!a.powers[kind]){
+    a.powers[kind]={
+      kind,
+      dodges:kind==='balanced'?5:10,
+      attacks:kind==='balanced'?5:10,
+      dodgeRest:0,
+      attackRest:0,
+      timer:0,
+      regen:0
+    };
+  }
+  return a.powers[kind];
+}
+
+function powerText(a){
+  const p=powerState(a);
+  if(!p)return '一般角色';
+
+  const cap=p.kind==='balanced'?5:10;
+  const dodge=p.dodgeRest?
+    `閃避休息：剩 ${p.dodgeRest}/5 次來襲`:
+    `自動閃避：剩 ${p.dodges}/${cap} 次`;
+  const attack=p.attackRest?
+    `連擊休息：剩 ${p.attackRest}/5 次自動機會`:
+    `自動連擊：剩 ${p.attacks}/${cap} 次`;
+
+  if(p.kind==='dodge')return dodge;
+  if(p.kind==='attack')return attack;
+
+  return `${dodge}｜${attack}｜回復倒數 ${Math.max(1,Math.ceil(5-p.regen))} 秒`;
+}
+
+// 只有原本即將命中的攻擊，才消耗一次閃避／休息計數。
+function autoEvade(a){
+  const p=powerState(a);
+  if(!p||p.kind==='attack')return false;
+
+  const cap=p.kind==='balanced'?5:10;
+
+  if(p.dodgeRest>0){
+    p.dodgeRest--;
+    if(!p.dodgeRest)p.dodges=cap;
+    return false;
+  }
+
+  p.dodges--;
+  a.evadeT=.24;
+  effect(
+    'evade',a.x,GROUND-a.y-120*bodyScale(a),
+    '#b4f5ff',45
+  );
+
+  if(!p.dodges)p.dodgeRest=5;
+  return true;
+}
+
+// 自動攻擊於出拳判定時扣次數；手動攻擊不消耗這個計數。
+function commitAutoAttack(a){
+  const p=powerState(a);
+  if(!p||(p.kind!=='attack'&&p.kind!=='balanced'))return;
+
+  p.attacks--;
+  if(p.attacks<=0)p.attackRest=5;
+}
+
+function setChase(a,d){
+  const b=enemy(a.side);
+  const travel=Math.max(.22,Math.abs(b.x-a.x)/2300+.08);
+
+  d.homing=true;
+  d.target=b;
+  d.escapeSerial=b.escapeSerial;
+  d.events=d.events.map((t,j)=>travel+j*.15);
+  d.dur=d.events[d.events.length-1]+.18;
+  d.dashSpeed=3000;
+  return d;
+}
+
+function updateChase(a,d,dt){
+  const b=enemy(a.side);
+
+  if(
+    !b||b!==d.target||b.hp<=0||
+    b.escapeSerial!==d.escapeSerial
+  ){
+    d.lostTarget=true;
+    return;
+  }
+  if(d.lostTarget)return;
+
+  a.face=Math.sign(b.x-a.x)||a.face;
+  const goal=clamp(b.x-a.face*85,55,1045);
+  a.x=clamp(
+    a.x+clamp(goal-a.x,-d.dashSpeed*dt,d.dashSpeed*dt),
+    55,1045
+  );
+
+  if(d.t<d.events[0]){
+    effect('dash',a.x,GROUND-a.y-100,'#c4ecff',20);
+  }
+}
+
+function updatePower(a,dt){
+  if(!S.run||S.paused||a.hp<=0)return;
+  const p=powerState(a);
+  if(!p)return;
+
+  // 回復獨立運作，不受攻擊或閃避休息計數影響。
+  if(p.kind==='balanced'){
+    p.regen+=dt;
+    if(p.regen>=5-1e-8){
+      p.regen=Math.max(0,p.regen-5);
+      a.hp=Math.min(a.maxHp,a.hp+5);
+      a.ki=Math.min(100,a.ki+5);
+      effect('regen',a.x,GROUND-a.y-160,'#86ffb0',35);
+    }
+  }
+
+  if(p.kind==='dodge')return;
+
+  // 每累積 0.8 秒可行動空檔，得到一次自動攻擊機會。
+  if(!canAct(a)||enemy(a.side).hp<=0)return;
+
+  p.timer+=dt;
+  if(p.timer<.8-1e-8)return;
+  p.timer=0;
+
+  if(p.attackRest>0){
+    p.attackRest--;
+    if(!p.attackRest)p.attacks=p.kind==='balanced'?5:10;
+    return;
+  }
+
+  const d={
+    name:'自動突進拳',
+    type:'rush',
+    cost:0,
+    power:a.atk,
+    dur:.5,
+    events:[.24],
+    t:0,
+    done:0,
+    face:a.face,
+    automatic:true
+  };
+
+  a.action=setChase(a,d);
+}
+
+function transformTo(a,index){
+  if(
+    !Number.isInteger(index)||
+    index< -1||index>=a.forms.length
+  )return false;
+
+  if(index===a.form){
+    say('目前已是這個形態');
+    return false;
+  }
+
+  const f=index<0?['普通形態',0,1]:a.forms[index];
+
+  if(a.ki<f[1]){
+    say(`${f[0]}需要 ${f[1]} 氣`);
+    return false;
+  }
+
+  a.ki-=f[1];
+  a.form=index;
+  a.mult=f[2]*(a.fused?1.28:1);
+
+  // 切換形態不會反覆增加最大血量或免費回血。
+  const bonus=index<0?0:(index+1)*12;
+  a.maxHp+=bonus-a.formHpBonus;
+  a.formHpBonus=bonus;
+  a.hp=Math.min(a.hp,a.maxHp);
+
+  a.action={type:'transform',t:0,dur:.8,events:[],done:0};
+  effect('aura',a.x,GROUND-a.y-100,appearance(a).hair,100);
+  say(`${a.name} → ${f[0]}（消耗 ${f[1]} 氣）`,1.4);
+  powerState(a);
+  return true;
+}
+
+function updateTransformSelectors(){
+  for(let i=0;i<2;i++){
+    const a=active(i);
+    const box=$('#formBox'+i);
+    const select=$('#battleForm'+i);
+
+    box.hidden=i===1&&S.mode!=='local';
+    if(!a)continue;
+
+    if(select.actor!==a){
+      select.actor=a;
+      select.innerHTML=
+        '<option value="-1">普通形態 · 0 氣</option>'+
+        a.forms.map((f,j)=>
+          `<option value="${j}">${f[0]} · ${f[1]} 氣</option>`
+        ).join('');
+      select.value=String(
+        a.form+1<a.forms.length?a.form+1:a.form
+      );
+    }
+  }
 }
 
 function act(i,key){
- let a=active(i),b=enemy(i);
- if(!canAct(a))return;
+  const a=active(i),b=enemy(i);
+  if(!canAct(a))return;
 
- const face=Math.sign(b.x-a.x)||a.face;
- a.face=face;
+  const face=Math.sign(b.x-a.x)||a.face;
+  a.face=face;
 
- if(key==='jump'){
-  if(a.y<=0){
-   a.vy=735;
-   effect('dust',a.x,GROUND,'#e0c09a');
+  if(key==='jump'){
+    if(a.y<=0){
+      a.vy=735;
+      a.escapeSerial++;
+      effect('dust',a.x,GROUND,'#e0c09a');
+    }
+    return;
   }
-  return;
- }
 
- if(key==='blink'){
-  if(a.blinkCD>0)return;
-  if(a.ki<15)return say('閃現需要 15 氣');
+  if(key==='blink'){
+    if(a.blinkCD>0)return;
+    if(a.ki<15)return say('閃現需要 15 氣');
 
-  let x=b.x-b.face*105;
-  if(x<55||x>1045)return say('對手背後空間不足');
+    const x=b.x-b.face*105;
+    if(x<55||x>1045)return say('對手背後空間不足');
 
-  a.ki-=15;
-  a.blinkCD=.85;
-  effect('blink',a.x,GROUND-a.y-95,'#b0edff');
+    a.ki-=15;
+    a.blinkCD=.85;
+    a.escapeSerial++;
 
-  a.x=x;
-  a.y=b.y;
-  a.vy=b.vy;
-  a.face=Math.sign(b.x-a.x)||face;
-
-  effect('blink',a.x,GROUND-a.y-95,'#b0edff');
-  return;
- }
-
- if(key==='swap'){
-  const next=S.teams[i].findIndex((c,j)=>j!==S.indices[i]&&c.hp>0);
-  if(next>=0){
-   a.action=null;
-   a.blocking=false;
-   S.indices[i]=next;
-
-   const c=active(i);
-   c.x=i?890:210;
-   c.y=c.vy=0;
-   c.action=null;
-   c.blocking=false;
-   say('換上 '+c.name);
+    effect('blink',a.x,GROUND-a.y-95,'#b0edff');
+    a.x=x;
+    a.y=b.y;
+    a.vy=b.vy;
+    a.face=Math.sign(b.x-a.x)||face;
+    effect('blink',a.x,GROUND-a.y-95,'#b0edff');
+    return;
   }
-  return;
- }
 
- if(key==='transform'){
-  const f=a.forms[a.form+1];
-  if(!f)return say('沒有下一階段變身');
-  if(a.ki<f[1])return say('變身需要 '+f[1]+' 氣');
+  if(key==='swap'){
+    if(
+      b.action?.homing&&b.action.target===a&&
+      !b.action.lostTarget&&
+      b.action.escapeSerial===a.escapeSerial
+    ){
+      say('正在被追擊，請跳躍或閃現');
+      return;
+    }
 
-  a.ki-=f[1];
-  a.form++;
-  a.mult=f[2];
-  a.maxHp+=12;
-  a.hp=Math.min(a.maxHp,a.hp+12);
-  a.action={type:'transform',t:0,dur:.8,events:[]};
+    const next=S.teams[i].findIndex(
+      (c,j)=>j!==S.indices[i]&&c.hp>0
+    );
 
-  effect('aura',a.x,GROUND-a.y-100,'#fbe26a',100);
-  say(f[0]);
-  return;
- }
+    if(next>=0){
+      a.action=null;
+      a.blocking=false;
+      S.indices[i]=next;
 
- const defs={
-  punch:{name:'拳',type:'punch',cost:0,power:a.atk,dur:.3,events:[.12]},
-  kick:{name:'踢',type:'kick',cost:0,power:a.atk*1.2,dur:.4,events:[.17]},
-  kiShot:{name:'氣彈',type:'energy',cost:12,power:a.kiAtk*.82,dur:.3,events:[.1]},
-  special1:{...a.s1,cost:30,power:a.kiAtk*1.35+a.atk*.42,dur:.62,events:[.2]},
-  special2:{...a.s2,cost:38,power:a.kiAtk*1.58+a.atk*.42,dur:.68,events:[.22]},
-  ultimate:{...a.ult,cost:65,power:a.kiAtk*2.75+a.atk*.55,dur:1,events:[.38],ultimate:true}
- };
+      const c=active(i);
+      c.x=i?890:210;
+      c.y=c.vy=0;
+      c.action=null;
+      c.blocking=false;
+      say('換上 '+c.name);
+    }
+    return;
+  }
 
- let d=defs[key];
- if(!d)return;
- if(a.ki<d.cost)return say('氣力不足，需要 '+d.cost+' 氣');
+  if(key==='transform'){
+    let index;
+    if(i===1&&S.mode==='cpu'){
+      index=a.forms.reduce(
+        (best,f,j)=>f[1]<=a.ki&&j>a.form?j:best,
+        a.form
+      );
+    }else{
+      index=Number($('#battleForm'+i).value);
+    }
+    return transformTo(a,index);
+  }
 
- a.ki-=d.cost;
- if(!d.cost)a.ki=Math.min(100,a.ki+4);
+  const defs={
+    punch:{
+      name:'拳',type:'punch',cost:0,power:a.atk,
+      dur:.3,events:[.12]
+    },
+    kick:{
+      name:'踢',type:'kick',cost:0,power:a.atk*1.2,
+      dur:.4,events:[.17]
+    },
+    kiShot:{
+      name:'氣彈',type:'energy',cost:12,power:a.kiAtk*.82,
+      dur:.3,events:[.1]
+    },
+    special1:{
+      ...a.s1,cost:30,power:a.kiAtk*1.35+a.atk*.42,
+      dur:.62,events:[.2]
+    },
+    special2:{
+      ...a.s2,cost:38,power:a.kiAtk*1.58+a.atk*.42,
+      dur:.68,events:[.22]
+    },
+    ultimate:{
+      ...a.ult,cost:65,power:a.kiAtk*2.75+a.atk*.55,
+      dur:1,events:[.38],ultimate:true
+    }
+  };
 
- if(['combo','sword','staff','volley'].includes(d.type)){
-  d.events=[.17,.32,.47];
-  d.dur=.72;
-  d.power/=3;
- }
+  const d=defs[key];
+  if(!d)return;
+  if(a.ki<d.cost)return say('氣力不足，需要 '+d.cost+' 氣');
 
- a.action={...d,t:0,done:0,face};
- if(d.cost>=30)say(d.name);
-}
+  a.ki-=d.cost;
+  if(!d.cost)a.ki=Math.min(100,a.ki+4);
 
-const meleeTypes=['punch','kick','combo','rush','sword','staff','stretch'];
-
-function strike(a,d){
- const b=enemy(a.side);
- if(!b||b.hp<=0)return;
-
- const power=d.power*a.mult*a.buff*
-  (a.side===1&&S.mode==='cpu'?difficulty[S.difficulty][1]:1);
-
- if(meleeTypes.includes(d.type)){
-  const range=d.type==='stretch'?255:
-   ['sword','staff'].includes(d.type)?230:
-   d.type==='kick'?175:160;
-
-  effect('slash',a.x+a.face*80,GROUND-a.y-100,'#e9faff',range*.45);
+  if(['combo','sword','staff','volley'].includes(d.type)){
+    d.events=[.17,.32,.47];
+    d.dur=.72;
+    d.power/=3;
+  }
 
   if(
-   Math.abs(b.x-a.x)<range&&
-   (b.x-a.x)*a.face>=-15&&
-   Math.abs((a.y+110*bodyScale(a))-(b.y+110*bodyScale(b)))<85
+    ['special1','special2','ultimate'].includes(key)&&
+    meleeTypes.includes(d.type)
   ){
-   hurt(b,power,a.face,d.type==='kick'?30:18);
+    setChase(a,d);
   }
- }else{
-  const kind=d.type;
-  const r=d.ultimate?40:kind==='orb'?27:kind==='beam'?22:kind==='laser'?8:14;
 
-  S.shots.push({
-   x:a.x+a.face*55,
-   y:GROUND-a.y-118*bodyScale(a),
-   vx:a.face*(kind==='laser'?950:660),
-   side:a.side,power,r,type:kind,life:2.2,
-   color:kind==='destruction'?'#bf6fff':
-    kind==='pink'?'#ff85c7':
-    kind==='disc'?'#ffe95e':'#83e9ff'
-  });
+  a.action={...d,t:0,done:0,face};
+  if(d.cost>=30)say(d.name);
+}
 
-  effect('flash',a.x+a.face*55,GROUND-a.y-118*bodyScale(a),'#b5f8ff',r*1.3);
- }
+const meleeTypes=[
+  'punch','kick','combo','rush','sword','staff','stretch'
+];
+
+function strike(a,d){
+  if(d.automatic)commitAutoAttack(a);
+
+  const b=enemy(a.side);
+  if(!b||b.hp<=0)return;
+
+  const power=d.power*a.mult*a.buff*
+    (a.side===1&&S.mode==='cpu'?difficulty[S.difficulty][1]:1);
+
+  if(meleeTypes.includes(d.type)){
+    const range=d.type==='stretch'?255:
+      ['sword','staff'].includes(d.type)?230:
+      d.type==='kick'?175:160;
+
+    effect(
+      'slash',a.x+a.face*80,
+      GROUND-a.y-100,'#e9faff',range*.45
+    );
+
+    const lockValid=!d.homing||(
+      !d.lostTarget&&b===d.target&&
+      b.escapeSerial===d.escapeSerial
+    );
+
+    const near=Math.abs(b.x-a.x)<range;
+    const inFront=(b.x-a.x)*a.face>=-15;
+    const sameHeight=Math.abs(
+      (a.y+110*bodyScale(a))-(b.y+110*bodyScale(b))
+    )<85;
+
+    if(lockValid&&near&&inFront&&sameHeight){
+      hurt(b,power,a.face,d.type==='kick'?30:18);
+    }
+  }else{
+    const kind=d.type;
+    const r=d.ultimate?40:
+      kind==='orb'?27:kind==='beam'?22:kind==='laser'?8:14;
+
+    S.shots.push({
+      x:a.x+a.face*55,
+      y:GROUND-a.y-118*bodyScale(a),
+      vx:a.face*(kind==='laser'?950:660),
+      side:a.side,power,r,type:kind,life:2.2,
+      color:kind==='destruction'?'#bf6fff':
+        kind==='pink'?'#ff85c7':
+        kind==='disc'?'#ffe95e':'#83e9ff'
+    });
+
+    effect(
+      'flash',a.x+a.face*55,
+      GROUND-a.y-118*bodyScale(a),'#b5f8ff',r*1.3
+    );
+  }
 }
 
 function hurt(b,power,dir,force){
- if(b.hp<=0)return;
+  if(b.hp<=0)return false;
+  if(autoEvade(b))return false;
 
- const blocked=b.blocking;
- b.hp=Math.max(0,b.hp-power*(blocked?.5:1));
+  const blocked=b.blocking;
+  b.hp=Math.max(0,b.hp-power*(blocked?.5:1));
 
- if(!blocked){
-  b.hitT=.18;
-  // 保留已承諾的攻擊，受擊不會吞掉技能。
-  b.x=clamp(b.x+dir*force,55,1045);
- }
+  if(!blocked){
+    b.hitT=.18;
+    // 已開始的攻擊保留，避免中途吞掉技能。
+    b.x=clamp(b.x+dir*force,55,1045);
+  }
 
- effect(blocked?'block':'burst',b.x,GROUND-b.y-105,blocked?'#ffe56b':'#fff1b0',40);
+  effect(
+    blocked?'block':'burst',
+    b.x,GROUND-b.y-105,
+    blocked?'#ffe56b':'#fff1b0',40
+  );
 
- if(!b.hp){
-  b.action=null;
-  b.blocking=false;
-  b.koT=.3;
- }
+  if(!b.hp){
+    b.action=null;
+    b.blocking=false;
+    b.koT=.3;
+  }
+  return true;
 }
 
 function useItem(id){
- if(!S.run||S.paused)return;
- const p=active(0);
- if(p.hp<=0)return;
- if(!save.items[id])return toast('沒有這個道具');
+  if(!S.run||S.paused)return;
+  const p=active(0);
+  if(p.hp<=0)return;
+  if(!save.items[id])return toast('沒有這個道具');
 
- if(id==='senzu')p.hp=Math.min(p.maxHp,p.hp+p.maxHp*.55);
- if(id==='zsword')p.buff=Math.max(p.buff,1.35);
+  if(id==='senzu'){
+    p.hp=Math.min(p.maxHp,p.hp+p.maxHp*.55);
+  }
+  if(id==='zsword'){
+    p.buff=Math.max(p.buff,1.35);
+  }
+  if(id==='capsule'){
+    const r=Math.random();
+    if(r<.34)p.hp=Math.min(p.maxHp,p.hp+35);
+    else if(r<.67)p.ki=100;
+    else p.buff=Math.max(p.buff,1.25);
+  }
+  if(id==='staff'){
+    p.ki=100;
+    p.hp=Math.min(p.maxHp,p.hp+20);
+  }
+  if(id==='potara'){
+    if(p.fused)return toast('此角色已合體');
 
- if(id==='capsule'){
-  const r=Math.random();
-  if(r<.34)p.hp=Math.min(p.maxHp,p.hp+35);
-  else if(r<.67)p.ki=100;
-  else p.buff=Math.max(p.buff,1.25);
- }
+    const team=S.teams[0];
+    let other;
+    for(let step=1;step<team.length;step++){
+      const c=team[(S.indices[0]+step)%team.length];
+      if(c.hp>0){
+        other=c;
+        break;
+      }
+    }
 
- if(id==='staff'){
-  p.ki=100;
-  p.hp=Math.min(p.maxHp,p.hp+20);
- }
+    if(!other)return toast('沒有存活隊友可以合體');
 
- if(id==='potara'){
-  if(p.fused)return toast('此角色已合體');
-
-  const team=S.teams[0];
-  let other;
-
-  for(let step=1;step<team.length;step++){
-   const c=team[(S.indices[0]+step)%team.length];
-   if(c.hp>0){other=c;break;}
+    p.name+='×'+other.name;
+    p.maxHp=Math.round((p.maxHp+other.maxHp)*.72);
+    p.hp=Math.min(p.maxHp,p.hp+other.hp*.55);
+    p.atk=Math.round((p.atk+other.atk)*.72);
+    p.kiAtk=Math.round((p.kiAtk+other.kiAtk)*.72);
+    p.mult*=1.28;
+    p.fused=true;
+    other.hp=0;
+    other.action=null;
   }
 
-  if(!other)return toast('沒有存活隊友可以合體');
-
-  p.name+='×'+other.name;
-  p.maxHp=Math.round((p.maxHp+other.maxHp)*.72);
-  p.hp=Math.min(p.maxHp,p.hp+other.hp*.55);
-  p.atk=Math.round((p.atk+other.atk)*.72);
-  p.kiAtk=Math.round((p.kiAtk+other.kiAtk)*.72);
-  p.mult*=1.28;
-  p.fused=true;
-  other.hp=0;
-  other.action=null;
- }
-
- save.items[id]--;
- persist();
- renderItems();
- say(itemDefs[id][0]);
+  save.items[id]--;
+  persist();
+  renderItems();
+  say(itemDefs[id][0]);
 }
 
 function finish(winner){
- S.run=false;
- clearInput();
+  S.run=false;
+  clearInput();
 
- let text=winner<0?'平手！':
-  S.mode==='local'?`P${winner+1} 獲勝！`:
-  winner===0?'🏆 YOU WIN!':'💥 YOU LOSE';
+  let text=winner<0?'平手！':
+    S.mode==='local'?`P${winner+1} 獲勝！`:
+    winner===0?'🏆 YOU WIN!':'💥 YOU LOSE';
 
- if(winner===0){
-  let reward=difficulty[S.mode==='local'?'normal':S.difficulty][2]*S.teams[0].length;
-  save.coins+=reward;
-  save.wins++;
+  if(winner===0){
+    const reward=difficulty[
+      S.mode==='local'?'normal':S.difficulty
+    ][2]*S.teams[0].length;
 
-  if(Math.random()<Math.min(.55,.18+.06*S.teams[0].length)){
-   save.balls=Math.min(7,save.balls+1);
-   text+='　獲得龍珠！';
+    save.coins+=reward;
+    save.wins++;
+
+    if(Math.random()<Math.min(.55,.18+.06*S.teams[0].length)){
+      save.balls=Math.min(7,save.balls+1);
+      text+='　獲得龍珠！';
+    }
+
+    text+=`　+${reward} 金幣`;
+    persist();
   }
 
-  text+=`　+${reward} 金幣`;
-  persist();
- }
-
- say(text,10);
- $('#resultText').textContent=text;
- $('#result').hidden=false;
+  say(text,10);
+  $('#resultText').textContent=text;
+  $('#result').hidden=false;
 }
 
 function update(dt){
- S.clock+=dt;
+  S.clock+=dt;
 
- for(let i=0;i<2;i++){
-  let a=active(i),b=enemy(i);
+  for(let i=0;i<2;i++){
+    const a=active(i),b=enemy(i);
 
-  a.blinkCD=Math.max(0,a.blinkCD-dt);
-  a.hitT=Math.max(0,a.hitT-dt);
-  a.blockT=Math.max(0,a.blockT-dt);
-  a.defCD=Math.max(0,a.defCD-dt);
+    a.evadeT=Math.max(0,a.evadeT-dt);
+    a.blinkCD=Math.max(0,a.blinkCD-dt);
+    a.hitT=Math.max(0,a.hitT-dt);
+    a.blockT=Math.max(0,a.blockT-dt);
+    a.defCD=Math.max(0,a.defCD-dt);
 
-  if(a.hp<=0){
-   a.koT-=dt;
-   continue;
+    if(a.hp<=0){
+      a.koT-=dt;
+      continue;
+    }
+
+    if(!a.action)a.face=Math.sign(b.x-a.x)||a.face;
+
+    const h=S.holds[i];
+    a.blocking=!a.action&&a.hitT<=0&&
+      (h.has('block')||a.blockT>0);
+
+    if(!a.blocking&&!a.action&&a.hitT<=0){
+      const dx=(h.has('right')?1:0)-(h.has('left')?1:0);
+      a.x=clamp(a.x+dx*(a.speed||410)*dt,55,1045);
+      a.walk=dx?S.clock*11:0;
+
+      if(h.has('charge')){
+        a.ki=Math.min(100,a.ki+28*dt);
+      }
+    }else{
+      a.walk=0;
+    }
+
+    // y 是離地高度；正速度上升，重力減少上升速度。
+    if(a.y>0||a.vy>0){
+      a.y+=a.vy*dt;
+      a.vy-=1600*dt;
+      if(a.y<=0){
+        a.y=0;
+        a.vy=0;
+        effect('dust',a.x,GROUND,'#d7c09b');
+      }
+    }
+
+    if(a.action){
+      const d=a.action;
+      d.t+=dt;
+
+      if(d.homing){
+        updateChase(a,d,dt);
+      }else if(d.type==='rush'&&d.t<.19){
+        a.x=clamp(a.x+d.face*700*dt,55,1045);
+      }
+
+      while(d.done<d.events.length&&d.t>=d.events[d.done]){
+        strike(a,d);
+        d.done++;
+      }
+
+      if(d.t>=d.dur)a.action=null;
+    }
   }
 
-  if(!a.action)a.face=Math.sign(b.x-a.x)||a.face;
+  for(let i=0;i<2;i++)updatePower(active(i),dt);
+  if(S.mode==='cpu')ai(dt);
 
-  const h=S.holds[i];
-  a.blocking=!a.action&&a.hitT<=0&&(h.has('block')||a.blockT>0);
+  for(let j=S.shots.length-1;j>=0;j--){
+    const s=S.shots[j],old=s.x;
+    s.x+=s.vx*dt;
+    s.life-=dt;
 
-  if(!a.blocking&&!a.action&&a.hitT<=0){
-   const dx=(h.has('right')?1:0)-(h.has('left')?1:0);
-   a.x=clamp(a.x+dx*(a.speed||410)*dt,55,1045);
-   a.walk=dx?S.clock*11:0;
-   if(h.has('charge'))a.ki=Math.min(100,a.ki+28*dt);
-  }else a.walk=0;
+    const b=active(1-s.side);
+    const sc=bodyScale(b);
+    const top=GROUND-b.y-215*sc;
+    const bottom=GROUND-b.y-12*sc;
 
-  // 離地高度向上為正，跳躍初速向上，重力向下。
-  if(a.y>0||a.vy>0){
-   a.y+=a.vy*dt;
-   a.vy-=1600*dt;
-   if(a.y<=0){
-    a.y=0;
-    a.vy=0;
-    effect('dust',a.x,GROUND,'#d7c09b');
-   }
+    const hit=b.hp>0&&
+      Math.max(old,s.x)+s.r>b.x-36*sc&&
+      Math.min(old,s.x)-s.r<b.x+36*sc&&
+      s.y+s.r>top&&s.y-s.r<bottom;
+
+    if(hit){
+      if(hurt(b,s.power,Math.sign(s.vx),s.r>30?40:20)){
+        effect('burst',s.x,s.y,s.color,s.r*2);
+      }
+      S.shots.splice(j,1);
+    }else if(s.life<=0||s.x< -150||s.x>1250){
+      S.shots.splice(j,1);
+    }
   }
 
-  if(a.action){
-   let d=a.action;
-   d.t+=dt;
+  for(const f of S.fx)f.life-=dt;
+  S.fx=S.fx.filter(f=>f.life>0);
 
-   if(d.type==='rush'&&d.t<.19){
-    a.x=clamp(a.x+d.face*700*dt,55,1045);
-   }
-
-   while(d.done<d.events.length&&d.t>=d.events[d.done]){
-    strike(a,d);
-    d.done++;
-   }
-
-   if(d.t>=d.dur)a.action=null;
+  const alive=S.teams.map(t=>t.some(c=>c.hp>0));
+  if(!alive[0]||!alive[1]){
+    if([0,1].some(i=>active(i).hp<=0&&active(i).koT>0))return;
+    finish(!alive[0]&&!alive[1]?-1:alive[0]?0:1);
+    return;
   }
- }
 
- if(S.mode==='cpu')ai(dt);
-
- for(let j=S.shots.length-1;j>=0;j--){
-  const s=S.shots[j],old=s.x;
-  s.x+=s.vx*dt;
-  s.life-=dt;
-
-  let b=active(1-s.side);
-  const sc=bodyScale(b);
-  const top=GROUND-b.y-215*sc;
-  const bottom=GROUND-b.y-12*sc;
-
-  const hit=b.hp>0&&
-   Math.max(old,s.x)+s.r>b.x-36*sc&&
-   Math.min(old,s.x)-s.r<b.x+36*sc&&
-   s.y+s.r>top&&s.y-s.r<bottom;
-
-  if(hit){
-   hurt(b,s.power,Math.sign(s.vx),s.r>30?40:20);
-   effect('burst',s.x,s.y,s.color,s.r*2);
-   S.shots.splice(j,1);
-  }else if(s.life<=0||s.x<-150||s.x>1250){
-   S.shots.splice(j,1);
+  for(let i=0;i<2;i++){
+    const a=active(i);
+    if(a.hp<=0&&a.koT<=0){
+      S.indices[i]=S.teams[i].findIndex(c=>c.hp>0);
+      const n=active(i);
+      n.x=i?890:210;
+      n.y=n.vy=0;
+      n.action=null;
+      n.blocking=false;
+      say('換上 '+n.name);
+    }
   }
- }
 
- for(const f of S.fx)f.life-=dt;
- S.fx=S.fx.filter(f=>f.life>0);
-
- const alive=S.teams.map(t=>t.some(c=>c.hp>0));
-
- if(!alive[0]||!alive[1]){
-  if([0,1].some(i=>active(i).hp<=0&&active(i).koT>0))return;
-  finish(!alive[0]&&!alive[1]?-1:alive[0]?0:1);
-  return;
- }
-
- for(let i=0;i<2;i++){
-  const a=active(i);
-  if(a.hp<=0&&a.koT<=0){
-   S.indices[i]=S.teams[i].findIndex(c=>c.hp>0);
-   let n=active(i);
-   n.x=i?890:210;
-   n.y=n.vy=0;
-   n.action=null;
-   n.blocking=false;
-   say('換上 '+n.name);
-  }
- }
-
- if(S.clock>S.messageUntil)$('#message').textContent='';
+  if(S.clock>S.messageUntil)$('#message').textContent='';
 }
 
 function ai(dt){
- const a=active(1),b=active(0);
- if(a.hp<=0||b.hp<=0)return;
+  const a=active(1),b=active(0);
+  if(a.hp<=0||b.hp<=0)return;
+  const settings=difficulty[S.difficulty];
 
- const settings=difficulty[S.difficulty];
+  if(a.defCD===0&&!a.action&&!a.blocking&&a.hitT<=0){
+    const danger=S.shots.some(s=>
+      s.side===0&&(a.x-s.x)*s.vx>0&&Math.abs(a.x-s.x)<260
+    )||Math.abs(a.x-b.x)<190&&b.action&&
+      meleeTypes.includes(b.action.type);
 
- if(a.defCD===0&&!a.action&&!a.blocking&&a.hitT<=0){
-  const danger=S.shots.some(s=>
-   s.side===0&&(a.x-s.x)*s.vx>0&&Math.abs(a.x-s.x)<260
-  )||Math.abs(a.x-b.x)<190&&b.action&&meleeTypes.includes(b.action.type);
-
-  if(danger){
-   a.defCD=.45;
-   if(Math.random()<settings[3]){
-    if(Math.random()<.5)act(1,'jump');
-    else a.blockT=.5;
-   }
+    if(danger){
+      a.defCD=.45;
+      if(Math.random()<settings[3]){
+        if(Math.random()<.5)act(1,'jump');
+        else a.blockT=.5;
+      }
+    }
   }
- }
 
- S.ai+=dt;
- if(S.ai<settings[0])return;
- S.ai=0;
- if(!canAct(a))return;
+  S.ai+=dt;
+  if(S.ai<settings[0])return;
+  S.ai=0;
+  if(!canAct(a))return;
 
- let r=Math.random(),d=Math.abs(a.x-b.x);
+  const passive=powerState(a);
+  if(passive&&(
+    passive.kind==='attack'||passive.kind==='balanced'
+  ))return;
 
- if(a.ki<25){
-  a.ki=Math.min(100,a.ki+20);
-  effect('aura',a.x,GROUND-a.y-100,'#76dfff',55);
- }else if(r<.08){
-  act(1,'transform');
- }else if(r<.16){
-  act(1,'blink');
- }else if(d>235){
-  if(r<.5){
-   a.x=clamp(a.x+Math.sign(b.x-a.x)*95*(a.speed||410)/410,55,1045);
-  }else act(1,r<.8?'kiShot':'special1');
- }else{
-  act(1,r<.3?'punch':r<.5?'kick':r<.7?'special2':r<.85?'special1':'ultimate');
- }
+  const r=Math.random(),d=Math.abs(a.x-b.x);
+
+  if(a.ki<25){
+    a.ki=Math.min(100,a.ki+20);
+    effect('aura',a.x,GROUND-a.y-100,'#76dfff',55);
+  }else if(r<.08){
+    act(1,'transform');
+  }else if(r<.16){
+    act(1,'blink');
+  }else if(d>235){
+    if(r<.5){
+      a.x=clamp(
+        a.x+Math.sign(b.x-a.x)*95*(a.speed||410)/410,
+        55,1045
+      );
+    }else{
+      act(1,r<.8?'kiShot':'special1');
+    }
+  }else{
+    act(1,r<.3?'punch':r<.5?'kick':
+      r<.7?'special2':r<.85?'special1':'ultimate');
+  }
 }
 
 function hud(){
- for(const [i,p] of [[0,'p'],[1,'e']]){
-  const a=active(i);
-  if(!a)continue;
+  updateTransformSelectors();
 
-  $('#'+p+'n').textContent=
-   a.name+(formName(a)?'・'+formName(a):'')+(a.blocking?' 🛡':'');
+  for(const [i,p] of [[0,'p'],[1,'e']]){
+    const a=active(i);
+    if(!a)continue;
 
-  $('#'+p+'h').style.width=100*a.hp/a.maxHp+'%';
-  $('#'+p+'k').style.width=a.ki+'%';
-  $('#'+p+'m').textContent=
-   `HP ${Math.ceil(a.hp)}｜氣 ${Math.floor(a.ki)}｜${S.indices[i]+1}/${S.teams[i].length}`;
- }
+    $('#'+p+'power').textContent=powerText(a);
+    $('#'+p+'n').textContent=a.name+
+      (formName(a)?'・'+formName(a):'')+
+      (a.blocking?' 🛡':'');
+
+    $('#'+p+'h').style.width=100*a.hp/a.maxHp+'%';
+    $('#'+p+'k').style.width=a.ki+'%';
+    $('#'+p+'m').textContent=
+      `HP ${Math.ceil(a.hp)}｜氣 ${Math.floor(a.ki)}｜`+
+      `${S.indices[i]+1}/${S.teams[i].length}`;
+  }
 }
 
-// Canvas 角色繪製
+// =========================
+// Canvas 角色與特效
+// =========================
+
 const canvas=$('#fight');
 const ctx=canvas.getContext('2d');
 
 function bodyScale(c){
- const f=formName(c);
- return f.includes('橙色')?1.2:
-  f.includes('4')?1.06:
-  c.style==='zeno'?.76:
-  c.height||(c.child?.72:c.big?1.13:1);
+  const f=formName(c);
+  return f.includes('橙色')?1.2:
+    f.includes('4')?1.06:
+    c.style==='zeno'?.76:
+    c.height||(c.child?.72:c.big?1.13:1);
 }
 
 function poly(g,pts,fill,stroke='#182135',width=2){
- g.beginPath();
- pts.forEach(([x,y],i)=>i?g.lineTo(x,y):g.moveTo(x,y));
- g.closePath();
- g.fillStyle=fill;
- g.fill();
- if(stroke){
-  g.strokeStyle=stroke;
-  g.lineWidth=width;
-  g.stroke();
- }
+  g.beginPath();
+  pts.forEach(([x,y],i)=>i?g.lineTo(x,y):g.moveTo(x,y));
+  g.closePath();
+  g.fillStyle=fill;
+  g.fill();
+  if(stroke){
+    g.strokeStyle=stroke;
+    g.lineWidth=width;
+    g.stroke();
+  }
 }
 
 function ellipse(g,x,y,rx,ry,fill,stroke){
- g.beginPath();
- g.ellipse(x,y,rx,ry,0,0,Math.PI*2);
- g.fillStyle=fill;
- g.fill();
- if(stroke){
-  g.strokeStyle=stroke;
-  g.lineWidth=2;
-  g.stroke();
- }
+  g.beginPath();
+  g.ellipse(x,y,rx,ry,0,0,Math.PI*2);
+  g.fillStyle=fill;
+  g.fill();
+  if(stroke){
+    g.strokeStyle=stroke;
+    g.lineWidth=2;
+    g.stroke();
+  }
 }
 
 function line(g,pts,color,width){
- g.beginPath();
- pts.forEach(([x,y],i)=>i?g.lineTo(x,y):g.moveTo(x,y));
- g.strokeStyle=color;
- g.lineWidth=width;
- g.lineCap='round';
- g.lineJoin='round';
- g.stroke();
+  g.beginPath();
+  pts.forEach(([x,y],i)=>i?g.lineTo(x,y):g.moveTo(x,y));
+  g.strokeStyle=color;
+  g.lineWidth=width;
+  g.lineCap='round';
+  g.lineJoin='round';
+  g.stroke();
 }
 
 function limb(g,pts,color,width){
- line(g,pts,'#162035',width+4);
- line(g,pts,color,width);
- line(g,pts.map(([x,y])=>[x-2,y-2]),'#ffffff22',width*.25);
+  line(g,pts,'#162035',width+4);
+  line(g,pts,color,width);
+  line(g,pts.map(([x,y])=>[x-2,y-2]),'#ffffff22',width*.25);
 }
 
 function appearance(c){
- let f=formName(c);
+  const f=formName(c);
 
- let skin=
-  c.style==='piccolo'?(f.includes('橙')?'#d58c30':'#6baa54'):
-  c.style==='cat'?'#a084b7':
-  c.style==='buu'?'#ef91b5':
-  c.style==='frieza'?(f.includes('黃金')?'#e4b748':f.includes('黑金')?'#555168':'#eeeaf6'):
-  c.style==='cell'?'#74ac57':
-  c.style==='angel'?'#c0e9ee':
-  c.style==='zeno'?'#75b8ef':
-  c.id==='jiren'?'#b7bcc6':'#efb78d';
+  const skin=c.style==='piccolo'?
+    (f.includes('橙')?'#d58c30':'#6baa54'):
+    c.style==='cat'?'#a084b7':
+    c.style==='buu'?'#ef91b5':
+    c.style==='frieza'?
+      (f.includes('黃金')?'#e4b748':
+       f.includes('黑金')?'#555168':'#eeeaf6'):
+    c.style==='cell'?'#74ac57':
+    c.style==='angel'?'#c0e9ee':
+    c.style==='zeno'?'#75b8ef':
+    c.id==='jiren'?'#b7bcc6':'#efb78d';
 
- let hair=c.hairBase||(
-  c.style==='trunks'?'#bba0d2':
-  c.style==='bob'?'#efd374':
-  c.style==='angel'?'#f1faff':'#151b28'
- );
+  let hair=c.hairBase||(
+    c.style==='trunks'?'#bba0d2':
+    c.style==='bob'?'#efd374':
+    c.style==='angel'?'#f1faff':'#151b28'
+  );
 
- if(f.includes('超級賽亞人')&&!f.includes('4')){
-  hair=f.includes('藍')?'#46d8ef':
-   f.includes('之神')?'#d83450':'#ffe468';
- }
+  if(f.includes('超級賽亞人')&&!f.includes('4')){
+    hair=f.includes('藍')?'#46d8ef':
+      f.includes('之神')?'#d83450':'#ffe468';
+  }
+  if(f.includes('自在')||f.includes('野獸'))hair='#e5f1ff';
+  if(f.includes('自我'))hair='#a377db';
+  if(c.id==='broly'&&f.includes('全力'))hair='#b5e762';
 
- if(f.includes('自在')||f.includes('野獸'))hair='#e5f1ff';
- if(f.includes('自我'))hair='#a377db';
- if(c.id==='broly'&&f.includes('全力'))hair='#b5e762';
+  const god=f==='超級賽亞人之神';
+  const eye=god?'#e5293f':
+    f.includes('野獸')?'#df2549':
+    f.includes('自我')?'#bb73e8':
+    f.includes('自在')?'#bbcddd':
+    f.includes('4')?'#e9b849':
+    f==='究極悟飯'?'#142035':
+    f?'#338580':'#142035';
 
- // 超紅：紅髮、紅眼。紅色氣焰使用同一個 hair 顏色。
- const god=f==='超級賽亞人之神';
-
- const eye=
-  god?'#e5293f':
-  f.includes('野獸')?'#df2549':
-  f.includes('自我')?'#bb73e8':
-  f.includes('自在')?'#bbcddd':
-  f.includes('4')?'#e9b849':
-  f==='究極悟飯'?'#142035':
-  f?'#338580':'#142035';
-
- return {f,skin,hair,eye,god};
+  return {f,skin,hair,eye,god};
 }
 
 function fighter(g,c,x,y,time=0,preview=false){
- const {f,skin,hair,eye,god}=appearance(c);
- const scale=bodyScale(c);
+  const {f,skin,hair,eye,god}=appearance(c);
+  const scale=bodyScale(c);
+  const d=c.action;
+  const p=d?clamp(d.t/d.dur,0,1):0;
+  const w=Math.sin(p*Math.PI);
+  const type=d?.type||'';
+  const swing=Math.sin(time*28);
 
- let d=c.action;
- let p=d?clamp(d.t/d.dur,0,1):0;
- let w=Math.sin(p*Math.PI);
- let type=d?.type||'';
- let swing=Math.sin(time*28);
+  const punch=type==='punch'||
+    ['combo','rush','stretch','sword','staff'].includes(type);
+  const kick=type==='kick'||type==='combo'&&swing<0;
 
- let punch=type==='punch'||['combo','rush','stretch','sword','staff'].includes(type);
- let kick=type==='kick'||type==='combo'&&swing<0;
+  let foot1=[24,-10],foot2=[-24,-10];
+  let hand1=[36,-117],hand2=[-38,-125];
 
- let foot1=[24,-10],foot2=[-24,-10];
- let hand1=[36,-117],hand2=[-38,-125];
+  if(c.y>0){
+    foot1=[34,-35];
+    foot2=[-26,-45];
+  }else if(c.walk){
+    foot1=[22+Math.sin(c.walk)*22,-10];
+    foot2=[-22-Math.sin(c.walk)*22,-10];
+  }
 
- if(c.y>0){
-  foot1=[34,-35];
-  foot2=[-26,-45];
- }else if(c.walk){
-  foot1=[22+Math.sin(c.walk)*22,-10];
-  foot2=[-22-Math.sin(c.walk)*22,-10];
- }
+  if(punch)hand1=[40+(type==='stretch'?155:70)*w,-137];
+  if(kick)foot1=[25+95*w,-14-77*w];
 
- if(punch)hand1=[40+(type==='stretch'?155:70)*w,-137];
- if(kick)foot1=[25+95*w,-14-77*w];
+  if(d&&!meleeTypes.includes(type)&&type!=='transform'){
+    hand1=[65,-130];
+    hand2=[50,-136];
+  }
 
- if(d&&!meleeTypes.includes(type)&&type!=='transform'){
-  hand1=[65,-130];
-  hand2=[50,-136];
- }
+  if(type==='transform'){
+    hand1=[48,-87];
+    hand2=[-48,-87];
+  }
 
- if(type==='transform'){
-  hand1=[48,-87];
-  hand2=[-48,-87];
- }
+  if(c.blocking){
+    hand1=[30,-163];
+    hand2=[10,-152];
+  }
 
- if(c.blocking){
-  hand1=[30,-163];
-  hand2=[10,-152];
- }
+  if(c.evadeT>0){
+    hand1=[-15,-140];
+    hand2=[-35,-105];
+  }
 
- g.save();
- g.translate(x,y);
- g.scale((c.face||1)*scale*(god?.94:1),scale);
-
- const aura=f||c.fused||type==='transform'||
-  (!preview&&S.holds[c.side]?.has('charge'));
-
- if(aura){
   g.save();
-  g.globalAlpha=.2+.05*Math.sin(time*16);
+  g.translate(x+(c.evadeT>0?-c.face*20:0),y);
+
+  if(c.evadeT>0){
+    g.globalAlpha=.6;
+    g.rotate(-c.face*.16);
+  }
+
+  g.scale((c.face||1)*scale*(god?.94:1),scale);
+
+  const aura=f||c.fused||type==='transform'||
+    (!preview&&S.holds[c.side]?.has('charge'));
+
+  if(aura){
+    g.save();
+    g.globalAlpha=.2+.05*Math.sin(time*16);
+    poly(g,[
+      [-57,0],[-74,-105],[-52,-185],[-33,-166],
+      [0,-255],[24,-180],[45,-207],[70,-110],[53,0]
+    ],hair);
+    g.restore();
+  }
+
+  if(c.tail||f.includes('4')||c.style==='frieza'){
+    line(g,[[-17,-66],[-61,-44],[-79,-74],[-63,-105]],
+      c.style==='frieza'?skin:'#8a5438',10);
+  }
+
+  if(c.cape||c.style==='piccolo'&&c.cape!==false){
+    poly(g,[[-34,-157],[-66,-50],[-5,-23],[58,-52],[28,-155]],
+      '#ede9e3');
+  }
+
+  if(f.includes('3')){
+    poly(g,[
+      [-19,-204],[-56,-207],[-43,-179],[-65,-173],
+      [-45,-154],[-63,-135],[-40,-116],[-49,-89],
+      [-22,-102],[-19,-64],[2,-98],[23,-78],
+      [29,-109],[40,-97],[34,-154],[22,-209]
+    ],hair);
+  }
+
+  const pants=c.pants||(
+    f.includes('4')?'#e5ce9c':
+    c.style==='buu'?'#efefea':
+    c.style==='frieza'||c.style==='cell'?skin:
+    c.style==='vegeta'?'#2c4f9d':c.color
+  );
+
+  limb(g,[[-16,-81],[-21,-44],foot2],pants,20);
+  limb(g,[
+    [16,-81],
+    [foot1[0]*.56,-48+(foot1[1]+10)*.45],
+    foot1
+  ],pants,21);
+
+  for(const q of [foot2,foot1]){
+    poly(g,[
+      [q[0]-10,q[1]-13],[q[0]+9,q[1]-14],
+      [q[0]+17,q[1]+5],[q[0]-12,q[1]+5]
+    ],c.style==='vegeta'?'#eeeeeb':'#253653');
+  }
+
+  limb(g,[[-26,-146],[-37,-125],hand2],skin,15);
+
+  const torso=f.includes('4')?'#bd3845':c.color;
+  const gradient=g.createLinearGradient(-35,0,35,0);
+  gradient.addColorStop(0,torso);
+  gradient.addColorStop(.5,torso);
+  gradient.addColorStop(1,'#25304a');
+
   poly(g,[
-   [-57,0],[-74,-105],[-52,-185],[-33,-166],[0,-255],
-   [24,-180],[45,-207],[70,-110],[53,0]
-  ],hair);
+    [-28,-160],[-40,-143],[-28,-91],[-25,-79],
+    [26,-79],[32,-124],[35,-147],[23,-159]
+  ],gradient);
+
+  if(
+    c.style==='vegeta'&&
+    (!c.outfit||c.outfit==='armor')&&!f.includes('4')
+  ){
+    poly(g,[
+      [-31,-151],[-23,-112],[25,-112],
+      [31,-151],[20,-144],[-20,-144]
+    ],'#e5e9ef');
+    poly(g,[[-24,-111],[24,-111],[21,-85],[-21,-85]],'#cbb47b');
+    for(let i=0;i<3;i++){
+      line(g,[[-21,-106+i*7],[21,-106+i*7]],'#857953',1.5);
+    }
+  }else if(c.style==='frieza'||c.style==='cell'){
+    ellipse(g,0,-138,18,15,'#965caf');
+  }else{
+    poly(g,[[-16,-158],[0,-127],[17,-158]],
+      f.includes('4')?skin:'#223e79');
+    line(g,[[-25,-90],[26,-90]],'#283d7b',10);
+    line(g,[[-22,-144],[-10,-119],[-19,-101]],'#ffffff33',2);
+
+    if(c.id.startsWith('goku')){
+      ellipse(g,18,-130,10,10,'#f4eada');
+      g.fillStyle='#20222b';
+      g.font='bold 12px serif';
+      g.textAlign='center';
+      g.fillText('悟',18,-126);
+    }
+  }
+
+  if(c.outfit==='jacket'||c.outfit==='vest'){
+    poly(g,[[-30,-153],[-7,-146],[-10,-93],[-28,-94]],c.color);
+    poly(g,[[7,-146],[30,-153],[28,-94],[10,-93]],c.color);
+    line(g,[[0,-140],[0,-96]],'#e0d9bf',2);
+  }
+
+  if(c.outfit==='shirt'){
+    line(g,[[0,-143],[0,-98]],'#c8d4e5',2);
+    for(let j=0;j<4;j++){
+      ellipse(g,3,-135+j*10,1.5,1.5,'#f1eff8');
+    }
+  }
+
+  if(c.scarf){
+    poly(g,[[-22,-153],[23,-151],[2,-129]],'#cc454b');
+  }
+
+  if(c.sword&&type!=='sword'){
+    line(g,[[-31,-97],[33,-189]],'#626a78',7);
+  }
+
+  if(c.style==='angel'){
+    g.strokeStyle='#8bdded';
+    g.lineWidth=5;
+    g.beginPath();
+    g.ellipse(0,-155,45,16,0,0,Math.PI*2);
+    g.stroke();
+  }
+
+  limb(g,[
+    [26,-146],
+    [(hand1[0]+26)/2,-119+(hand1[1]+119)*.5],
+    hand1
+  ],skin,17);
+
+  ellipse(g,...hand1,10,9,skin,'#503e3b');
+  ellipse(g,...hand2,9,8,skin,'#503e3b');
+
+  if(c.style!=='frieza'&&c.style!=='buu'){
+    line(g,[
+      [hand1[0]-8,hand1[1]],
+      [hand1[0]-3,hand1[1]]
+    ],'#304b8b',17);
+  }
+
+  if(['sword','staff'].includes(type)){
+    line(g,[
+      [hand1[0]-10,hand1[1]+32],
+      [hand1[0]+40,hand1[1]-68]
+    ],type==='staff'?'#c73b38':'#d5faff',type==='staff'?7:5);
+  }
+
+  poly(g,[[-9,-169],[-10,-151],[11,-151],[10,-169]],skin);
+  poly(g,[
+    [-22,-197],[-20,-172],[-13,-161],[2,-155],
+    [17,-165],[22,-182],[18,-202],[0,-210]
+  ],skin);
+
+  ellipse(g,-22,-181,5,8,skin);
+  ellipse(g,22,-181,5,8,skin);
+
+  if(c.style==='cat'){
+    poly(g,[[-20,-195],[-23,-242],[-4,-207]],skin);
+    poly(g,[[6,-207],[20,-241],[22,-193]],skin);
+  }else if(c.style==='buu'){
+    line(g,[[0,-204],[2,-223],[18,-218],[21,-230]],skin,11);
+  }else if(c.style==='cell'){
+    poly(g,[
+      [-23,-190],[-22,-239],[-3,-214],
+      [18,-238],[24,-188],[12,-202],[-12,-202]
+    ],skin);
+    for(let i=0;i<9;i++){
+      ellipse(g,(i%3)*14-14,-222+Math.floor(i/3)*11,2,3,'#264f32');
+    }
+  }else if(c.style==='frieza'){
+    ellipse(g,0,-202,15,10,'#9059b4');
+  }else if(c.style==='zeno'){
+    ellipse(g,0,-185,34,34,skin);
+    poly(g,[[-32,-202],[-19,-209],[-20,-159],[-31,-171]],'#bb4d9e');
+    poly(g,[[20,-209],[31,-202],[31,-171],[20,-159]],'#bb4d9e');
+  }else if(c.hairCut==='bowl'&&!f){
+    poly(g,[
+      [-24,-178],[-26,-205],[-12,-216],[12,-216],
+      [24,-202],[24,-180],[15,-190],[-15,-190]
+    ],hair);
+  }else if(c.hairCut==='short'&&!f){
+    poly(g,[
+      [-23,-193],[-18,-215],[-3,-218],
+      [7,-229],[19,-214],[26,-211],[20,-194],[3,-200]
+    ],hair);
+  }else if(c.hairCut==='swept'&&!f){
+    poly(g,[
+      [-23,-190],[-30,-212],[-8,-224],[4,-237],
+      [14,-220],[30,-224],[23,-204],[8,-196],[-5,-202]
+    ],hair);
+  }else if(
+    ['trunks','bob','long'].includes(c.style)&&!f.includes('超級')
+  ){
+    poly(g,[
+      [-24,-169],[-29,-203],[-15,-218],[13,-219],
+      [28,-203],[25,-166],[15,-179],[12,-203],
+      [-1,-187],[-12,-204],[-18,-184]
+    ],hair);
+  }else if(c.style==='angel'){
+    poly(g,[
+      [-22,-199],[-16,-226],[-23,-237],[2,-232],
+      [16,-249],[20,-219],[21,-198],[0,-207]
+    ],hair);
+  }else if(
+    c.style==='vegeta'&&!f.includes('3')&&!f.includes('4')
+  ){
+    poly(g,[
+      [-23,-191],[-26,-219],[-19,-239],[-8,-226],
+      [0,-246],[9,-226],[22,-239],[26,-211],
+      [21,-189],[12,-205],[0,-192],[-12,-206]
+    ],hair);
+  }else if(!['bald','piccolo'].includes(c.style)){
+    const tall=f.includes('野獸')?1.6:1;
+    poly(g,[
+      [-24,-190],[-39,-208],[-23,-210],[-32,-227],
+      [-12,-218],[-14,-211-25*tall],[1,-217],
+      [10,-215-31*tall],[19,-218],[31,-233],
+      [25,-207],[39,-213],[22,-187],[14,-201],
+      [3,-193],[-6,-204]
+    ],hair);
+    line(g,[[-10,-218],[-3,-209],[5,-217]],'#ffffff44',2);
+  }
+
+  if(c.style==='piccolo'){
+    line(g,[[-10,-203],[-18,-217]],skin,3);
+    line(g,[[10,-203],[20,-217]],skin,3);
+    poly(g,[[-20,-187],[-38,-189],[-23,-171]],skin);
+  }
+
+  poly(g,[[-17,-186],[-5,-183],[-15,-179]],'#fff9ef',null);
+  poly(g,[[5,-183],[17,-186],[15,-179]],'#fff9ef',null);
+  ellipse(g,-10,-182,3,3.5,eye);
+  ellipse(g,11,-182,3,3.5,eye);
+
+  if(!f.includes('3')&&!f.includes('自我')){
+    line(g,[[-18,-189],[-5,-186]],hair,3);
+    line(g,[[5,-186],[18,-189]],hair,3);
+  }
+
+  line(g,[[2,-180],[-1,-172],[3,-171]],'#9b715c',1.4);
+  line(g,[[-5,-165],[6,-165]],'#714f46',1.5);
+
+  if(c.glasses&&!f){
+    g.strokeStyle='#2c3249';
+    g.lineWidth=2;
+    g.strokeRect(-19,-188,17,12);
+    g.strokeRect(3,-188,17,12);
+    line(g,[[-2,-184],[3,-184]],'#30354a',2);
+  }
+
+  if(c.scouter&&!f){
+    g.globalAlpha=.65;
+    poly(g,[[-24,-193],[-4,-191],[-4,-179],[-24,-178]],'#ec6372');
+    g.globalAlpha=1;
+  }
+
+  if(c.id==='tien'){
+    ellipse(g,0,-198,4,6,'#fff');
+  }
+
+  if(c.id==='krillin'){
+    for(let i=0;i<6;i++){
+      ellipse(g,(i%2)*8-4,-196-Math.floor(i/2)*5,1.5,1.5,'#825945');
+    }
+  }
+
+  if(c.id==='roshi'){
+    ellipse(g,-11,-183,10,7,'#162332');
+    ellipse(g,11,-183,10,7,'#162332');
+    poly(g,[
+      [-16,-171],[0,-166],[17,-172],
+      [10,-147],[0,-142],[-11,-150]
+    ],'#f0ece5');
+  }
+
+  if(c.blocking){
+    g.strokeStyle='#ffe46a';
+    g.lineWidth=4;
+    g.beginPath();
+    g.ellipse(45,-116,24,69,0,-1.6,1.6);
+    g.stroke();
+  }
+
   g.restore();
- }
-
- if(c.tail||f.includes('4')||c.style==='frieza'){
-  line(g,[[-17,-66],[-61,-44],[-79,-74],[-63,-105]],
-   c.style==='frieza'?skin:'#8a5438',10);
- }
-
- if(c.cape||c.style==='piccolo'&&c.cape!==false){
-  poly(g,[[-34,-157],[-66,-50],[-5,-23],[58,-52],[28,-155]],'#ede9e3');
- }
-
- // 超三的長髮。
- if(f.includes('3')){
-  poly(g,[
-   [-19,-204],[-56,-207],[-43,-179],[-65,-173],[-45,-154],
-   [-63,-135],[-40,-116],[-49,-89],[-22,-102],[-19,-64],
-   [2,-98],[23,-78],[29,-109],[40,-97],[34,-154],[22,-209]
-  ],hair);
- }
-
- const pants=c.pants||(
-  f.includes('4')?'#e5ce9c':
-  c.style==='buu'?'#efefea':
-  c.style==='frieza'||c.style==='cell'?skin:
-  c.style==='vegeta'?'#2c4f9d':c.color
- );
-
- limb(g,[[-16,-81],[-21,-44],foot2],pants,20);
- limb(g,[[16,-81],[foot1[0]*.56,-48+(foot1[1]+10)*.45],foot1],pants,21);
-
- for(const q of [foot2,foot1]){
-  poly(g,[
-   [q[0]-10,q[1]-13],[q[0]+9,q[1]-14],
-   [q[0]+17,q[1]+5],[q[0]-12,q[1]+5]
-  ],c.style==='vegeta'?'#eeeeeb':'#253653');
- }
-
- limb(g,[[-26,-146],[-37,-125],hand2],skin,15);
-
- let torso=f.includes('4')?'#bd3845':c.color;
- const gradient=g.createLinearGradient(-35,0,35,0);
- gradient.addColorStop(0,torso);
- gradient.addColorStop(.5,torso);
- gradient.addColorStop(1,'#25304a');
-
- poly(g,[
-  [-28,-160],[-40,-143],[-28,-91],[-25,-79],
-  [26,-79],[32,-124],[35,-147],[23,-159]
- ],gradient);
-
- if(c.style==='vegeta'&&(!c.outfit||c.outfit==='armor')&&!f.includes('4')){
-  poly(g,[[-31,-151],[-23,-112],[25,-112],[31,-151],[20,-144],[-20,-144]],'#e5e9ef');
-  poly(g,[[-24,-111],[24,-111],[21,-85],[-21,-85]],'#cbb47b');
-  for(let i=0;i<3;i++){
-   line(g,[[-21,-106+i*7],[21,-106+i*7]],'#857953',1.5);
-  }
- }else if(c.style==='frieza'||c.style==='cell'){
-  ellipse(g,0,-138,18,15,'#965caf');
- }else{
-  poly(g,[[-16,-158],[0,-127],[17,-158]],f.includes('4')?skin:'#223e79');
-  line(g,[[-25,-90],[26,-90]],'#283d7b',10);
-  line(g,[[-22,-144],[-10,-119],[-19,-101]],'#ffffff33',2);
-
-  if(c.id.startsWith('goku')){
-   ellipse(g,18,-130,10,10,'#f4eada');
-   g.fillStyle='#20222b';
-   g.font='bold 12px serif';
-   g.textAlign='center';
-   g.fillText('悟',18,-126);
-  }
- }
-
- if(c.outfit==='jacket'||c.outfit==='vest'){
-  poly(g,[[-30,-153],[-7,-146],[-10,-93],[-28,-94]],c.color);
-  poly(g,[[7,-146],[30,-153],[28,-94],[10,-93]],c.color);
-  line(g,[[0,-140],[0,-96]],'#e0d9bf',2);
- }
-
- if(c.outfit==='shirt'){
-  line(g,[[0,-143],[0,-98]],'#c8d4e5',2);
-  for(let j=0;j<4;j++)ellipse(g,3,-135+j*10,1.5,1.5,'#f1eff8');
- }
-
- if(c.scarf)poly(g,[[-22,-153],[23,-151],[2,-129]],'#cc454b');
- if(c.sword&&type!=='sword')line(g,[[-31,-97],[33,-189]],'#626a78',7);
-
- if(c.style==='angel'){
-  g.strokeStyle='#8bdded';
-  g.lineWidth=5;
-  g.beginPath();
-  g.ellipse(0,-155,45,16,0,0,Math.PI*2);
-  g.stroke();
- }
-
- limb(g,[[26,-146],[(hand1[0]+26)/2,-119+(hand1[1]+119)*.5],hand1],skin,17);
- ellipse(g,...hand1,10,9,skin,'#503e3b');
- ellipse(g,...hand2,9,8,skin,'#503e3b');
-
- if(c.style!=='frieza'&&c.style!=='buu'){
-  line(g,[[hand1[0]-8,hand1[1]],[hand1[0]-3,hand1[1]]],'#304b8b',17);
- }
-
- if(['sword','staff'].includes(type)){
-  line(g,[
-   [hand1[0]-10,hand1[1]+32],
-   [hand1[0]+40,hand1[1]-68]
-  ],type==='staff'?'#c73b38':'#d5faff',type==='staff'?7:5);
- }
-
- poly(g,[[-9,-169],[-10,-151],[11,-151],[10,-169]],skin);
- poly(g,[
-  [-22,-197],[-20,-172],[-13,-161],[2,-155],
-  [17,-165],[22,-182],[18,-202],[0,-210]
- ],skin);
-
- ellipse(g,-22,-181,5,8,skin);
- ellipse(g,22,-181,5,8,skin);
-
- if(c.style==='cat'){
-  poly(g,[[-20,-195],[-23,-242],[-4,-207]],skin);
-  poly(g,[[6,-207],[20,-241],[22,-193]],skin);
- }else if(c.style==='buu'){
-  line(g,[[0,-204],[2,-223],[18,-218],[21,-230]],skin,11);
- }else if(c.style==='cell'){
-  poly(g,[[-23,-190],[-22,-239],[-3,-214],[18,-238],[24,-188],[12,-202],[-12,-202]],skin);
-  for(let i=0;i<9;i++){
-   ellipse(g,(i%3)*14-14,-222+Math.floor(i/3)*11,2,3,'#264f32');
-  }
- }else if(c.style==='frieza'){
-  ellipse(g,0,-202,15,10,'#9059b4');
- }else if(c.style==='zeno'){
-  ellipse(g,0,-185,34,34,skin);
-  poly(g,[[-32,-202],[-19,-209],[-20,-159],[-31,-171]],'#bb4d9e');
-  poly(g,[[20,-209],[31,-202],[31,-171],[20,-159]],'#bb4d9e');
- }else if(c.hairCut==='bowl'&&!f){
-  poly(g,[[-24,-178],[-26,-205],[-12,-216],[12,-216],[24,-202],[24,-180],[15,-190],[-15,-190]],hair);
- }else if(c.hairCut==='short'&&!f){
-  poly(g,[[-23,-193],[-18,-215],[-3,-218],[7,-229],[19,-214],[26,-211],[20,-194],[3,-200]],hair);
- }else if(c.hairCut==='swept'&&!f){
-  poly(g,[[-23,-190],[-30,-212],[-8,-224],[4,-237],[14,-220],[30,-224],[23,-204],[8,-196],[-5,-202]],hair);
- }else if(['trunks','bob','long'].includes(c.style)&&!f.includes('超級')){
-  poly(g,[
-   [-24,-169],[-29,-203],[-15,-218],[13,-219],[28,-203],
-   [25,-166],[15,-179],[12,-203],[-1,-187],[-12,-204],[-18,-184]
-  ],hair);
- }else if(c.style==='angel'){
-  poly(g,[[-22,-199],[-16,-226],[-23,-237],[2,-232],[16,-249],[20,-219],[21,-198],[0,-207]],hair);
- }else if(c.style==='vegeta'&&!f.includes('3')&&!f.includes('4')){
-  poly(g,[
-   [-23,-191],[-26,-219],[-19,-239],[-8,-226],[0,-246],
-   [9,-226],[22,-239],[26,-211],[21,-189],[12,-205],[0,-192],[-12,-206]
-  ],hair);
- }else if(!['bald','piccolo'].includes(c.style)){
-  let tall=f.includes('野獸')?1.6:1;
-  poly(g,[
-   [-24,-190],[-39,-208],[-23,-210],[-32,-227],[-12,-218],
-   [-14,-211-25*tall],[1,-217],[10,-215-31*tall],
-   [19,-218],[31,-233],[25,-207],[39,-213],
-   [22,-187],[14,-201],[3,-193],[-6,-204]
-  ],hair);
-  line(g,[[-10,-218],[-3,-209],[5,-217]],'#ffffff44',2);
- }
-
- if(c.style==='piccolo'){
-  line(g,[[-10,-203],[-18,-217]],skin,3);
-  line(g,[[10,-203],[20,-217]],skin,3);
-  poly(g,[[-20,-187],[-38,-189],[-23,-171]],skin);
- }
-
- poly(g,[[-17,-186],[-5,-183],[-15,-179]],'#fff9ef',null);
- poly(g,[[5,-183],[17,-186],[15,-179]],'#fff9ef',null);
-
- ellipse(g,-10,-182,3,3.5,eye);
- ellipse(g,11,-182,3,3.5,eye);
-
- if(!f.includes('3')&&!f.includes('自我')){
-  line(g,[[-18,-189],[-5,-186]],hair,3);
-  line(g,[[5,-186],[18,-189]],hair,3);
- }
-
- line(g,[[2,-180],[-1,-172],[3,-171]],'#9b715c',1.4);
- line(g,[[-5,-165],[6,-165]],'#714f46',1.5);
-
- if(c.glasses&&!f){
-  g.strokeStyle='#2c3249';
-  g.lineWidth=2;
-  g.strokeRect(-19,-188,17,12);
-  g.strokeRect(3,-188,17,12);
-  line(g,[[-2,-184],[3,-184]],'#30354a',2);
- }
-
- if(c.scouter&&!f){
-  g.globalAlpha=.65;
-  poly(g,[[-24,-193],[-4,-191],[-4,-179],[-24,-178]],'#ec6372');
-  g.globalAlpha=1;
- }
-
- if(c.id==='tien')ellipse(g,0,-198,4,6,'#fff');
-
- if(c.id==='krillin'){
-  for(let i=0;i<6;i++){
-   ellipse(g,(i%2)*8-4,-196-Math.floor(i/2)*5,1.5,1.5,'#825945');
-  }
- }
-
- if(c.id==='roshi'){
-  ellipse(g,-11,-183,10,7,'#162332');
-  ellipse(g,11,-183,10,7,'#162332');
-  poly(g,[[-16,-171],[0,-166],[17,-172],[10,-147],[0,-142],[-11,-150]],'#f0ece5');
- }
-
- if(c.blocking){
-  g.strokeStyle='#ffe46a';
-  g.lineWidth=4;
-  g.beginPath();
-  g.ellipse(45,-116,24,69,0,-1.6,1.6);
-  g.stroke();
- }
-
- g.restore();
 }
 
 let previewForm=-1;
 
 function renderFormPreview(c){
- const select=$('#formPreview');
+  const select=$('#formPreview');
+  select.innerHTML='<option value="-1">普通形態</option>'+
+    c.forms.map((f,i)=>`<option value="${i}">${f[0]}</option>`).join('');
 
- select.innerHTML='<option value="-1">普通形態</option>'+
-  c.forms.map((f,i)=>`<option value="${i}">${f[0]}</option>`).join('');
+  previewForm=Math.min(previewForm,c.forms.length-1);
+  select.value=String(previewForm);
+  select.onchange=()=>{
+    previewForm=Number(select.value);
+    renderFormPreview(c);
+  };
 
- previewForm=Math.min(previewForm,c.forms.length-1);
- select.value=String(previewForm);
+  const g=$('#characterPreview').getContext('2d');
+  g.clearRect(0,0,420,280);
+  g.fillStyle='#111b30';
+  g.fillRect(0,0,420,280);
 
- select.onchange=()=>{
-  previewForm=Number(select.value);
-  renderFormPreview(c);
- };
-
- const g=$('#characterPreview').getContext('2d');
- g.clearRect(0,0,420,280);
- g.fillStyle='#111b30';
- g.fillRect(0,0,420,280);
-
- const a=make(c,0);
- a.form=previewForm;
-
- g.save();
- g.translate(210,263);
- g.scale(.91,.91);
- fighter(g,a,0,0,0,true);
- g.restore();
+  const a=make(c,0);
+  a.form=previewForm;
+  g.save();
+  g.translate(210,263);
+  g.scale(.91,.91);
+  fighter(g,a,0,0,0,true);
+  g.restore();
 }
 
 function thumbnail(canvas,c){
- const g=canvas.getContext('2d');
- g.clearRect(0,0,190,180);
+  const g=canvas.getContext('2d');
+  g.clearRect(0,0,190,180);
 
- const grad=g.createRadialGradient(95,75,4,95,90,100);
- grad.addColorStop(0,'#38496d');
- grad.addColorStop(1,'#151e31');
- g.fillStyle=grad;
- g.fillRect(0,0,190,180);
+  const grad=g.createRadialGradient(95,75,4,95,90,100);
+  grad.addColorStop(0,'#38496d');
+  grad.addColorStop(1,'#151e31');
+  g.fillStyle=grad;
+  g.fillRect(0,0,190,180);
 
- g.save();
- g.translate(95,173);
- g.scale(.68,.68);
- fighter(g,make(c,0),0,0,0,true);
- g.restore();
+  g.save();
+  g.translate(95,173);
+  g.scale(.68,.68);
+  fighter(g,make(c,0),0,0,0,true);
+  g.restore();
 }
 
 function draw(){
- const [name,sky,floor]=arenas[S.arena];
+  const [name,sky,floor]=arenas[S.arena];
+  const g=ctx.createLinearGradient(0,0,0,560);
+  g.addColorStop(0,sky);
+  g.addColorStop(1,'#10182b');
 
- const g=ctx.createLinearGradient(0,0,0,560);
- g.addColorStop(0,sky);
- g.addColorStop(1,'#10182b');
+  ctx.fillStyle=g;
+  ctx.fillRect(0,0,1100,560);
+  ctx.fillStyle='#fff5';
 
- ctx.fillStyle=g;
- ctx.fillRect(0,0,1100,560);
-
- ctx.fillStyle='#fff5';
- for(let i=0;i<30;i++){
-  ctx.fillRect((i*173)%1100,(i*61)%280,2,2);
- }
-
- if(S.arena==='gravity'||S.arena==='zeno'){
-  for(let i=0;i<8;i++){
-   ctx.fillStyle=i%2?'#ffffff12':'#0002';
-   ctx.fillRect(i*150,0,45,410);
+  for(let i=0;i<30;i++){
+    ctx.fillRect((i*173)%1100,(i*61)%280,2,2);
   }
- }else{
-  poly(ctx,[
-   [0,390],[100,256],[200,360],[350,210],[510,395],
-   [680,235],[830,360],[990,250],[1100,400]
-  ],'#ffffff12',null);
- }
 
- ctx.fillStyle=floor;
- ctx.fillRect(0,410,1100,150);
-
- line(ctx,[[0,GROUND],[1100,GROUND]],'#ffffff55',2);
-
- for(let i=0;i<8;i++){
-  line(ctx,[[550+(i-4)*70,410],[550+(i-4)*230,560]],'#0002',1);
- }
-
- for(let i=0;i<2;i++){
-  const a=active(i);
-  if(!a)continue;
-
-  ellipse(ctx,a.x,GROUND+3,Math.max(15,43-a.y*.06),8,'#0005');
-
-  ctx.save();
-  if(a.hp<=0)ctx.globalAlpha=.5;
-  fighter(ctx,a,a.x,GROUND-a.y,S.clock);
-  ctx.restore();
- }
-
- for(const s of S.shots){
-  ctx.save();
-  ctx.shadowBlur=20;
-  ctx.shadowColor=s.color;
-
-  line(ctx,[
-   [s.x-Math.sign(s.vx)*(s.type==='beam'?110:45),s.y],
-   [s.x,s.y]
-  ],s.color+'88',s.r);
-
-  ellipse(ctx,s.x,s.y,
-   s.type==='disc'?s.r*1.8:s.type==='beam'?s.r*1.4:s.r,
-   s.type==='disc'?5:s.type==='laser'?5:s.r,
-   s.color);
-
-  ellipse(ctx,s.x,s.y,s.r*.5,Math.max(3,s.r*.5),'#fff');
-  ctx.restore();
- }
-
- for(const f of S.fx){
-  ctx.save();
-
-  const a=f.life/f.max;
-  ctx.globalAlpha=a;
-  ctx.strokeStyle=f.color;
-  ctx.lineWidth=3;
-
-  if(f.type==='slash'){
-   ctx.beginPath();
-   ctx.arc(f.x,f.y,f.r,-1.2,1.2);
-   ctx.stroke();
-  }else if(f.type==='blink'){
-   for(let j=0;j<8;j++){
-    line(ctx,[
-     [f.x-22,f.y-75+j*20],[f.x+22,f.y-75+j*20]
-    ],f.color,2);
-   }
-  }else if(f.type==='dust'){
-   ellipse(ctx,f.x,f.y,f.r*(2-a),8,f.color);
-  }else{
-   ctx.beginPath();
-   ctx.ellipse(f.x,f.y,
-    f.r*(2-a),
-    f.type==='aura'?f.r*1.5:f.r*(2-a),
-    0,0,Math.PI*2);
-   ctx.stroke();
-
-   if(f.type==='burst'){
-    for(let j=0;j<8;j++){
-     let ang=j*Math.PI/4;
-     line(ctx,[
-      [f.x+Math.cos(ang)*15,f.y+Math.sin(ang)*15],
-      [f.x+Math.cos(ang)*f.r,f.y+Math.sin(ang)*f.r]
-     ],f.color,4);
+  if(S.arena==='gravity'||S.arena==='zeno'){
+    for(let i=0;i<8;i++){
+      ctx.fillStyle=i%2?'#ffffff12':'#0002';
+      ctx.fillRect(i*150,0,45,410);
     }
-   }
-
-   if(f.type==='block'){
-    ctx.fillStyle=f.color;
-    ctx.font='bold 15px system-ui';
-    ctx.fillText('BLOCK · 50%',f.x-45,f.y-50);
-   }
+  }else{
+    poly(ctx,[
+      [0,390],[100,256],[200,360],[350,210],[510,395],
+      [680,235],[830,360],[990,250],[1100,400]
+    ],'#ffffff12',null);
   }
 
-  ctx.restore();
- }
+  ctx.fillStyle=floor;
+  ctx.fillRect(0,410,1100,150);
+  line(ctx,[[0,GROUND],[1100,GROUND]],'#ffffff55',2);
+
+  for(let i=0;i<8;i++){
+    line(ctx,[
+      [550+(i-4)*70,410],[550+(i-4)*230,560]
+    ],'#0002',1);
+  }
+
+  for(let i=0;i<2;i++){
+    const a=active(i);
+    if(!a)continue;
+
+    ellipse(ctx,a.x,GROUND+3,Math.max(15,43-a.y*.06),8,'#0005');
+    ctx.save();
+    if(a.hp<=0)ctx.globalAlpha=.5;
+    fighter(ctx,a,a.x,GROUND-a.y,S.clock);
+    ctx.restore();
+  }
+
+  for(const s of S.shots){
+    ctx.save();
+    ctx.shadowBlur=20;
+    ctx.shadowColor=s.color;
+
+    line(ctx,[
+      [s.x-Math.sign(s.vx)*(s.type==='beam'?110:45),s.y],
+      [s.x,s.y]
+    ],s.color+'88',s.r);
+
+    ellipse(ctx,s.x,s.y,
+      s.type==='disc'?s.r*1.8:s.type==='beam'?s.r*1.4:s.r,
+      s.type==='disc'?5:s.type==='laser'?5:s.r,
+      s.color
+    );
+    ellipse(ctx,s.x,s.y,s.r*.5,Math.max(3,s.r*.5),'#fff');
+    ctx.restore();
+  }
+
+  for(const f of S.fx){
+    ctx.save();
+    const a=f.life/f.max;
+    ctx.globalAlpha=a;
+    ctx.strokeStyle=f.color;
+    ctx.lineWidth=3;
+
+    if(f.type==='evade'||f.type==='regen'){
+      ctx.fillStyle=f.color;
+      ctx.font='bold 19px system-ui';
+      ctx.textAlign='center';
+      ctx.fillText(
+        f.type==='evade'?'自動閃避':'HP +5 · 氣 +5',
+        f.x,f.y-30
+      );
+      line(ctx,[[f.x-30,f.y],[f.x+30,f.y]],f.color,3);
+    }else if(f.type==='dash'){
+      line(ctx,[[f.x-35,f.y],[f.x+35,f.y]],f.color,2);
+    }else if(f.type==='slash'){
+      ctx.beginPath();
+      ctx.arc(f.x,f.y,f.r,-1.2,1.2);
+      ctx.stroke();
+    }else if(f.type==='blink'){
+      for(let j=0;j<8;j++){
+        line(ctx,[
+          [f.x-22,f.y-75+j*20],[f.x+22,f.y-75+j*20]
+        ],f.color,2);
+      }
+    }else if(f.type==='dust'){
+      ellipse(ctx,f.x,f.y,f.r*(2-a),8,f.color);
+    }else{
+      ctx.beginPath();
+      ctx.ellipse(
+        f.x,f.y,f.r*(2-a),
+        f.type==='aura'?f.r*1.5:f.r*(2-a),
+        0,0,Math.PI*2
+      );
+      ctx.stroke();
+
+      if(f.type==='burst'){
+        for(let j=0;j<8;j++){
+          const ang=j*Math.PI/4;
+          line(ctx,[
+            [f.x+Math.cos(ang)*15,f.y+Math.sin(ang)*15],
+            [f.x+Math.cos(ang)*f.r,f.y+Math.sin(ang)*f.r]
+          ],f.color,4);
+        }
+      }
+
+      if(f.type==='block'){
+        ctx.fillStyle=f.color;
+        ctx.font='bold 15px system-ui';
+        ctx.fillText('BLOCK · 50%',f.x-45,f.y-50);
+      }
+    }
+    ctx.restore();
+  }
 }
 
+// 固定物理時間步長，讓不同螢幕更新率有相同的戰鬥速度。
 let acc=0;
-
 function loop(t){
- const dt=Math.min(.05,(t-S.last)/1000||0);
- S.last=t;
+  const dt=Math.min(.05,(t-S.last)/1000||0);
+  S.last=t;
 
- if(S.run&&!S.paused){
-  acc+=dt;
-  while(acc>=1/120&&S.run){
-   update(1/120);
-   acc-=1/120;
+  if(S.run&&!S.paused){
+    acc+=dt;
+    while(acc>=1/120&&S.run){
+      update(1/120);
+      acc-=1/120;
+    }
+  }else{
+    acc=0;
   }
- }else acc=0;
 
- if(!$('#game').hidden){
-  draw();
-  hud();
- }
+  if(!$('#game').hidden){
+    draw();
+    hud();
+  }
 
- requestAnimationFrame(loop);
+  requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
 
+// =========================
+// 觸控與鍵盤
+// =========================
+
 const actions=[
- ['punch','拳 J'],
- ['kick','踢 H'],
- ['kiShot','氣彈 K / 12'],
- ['special1','特別技1 L / 30'],
- ['special2','特別技2 ; / 38'],
- ['ultimate','終極技 U / 65'],
- ['transform','變身 T'],
- ['swap','換人 R']
+  ['punch','拳 J'],
+  ['kick','踢 H'],
+  ['kiShot','氣彈 K / 12'],
+  ['special1','特別技1 L / 30'],
+  ['special2','特別技2 ; / 38'],
+  ['ultimate','終極技 U / 65'],
+  ['transform','變身 T'],
+  ['swap','換人 R']
 ];
 
-$('#actions').innerHTML=actions
- .map(([k,v])=>`<button class="control" data-act="${k}">${v}</button>`).join('');
+$('#actions').innerHTML=actions.map(([k,v])=>
+  `<button class="control" data-act="${k}">${v}</button>`
+).join('');
 
 function clearInput(){
- touchHolds.clear();
- S.keys.clear();
- S.holds=[new Set(),new Set()];
- document.querySelectorAll('.held').forEach(b=>b.classList.remove('held'));
- for(let i=0;i<2;i++){
-  if(active(i))active(i).blocking=false;
- }
+  touchHolds.clear();
+  S.keys.clear();
+  S.holds=[new Set(),new Set()];
+  document.querySelectorAll('.held')
+    .forEach(b=>b.classList.remove('held'));
+
+  for(let i=0;i<2;i++){
+    if(active(i))active(i).blocking=false;
+  }
 }
 
 const heldMaps=[
- {a:'left',d:'right',g:'block',i:'charge'},
- {arrowleft:'left',arrowright:'right','7':'block','0':'charge'}
+  {a:'left',d:'right',g:'block',i:'charge'},
+  {arrowleft:'left',arrowright:'right','7':'block','0':'charge'}
 ];
 
 const actionMaps=[
- {
-  w:'jump',f:'blink',j:'punch',h:'kick',k:'kiShot',
-  l:'special1',';':'special2',u:'ultimate',t:'transform',r:'swap'
- },
- {
-  arrowup:'jump','8':'blink','1':'punch','2':'kick','3':'kiShot',
-  '4':'special1','5':'special2','6':'ultimate',
-  enter:'transform',shift:'swap'
- }
+  {
+    w:'jump',f:'blink',j:'punch',h:'kick',k:'kiShot',
+    l:'special1',';':'special2',u:'ultimate',t:'transform',r:'swap'
+  },
+  {
+    arrowup:'jump','8':'blink','1':'punch','2':'kick','3':'kiShot',
+    '4':'special1','5':'special2','6':'ultimate',
+    enter:'transform',shift:'swap'
+  }
 ];
 
 const touchHolds=new Map();
 
 function refreshHolds(){
- S.holds=[new Set(),new Set()];
-
- for(let i=0;i<2;i++){
-  if(i&&S.mode!=='local')continue;
-  for(const k of S.keys){
-   if(heldMaps[i][k])S.holds[i].add(heldMaps[i][k]);
+  S.holds=[new Set(),new Set()];
+  for(let i=0;i<2;i++){
+    if(i&&S.mode!=='local')continue;
+    for(const k of S.keys){
+      if(heldMaps[i][k])S.holds[i].add(heldMaps[i][k]);
+    }
   }
- }
-
- for(const v of touchHolds.values())S.holds[0].add(v);
+  for(const v of touchHolds.values())S.holds[0].add(v);
 }
 
 for(const b of document.querySelectorAll('[data-hold]')){
- b.onpointerdown=e=>{
-  e.preventDefault();
-  if(!S.run||S.paused)return;
+  b.onpointerdown=e=>{
+    e.preventDefault();
+    if(!S.run||S.paused)return;
+    touchHolds.set(e.pointerId,b.dataset.hold);
+    b.setPointerCapture(e.pointerId);
+    b.classList.add('held');
+    refreshHolds();
+  };
 
-  touchHolds.set(e.pointerId,b.dataset.hold);
-  b.setPointerCapture(e.pointerId);
-  b.classList.add('held');
-  refreshHolds();
- };
+  const release=e=>{
+    touchHolds.delete(e.pointerId);
+    b.classList.remove('held');
+    refreshHolds();
+  };
 
- const release=e=>{
-  touchHolds.delete(e.pointerId);
-  b.classList.remove('held');
-  refreshHolds();
- };
-
- b.onpointerup=b.onpointercancel=b.onlostpointercapture=release;
+  b.onpointerup=b.onpointercancel=b.onlostpointercapture=release;
 }
 
 for(const b of document.querySelectorAll('[data-act]')){
- b.onpointerdown=e=>{
-  e.preventDefault();
-  act(0,b.dataset.act);
- };
- b.onclick=e=>{
-  if(e.detail===0)act(0,b.dataset.act);
- };
+  b.onpointerdown=e=>{
+    e.preventDefault();
+    act(0,b.dataset.act);
+  };
+  b.onclick=e=>{
+    if(e.detail===0)act(0,b.dataset.act);
+  };
 }
 
 document.addEventListener('keydown',e=>{
- if(!S.run||/INPUT|SELECT|TEXTAREA/.test(e.target.tagName))return;
+  if(!S.run||/INPUT|SELECT|TEXTAREA/.test(e.target.tagName))return;
+  const k=e.key.toLowerCase();
 
- let k=e.key.toLowerCase();
-
- if(k==='escape'&&!e.repeat){
-  e.preventDefault();
-  pause();
-  return;
- }
-
- if(S.paused)return;
-
- if(heldMaps.some(m=>m[k])||actionMaps.some(m=>m[k])){
-  e.preventDefault();
- }
-
- S.keys.add(k);
- refreshHolds();
-
- if(!e.repeat){
-  for(let i=0;i<(S.mode==='local'?2:1);i++){
-   if(actionMaps[i][k])act(i,actionMaps[i][k]);
+  if(k==='escape'&&!e.repeat){
+    e.preventDefault();
+    pause();
+    return;
   }
- }
+  if(S.paused)return;
+
+  if(heldMaps.some(m=>m[k])||actionMaps.some(m=>m[k])){
+    e.preventDefault();
+  }
+
+  S.keys.add(k);
+  refreshHolds();
+
+  if(!e.repeat){
+    for(let i=0;i<(S.mode==='local'?2:1);i++){
+      if(actionMaps[i][k])act(i,actionMaps[i][k]);
+    }
+  }
 });
 
 document.addEventListener('keyup',e=>{
- S.keys.delete(e.key.toLowerCase());
- refreshHolds();
+  S.keys.delete(e.key.toLowerCase());
+  refreshHolds();
 });
 
 function loseFocus(){
- touchHolds.clear();
- clearInput();
- if(S.run&&!S.paused)pause();
+  touchHolds.clear();
+  clearInput();
+  if(S.run&&!S.paused)pause();
 }
 
 window.addEventListener('blur',loseFocus);
 document.addEventListener('visibilitychange',()=>{
- if(document.hidden)loseFocus();
+  if(document.hidden)loseFocus();
 });
 
+// =========================
+// 神龍、備份、音樂
+// =========================
+
 for(const b of document.querySelectorAll('[data-wish]')){
- b.onclick=()=>{
-  if(save.balls<7)return toast('需要七顆龍珠');
-  save.balls-=7;
+  b.onclick=()=>{
+    if(save.balls<7)return toast('需要七顆龍珠');
+    save.balls-=7;
 
-  if(b.dataset.wish==='coins'){
-   save.coins+=30000;
-  }else if(b.dataset.wish==='items'){
-   for(const k in save.items)save.items[k]+=3;
-  }else{
-   const pool=chars.filter(c=>!save.unlocked.includes(c.id));
-   if(pool.length){
-    save.unlocked.push(pool[Math.floor(Math.random()*pool.length)].id);
-   }else save.coins+=20000;
-  }
+    if(b.dataset.wish==='coins'){
+      save.coins+=30000;
+    }else if(b.dataset.wish==='items'){
+      for(const k in save.items)save.items[k]+=3;
+    }else{
+      const pool=chars.filter(c=>!save.unlocked.includes(c.id));
+      if(pool.length){
+        save.unlocked.push(pool[Math.floor(Math.random()*pool.length)].id);
+      }else{
+        save.coins+=20000;
+      }
+    }
 
-  render();
-  toast('神龍已實現願望！');
- };
+    render();
+    toast('神龍已實現願望！');
+  };
 }
 
 $('#reset').onclick=()=>{
- if(confirm('重設此裝置進度？雲端不會自動刪除。')){
-  save=baseSave();
-  S.picks=[['goku'],['vegeta']];
-  render();
- }
+  if(confirm('重設此裝置進度？雲端不會自動刪除。')){
+    save=baseSave();
+    S.picks=[['goku'],['vegeta']];
+    render();
+  }
 };
 
 $('#exportSave').onclick=()=>{
- const url=URL.createObjectURL(
-  new Blob([JSON.stringify(save,null,2)],{type:'application/json'})
- );
- const a=document.createElement('a');
- a.href=url;
- a.download='dragon-ball-save.json';
- a.click();
- setTimeout(()=>URL.revokeObjectURL(url),1000);
+  const url=URL.createObjectURL(
+    new Blob([JSON.stringify(save,null,2)],{type:'application/json'})
+  );
+  const a=document.createElement('a');
+  a.href=url;
+  a.download='dragon-ball-save.json';
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
 };
 
 $('#importSave').onchange=async e=>{
- try{
-  const f=e.target.files[0];
-  if(!f)return;
-  if(f.size>1e6)throw Error('檔案過大');
+  try{
+    const f=e.target.files[0];
+    if(!f)return;
+    if(f.size>1e6)throw Error('檔案過大');
 
-  const next=validate(JSON.parse(await f.text()));
-
-  if(confirm('以此備份取代本機進度？')){
-   save=next;
-   render();
-   toast('已匯入備份');
+    const next=validate(JSON.parse(await f.text()));
+    if(confirm('以此備份取代本機進度？')){
+      save=next;
+      render();
+      toast('已匯入備份');
+    }
+  }catch(err){
+    toast(err.message);
   }
- }catch(err){
-  toast(err.message);
- }
-
- e.target.value='';
+  e.target.value='';
 };
 
 let musicURL;
-
 $('#musicFile').onchange=e=>{
- if(!e.target.files[0])return;
-
- const old=musicURL;
- musicURL=URL.createObjectURL(e.target.files[0]);
- $('#bgm').src=musicURL;
- if(old)URL.revokeObjectURL(old);
-
- $('#bgm').play().catch(()=>toast('請按音樂播放鍵'));
+  if(!e.target.files[0])return;
+  const old=musicURL;
+  musicURL=URL.createObjectURL(e.target.files[0]);
+  $('#bgm').src=musicURL;
+  if(old)URL.revokeObjectURL(old);
+  $('#bgm').play().catch(()=>toast('請按音樂播放鍵'));
 };
 
-// Google 登入與 Firestore，設定後才載入。
-let cloud=null,cloudBusy=false;
+// =========================
+// Google 與雲端存檔
+// 未設定時，仍可正常玩本機遊戲。
+// =========================
 
-function cloudStatus(s){
- $('#cloudStatus').textContent=s;
+let cloud=null;
+let cloudBusy=false;
+let cloudLoading=false;
+let cloudJob=null;
+
+const CLOUD_CONFIG_KEY='db_firebase_config';
+const setupPanel=$('#account details');
+const setupInput=$('#config');
+const siteHost=location.hostname||'xcr0417-coder.github.io';
+
+function cloudStatus(message){
+  $('#cloudStatus').textContent=message;
+  $('#cloudStatus').setAttribute('role','status');
 }
 
+function cloudButtons(){
+  const signedIn=!!cloud?.a.currentUser;
+
+  $('#login').disabled=cloudLoading||cloudBusy||signedIn;
+  $('#login').textContent=cloudLoading?'正在連接…':
+    signedIn?'Google 已登入':'Google 登入';
+
+  $('#logout').disabled=!signedIn||cloudBusy;
+  $('#upload').disabled=!signedIn||cloudBusy;
+  $('#download').disabled=!signedIn||cloudBusy;
+  $('#applyConfig').disabled=cloudBusy||cloudLoading;
+}
+
+function openCloudSetup(message){
+  for(const page of document.querySelectorAll('.page')){
+    page.hidden=page.id!=='account';
+  }
+  for(const tab of document.querySelectorAll('[data-tab]')){
+    tab.classList.toggle('active',tab.dataset.tab==='account');
+  }
+
+  setupPanel.open=true;
+  cloudStatus(
+    message||'尚未設定 Google 登入。請完成下面三個步驟；本機進度仍會保留。'
+  );
+  setupPanel.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// 只讀取設定字串，不執行貼上的 JavaScript。
+function parseFirebaseConfig(raw){
+  if(typeof raw==='object'&&raw!==null)raw=JSON.stringify(raw);
+
+  if(typeof raw!=='string'||!raw.trim()){
+    throw Error('請先貼上 Firebase 的 firebaseConfig 設定。');
+  }
+  if(raw.length>20000){
+    throw Error('設定內容過長，請只貼 firebaseConfig。');
+  }
+
+  const allowed=[
+    'apiKey','authDomain','projectId','appId','storageBucket',
+    'messagingSenderId','measurementId','databaseURL'
+  ];
+
+  let parsed;
+  try{
+    parsed=JSON.parse(raw);
+  }catch{
+    const match=raw.match(
+      /(?:const|let|var)\s+firebaseConfig\s*=\s*(\{[\s\S]*?\})\s*;?/
+    )||raw.trim().match(/^(\{[\s\S]*\})\s*;?$/);
+
+    if(!match){
+      throw Error('請貼上完整的 const firebaseConfig = {...}; 或 JSON 物件。');
+    }
+
+    const body=match[1];
+    parsed={};
+
+    for(const key of allowed){
+      const field=new RegExp(
+        '(?:^|[,{\\s])(?:["\x27])?'+key+
+        '(?:["\x27])?\\s*:\\s*(["\x27])([^"\x27\\r\\n]*)\\1'
+      );
+      const value=body.match(field);
+      if(value)parsed[key]=value[2];
+    }
+  }
+
+  if(!parsed||Array.isArray(parsed)||typeof parsed!=='object'){
+    throw Error('設定必須是 Firebase Web 設定物件。');
+  }
+
+  const clean={};
+  for(const key of allowed){
+    if(typeof parsed[key]==='string')clean[key]=parsed[key].trim();
+  }
+
+  for(const key of ['apiKey','authDomain','projectId','appId']){
+    if(!clean[key]||/[<>…]|請填|你的|YOUR_/i.test(clean[key])){
+      throw Error('缺少有效的 '+key+'，請使用自己專案的設定值。');
+    }
+  }
+
+  if(!/^[A-Za-z0-9.-]+$/.test(clean.authDomain)){
+    throw Error('authDomain 請保留 Firebase 提供的網域，不要加 https:// 或路徑。');
+  }
+
+  return clean;
+}
+
+function explainCloudError(error){
+  const code=error?.code||'';
+  const messages={
+    'auth/unauthorized-domain':
+      '尚未授權此網站。請到 Firebase → Authentication → Settings → Authorized domains，加入：'+siteHost,
+    'auth/operation-not-allowed':
+      '尚未開啟 Google 登入。請到 Firebase → Authentication → Sign-in method，啟用 Google 並儲存。',
+    'auth/popup-blocked':
+      'Safari 擋住登入視窗。請允許此網站的彈出視窗，再按一次 Google 登入。',
+    'auth/popup-closed-by-user':
+      '登入視窗已關閉，尚未登入。可以再按一次 Google 登入。',
+    'auth/cancelled-popup-request':
+      '另一個登入視窗已開啟，請先完成該視窗。',
+    'auth/network-request-failed':
+      '連線失敗，請確認網路後再試一次。',
+    'auth/invalid-api-key':
+      'Firebase apiKey 無效，請重新貼上專案的 Web 設定。',
+    'auth/configuration-not-found':
+      '找不到登入設定，請先在 Firebase 啟用 Authentication 與 Google 登入。',
+    'permission-denied':
+      '已連接雲端，但無權讀寫。請檢查 Firestore 是否已發布下方的 saves/{uid} 規則。',
+    'unavailable':
+      '暫時連不上雲端資料庫，本機進度保留，請稍後重試。'
+  };
+
+  return messages[code]||
+    ('操作失敗：'+(error?.message||String(error)));
+}
+
+setupPanel.querySelector('summary').textContent=
+  '設定 Google 登入（第一次需要完成）';
+
+const steps=setupPanel.querySelector('ol');
+steps.innerHTML=`
+  <li>
+    開啟 <a href="https://console.firebase.google.com/"
+    target="_blank" rel="noopener">Firebase 控制台</a>，
+    建立專案並新增 Web 應用程式（&lt;/&gt;）。
+    複製它提供的 <b>const firebaseConfig = {...};</b>，貼到下面。
+  </li>
+  <li>
+    在 Authentication 啟用 Google 登入，設定支援信箱；
+    在 Settings → Authorized domains 加入你的遊戲網站網域：
+    <b id="requiredDomain"></b>。
+  </li>
+  <li>
+    若要雲端存檔，建立 Cloud Firestore 預設資料庫，
+    將下方規則貼到 Rules 並發布。
+    按「儲存設定並重新載入」，再按 Google 登入。
+  </li>`;
+
+$('#requiredDomain').textContent=siteHost;
+setupInput.placeholder=
+  '把 Firebase 給你的 const firebaseConfig = {...}; 整段貼在這裡';
+$('#applyConfig').textContent='儲存設定並重新載入';
+
+const hint=document.createElement('p');
+hint.className='small';
+hint.textContent=
+  '設定只存在目前瀏覽器。若要讓其他玩家免設定，請把這份 Web 設定填入原始碼的 FIREBASE_CONFIG，再上傳 GitHub。authDomain 保留 Firebase 的原值；不要改成 GitHub 網域。';
+setupInput.before(hint);
+
 async function initCloud(){
- let conf=FIREBASE_CONFIG;
+  if(cloud)return cloud;
+  if(cloudJob)return cloudJob;
 
- try{
-  conf=conf||JSON.parse(localStorage.getItem('db_firebase_config')||'null');
-  if(!conf)return;
+  cloudJob=(async()=>{
+    cloudLoading=true;
+    cloudButtons();
 
-  $('#config').value=JSON.stringify(conf,null,2);
+    try{
+      let savedConfig=null;
+      try{
+        savedConfig=localStorage.getItem(CLOUD_CONFIG_KEY);
+      }catch{}
 
-  const [app,auth,db]=await Promise.all([
-   import('https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js'),
-   import('https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js'),
-   import('https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js')
-  ]);
+      const raw=savedConfig||FIREBASE_CONFIG;
 
-  const instance=app.initializeApp(conf);
-  cloud={auth,db,a:auth.getAuth(instance),d:db.getFirestore(instance)};
+      if(!raw){
+        cloudStatus(
+          '本機存檔已啟用。Google 尚未設定；按登入即可開啟設定引導。'
+        );
+        return null;
+      }
 
-  auth.onAuthStateChanged(cloud.a,u=>cloudStatus(
-   u?'已登入：'+(u.email||u.displayName)+'。請選擇儲存到雲端或讀取雲端。':
-   'Google 已就緒，請按登入。'
-  ));
- }catch(e){
-  cloudStatus('雲端初始化失敗：'+e.message+'。本機遊戲仍可使用。');
- }
+      const config=parseFirebaseConfig(raw);
+      setupInput.value=JSON.stringify(config,null,2);
+
+      if(location.protocol==='file:'){
+        cloudStatus(
+          '本機遊戲可正常使用；Google 登入請從 GitHub Pages 網站開啟。'
+        );
+        return null;
+      }
+
+      cloudStatus('正在連接 Google 登入服務…');
+
+      const [app,auth,db]=await Promise.all([
+        import('https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js'),
+        import('https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js'),
+        import('https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js')
+      ]);
+
+      const instance=app.initializeApp(config,'dragon-battle-cloud');
+      const connection={
+        auth,db,a:auth.getAuth(instance),d:db.getFirestore(instance)
+      };
+
+      await connection.a.authStateReady();
+      cloud=connection;
+
+      auth.onAuthStateChanged(cloud.a,user=>{
+        cloudStatus(user?
+          '已登入：'+(user.email||user.displayName||'Google 帳號')+
+          '。本機進度未被覆蓋，可自行選擇雲端儲存或讀取。':
+          'Google 已就緒，請按「Google 登入」。'
+        );
+        cloudButtons();
+      });
+
+      return cloud;
+    }catch(error){
+      cloudStatus(explainCloudError(error));
+      return null;
+    }finally{
+      cloudLoading=false;
+      cloudButtons();
+    }
+  })();
+
+  try{
+    return await cloudJob;
+  }finally{
+    cloudJob=null;
+  }
 }
 
 $('#applyConfig').onclick=()=>{
- try{
-  const c=JSON.parse($('#config').value);
-  if(!c.apiKey||!c.authDomain||!c.projectId||!c.appId){
-   throw Error('請填入完整 Web 設定');
+  try{
+    const config=parseFirebaseConfig(setupInput.value);
+    localStorage.setItem(CLOUD_CONFIG_KEY,JSON.stringify(config));
+    persist();
+    location.reload();
+  }catch(error){
+    openCloudSetup(error.message);
+    setupInput.focus();
   }
-  localStorage.setItem('db_firebase_config',JSON.stringify(c));
-  location.reload();
- }catch(e){
-  toast(e.message);
- }
 };
 
 $('#login').onclick=async()=>{
- if(location.protocol==='file:'){
-  return toast('Google 登入需要 HTTPS 網站或 localhost');
- }
- if(!cloud)return toast('請先展開設定步驟，設定 Firebase');
+  if(cloudBusy||cloudLoading)return;
 
- try{
-  await cloud.auth.signInWithPopup(cloud.a,new cloud.auth.GoogleAuthProvider());
- }catch(e){
-  cloudStatus('登入失敗：'+e.message);
- }
+  if(!cloud){
+    openCloudSetup(location.protocol==='file:'?
+      '請從 GitHub Pages 網站開啟，再設定 Google 登入。':
+      '尚未連接 Google。請完成下方設定；若已設定，可以按登入重試連線。'
+    );
+
+    const ready=await initCloud();
+    if(ready){
+      cloudStatus('連線完成，請再按一次 Google 登入以開啟帳號選擇視窗。');
+    }
+    return;
+  }
+
+  cloudBusy=true;
+  cloudButtons();
+
+  try{
+    const provider=new cloud.auth.GoogleAuthProvider();
+    provider.setCustomParameters({prompt:'select_account'});
+    await cloud.auth.signInWithPopup(cloud.a,provider);
+    cloudStatus(
+      'Google 登入成功。本機進度保留；請選擇儲存到雲端或讀取雲端。'
+    );
+  }catch(error){
+    cloudStatus(explainCloudError(error));
+  }finally{
+    cloudBusy=false;
+    cloudButtons();
+  }
 };
 
 $('#logout').onclick=async()=>{
- if(cloud){
+  if(!cloud||cloudBusy)return;
+  cloudBusy=true;
+  cloudButtons();
+
   try{
-   await cloud.auth.signOut(cloud.a);
-  }catch(e){
-   cloudStatus(e.message);
+    await cloud.auth.signOut(cloud.a);
+    cloudStatus('已登出 Google，本機遊戲進度保留。');
+  }catch(error){
+    cloudStatus(explainCloudError(error));
+  }finally{
+    cloudBusy=false;
+    cloudButtons();
   }
- }
 };
 
 async function syncCloud(write){
- if(!cloud?.a.currentUser)return toast('請先登入 Google');
- if(cloudBusy)return;
-
- cloudBusy=true;
-
- const user=cloud.a.currentUser;
- const ref=cloud.db.doc(cloud.d,'saves',user.uid);
-
- try{
-  if(write){
-   if(!confirm('用目前本機進度覆蓋此帳號的雲端存檔？'))return;
-
-   await cloud.db.setDoc(ref,{
-    data:JSON.stringify(save),
-    updatedAt:cloud.db.serverTimestamp(),
-    version:3
-   });
-
-   cloudStatus('雲端儲存完成');
-  }else{
-   const snap=await cloud.db.getDoc(ref);
-   if(!snap.exists())return toast('此帳號尚無雲端存檔');
-
-   const data=validate(JSON.parse(snap.data().data));
-
-   if(cloud.a.currentUser?.uid!==user.uid){
-    throw Error('帳號已改變，請重新讀取');
-   }
-
-   if(confirm('以雲端進度覆蓋本機存檔？')){
-    save=data;
-    render();
-    cloudStatus('雲端讀取完成');
-   }
+  if(!cloud?.a.currentUser){
+    return openCloudSetup('請先完成設定並登入 Google。');
   }
- }catch(e){
-  cloudStatus('同步失敗：'+e.message+'。本機進度保留。');
- }finally{
-  cloudBusy=false;
- }
+  if(cloudBusy)return;
+
+  cloudBusy=true;
+  cloudButtons();
+
+  const user=cloud.a.currentUser;
+  const ref=cloud.db.doc(cloud.d,'saves',user.uid);
+
+  try{
+    if(write){
+      if(!confirm('用目前本機進度覆蓋此帳號的雲端存檔？'))return;
+
+      cloudStatus('正在儲存到雲端…');
+      await cloud.db.setDoc(ref,{
+        data:JSON.stringify(save),
+        updatedAt:cloud.db.serverTimestamp(),
+        version:3
+      });
+      cloudStatus('雲端儲存完成。');
+    }else{
+      cloudStatus('正在讀取雲端…');
+      const snap=await cloud.db.getDocFromServer(ref);
+
+      if(!snap.exists()){
+        cloudStatus('這個帳號還沒有雲端存檔。請先按「儲存到雲端」。');
+        return;
+      }
+
+      const data=validate(JSON.parse(snap.data().data));
+
+      if(cloud.a.currentUser?.uid!==user.uid){
+        throw Error('登入帳號已變更，請重新讀取。');
+      }
+
+      if(confirm(
+        '以雲端進度覆蓋本機存檔？建議先用「匯出備份」保存目前進度。'
+      )){
+        save=data;
+        render();
+        cloudStatus('已讀取雲端存檔。');
+      }else{
+        cloudStatus('已取消讀取，本機進度保留。');
+      }
+    }
+  }catch(error){
+    cloudStatus(explainCloudError(error));
+  }finally{
+    cloudBusy=false;
+    cloudButtons();
+  }
 }
 
 $('#upload').onclick=()=>syncCloud(true);
 $('#download').onclick=()=>syncCloud(false);
 
 render();
+cloudButtons();
 initCloud();
 </script>
 </html>
